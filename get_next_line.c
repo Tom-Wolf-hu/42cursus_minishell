@@ -6,17 +6,50 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 14:43:14 by omalovic          #+#    #+#             */
-/*   Updated: 2024/11/11 16:16:28 by omalovic         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:47:23 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+// if (remainder)
+// {
+// 	checker_result = checker(remainder);
+// 	if (checker_result != -1)
+// 	{
+// 		result = gen_str(NULL, remainder, checker_result);
+// 		remainder = get_remainder(remainder, checker_result, ft_strlen(remainder));
+// 		free_str(remainder);
+// 		return (result);
+// 	}
+// 	result = gen_str(NULL, remainder, ft_strlen(remainder));
+// 	free_str(remainder);
+// 	remainder = NULL;
+// }
+
 #include "get_next_line.h"
 
-int	get_i1(char *str)
+char	*ft_copystr(char **remainder, int checker_result)
 {
-	if (str != NULL)
-		return (ft_strlen(str));
-	return (0);
+	char	*result;
+	int	i;
+
+	if (!*remainder || checker_result <= 0)
+		return (NULL);
+	result = (char *)malloc(sizeof(char) * (checker_result + 1));
+	if (!result)
+	{
+		free_str(*remainder);
+		*remainder = NULL;
+		return (NULL);
+	}
+	i = 0;
+	while (i < checker_result)
+	{
+		result[i] = (*remainder)[i];
+		i++;
+	}
+	result[i] = '\0';
+	return (result);
 }
 
 char	*gen_str(char *src1, char *src2, int i2)
@@ -26,7 +59,15 @@ char	*gen_str(char *src1, char *src2, int i2)
 	int		j;
 	int		k;
 
-	i1 = get_i1(src1);
+	if (!src2)
+		return (NULL);
+	if (!src1)
+		return (ft_copystr(&src2, i2));
+	i1 = ft_strlen(src1);
+	if (i1 == -1)
+		return (NULL);
+	if (i1 < 0 || i2 < 0)
+		return (NULL);
 	result = (char *)malloc(sizeof(char) * (i1 + i2 + 1));
 	if (!result)
 		return (NULL);
@@ -48,19 +89,20 @@ char	*gen_str(char *src1, char *src2, int i2)
 	return (result);
 }
 
+
 char	*get_remainder(char *buffer, int checker_result, int bytes_read)
 {
-	char	*remainder = NULL;
+	char	*remainder;
 	int	i;
 	int	size;
 
-	i = 0;
 	size = bytes_read - checker_result;
 	if (size <= 0)
 		return (NULL);
 	remainder = (char *)malloc(sizeof(char) * (size + 1));
 	if (!remainder)
 		return (NULL);
+	i = 0;
 	while (i < size)
 	{
 		remainder[i] = buffer[checker_result + i];
@@ -70,32 +112,52 @@ char	*get_remainder(char *buffer, int checker_result, int bytes_read)
 	return (remainder);
 }
 
+int	deal_with_remainder(char **remainder, char **result)
+{
+	char *new_remainder;
+	
+	if (*remainder)
+	{
+		if (checker(*remainder) != -1)
+		{
+			*result = gen_str(NULL, *remainder, checker(*remainder));
+			new_remainder = get_remainder(*remainder, checker(*remainder), ft_strlen(*remainder));
+			free_str(*remainder);
+			*remainder = new_remainder;
+			if (!*remainder)
+			{
+				if (*result)
+					return (1);
+				return (-1);
+			}
+			return (1);
+		}
+		*result = ft_copystr(remainder, ft_strlen(*remainder));
+		if (!*result)
+			return (-1);
+		free_str(*remainder);
+		*remainder = NULL;
+	}
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
-	ssize_t	bytes_read;
-	char	buffer[BUFFER_SIZE + 1];
-	char	*result = NULL;
-	static char *remainder = NULL;
-	int	checker_result;
+	ssize_t		bytes_read;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*result;
+	static char	*remainder = NULL;
 
-	if (remainder)
-	{
-		checker_result = checker(remainder);
-		if (checker_result != -1)
-		{
-			result = gen_str(NULL, remainder, checker_result);
-			remainder = get_remainder(remainder, checker_result, ft_strlen(remainder));
-			return (result);
-		}
-		result = gen_str(NULL, remainder, ft_strlen(remainder));
-		free(remainder);
-		remainder = NULL;
-	}
+	result = NULL;
+	if (deal_with_remainder(&remainder, &result) == 1)
+		return (result);
+	if (deal_with_remainder(&remainder, &result) == -1)
+		return (NULL);
 	while (1)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (NULL);
+			return (free_str(remainder), free_str(result), NULL);
 		if (bytes_read == 0)
 		{
 			if (result && ft_strlen(result) > 0)
@@ -103,11 +165,16 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
-		checker_result = checker(buffer);
-		if (checker_result != -1)
+		if (checker(buffer) != -1)
 		{
-			remainder = get_remainder(buffer, checker_result, bytes_read);
-			result = gen_str(result, buffer, checker_result);
+			result = gen_str(result, buffer, checker(buffer));
+			remainder = get_remainder(buffer, checker(buffer), bytes_read);
+			if (!remainder)
+			{
+				if (result)
+					return (result);
+				return (NULL);
+			}
 			return (result);
 		}
 		result = gen_str(result, buffer, bytes_read);
@@ -120,11 +187,16 @@ char	*get_next_line(int fd)
 	int fd = open("/Users/omalovic/get_next_line_project/file", O_RDONLY);
 	if (fd == -1)
 		return 1;
+	// printf("firstcall:\n%s\nend of first call...\n", get_next_line(fd));
+	// printf("secondcall:\n%s\nend of second call...\n", get_next_line(fd));
 	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 
 } */

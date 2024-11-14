@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 14:43:10 by omalovic          #+#    #+#             */
-/*   Updated: 2024/11/11 16:15:54 by omalovic         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:13:04 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_strlen(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i] != '\0')
 	{
 		i++;
@@ -38,7 +40,9 @@ int	checker(char *buffer)
 	while (buffer[i] != '\0')
 	{
 		if (buffer[i] == '\n')
-			return (i + 1);
+		{
+			return (i+1);
+		}
 		i++;
 	}
 	return (-1);
