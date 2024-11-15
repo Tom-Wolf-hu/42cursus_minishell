@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 14:43:36 by omalovic          #+#    #+#             */
-/*   Updated: 2024/11/13 14:53:11 by omalovic         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:24:58 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,13 @@
 # include <fcntl.h>
 
 char	*get_next_line(int fd);
-int	ft_strlen(char *str);
+int		ft_strlen(char *str);
 char	*get_remainder(char *buffer, int checker_result, int bytes_read);
-void	free_str(char *str);
-int	checker(char *buffer);
+int		checker(char *buffer);
+char	*ft_copystr(char **remainder, int checker_result, int sign);
+char	*handle_remainder(char **result);
+char	*process_buffer(char *result, char *buffer,
+			ssize_t bytes_read, char **remainder);
+char	*gen_str(char *src1, char *src2, int i2);
 
 #endif
