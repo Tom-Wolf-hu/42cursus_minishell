@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/17 16:54:48 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:12:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,11 +190,11 @@ int	is_empty(char *line)
 	return (1);
 }
 
-extern	char	**environ;
 
 void	print_env(void)
 {
-	int	i;
+	int				i;
+	extern	char	**environ;
 
 	i = 0;
 	while (environ[i])
@@ -204,9 +204,71 @@ void	print_env(void)
 	}
 }
 
+void	execute_cmd(char *line)
+{
+	pid_t	pid;
+	int		status;
+	char	*args[] = {line, NULL};
+	char	*env[] = {NULL};
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execve("/usr/bin/ls", args, env);
+		perror("execve");
+		exit(127);
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else
+		perror("fork");
+}
+
+int	check_line(char *line, int i)
+{
+	int	len;
+
+	len = ft_strlen(line);
+	while (i < len)
+	{
+		if (!ft_isspace(line[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	handle_export(char *line)
 {
-	
+	char	*arg;
+	char	*equals_pos;
+	char	*value;
+
+	if (ft_strlen(line) == 6 || check_line(line, 7))
+		print_env();
+	else
+	{
+		arg = line + 7;
+		equals_pos = ft_strchr(arg, '=');
+		if (equals_pos != NULL)
+		{
+			*equals_pos = '\0';
+			value = equals_pos + 1;
+			if (setenv(arg, value, 1) == -1)
+				perror("setenv");
+		}
+		else
+			printf("export: invalid syntax\n");
+	}
+}
+
+void	handle_unset(char *line)
+{
+	char	*arg;
+
+	arg = line + 6;
+	if (unsetenv(arg) == -1)
+		perror("unsetenv");
 }
 
 void	choose_cmd(char *line)
@@ -221,8 +283,14 @@ void	choose_cmd(char *line)
 		handle_echo(line);
 	else if (ft_strcmp(line, "env") == 0)
 		print_env();
+	else if (ft_strncmp(line, "export", 6) == 0)
+		handle_export(line);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		handle_unset(line);
 	else
-		printf("minishell: command not found: %s\n", line);
+		execute_cmd(line);
+	// else
+		// printf("minishell: command not found: %s\n", line);
 }
 
 int main(void)

@@ -1,12 +1,8 @@
 NAME = minishell
 
 CC = cc
-<<<<<<< HEAD
 CFLAGS = -fsanitize=address -g
 # -Wall -Wextra -Werror
-=======
-CFLAGS = -fsanitize=address -g -Wall -Wextra -Werror
->>>>>>> c7639ae51f4bd13b58a1ed5fac90d3421602c0da
 
 SRCS = srcs/minishell.c 
 GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
