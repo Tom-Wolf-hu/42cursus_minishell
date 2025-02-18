@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/18 14:49:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/18 16:40:14 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int main(void)
 	{
 		signal(SIGINT, sig_handler);
 		signal(SIGQUIT, sig_handler);
-		line = readline("> ");
+		line = readline("minishell> ");
 		if (!line || ft_strcmp(line, "exit") == 0)
 			break ;
 		else if (ft_strcmp(line, "clear") == 0)

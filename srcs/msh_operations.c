@@ -6,13 +6,13 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/18 14:41:18 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/18 17:19:01 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	choose_op(t_redir e_red, char *name_d)
+void	choose_op(t_tokentype e_red, char *name_d)
 {
 	if (!name_d)
 	{
