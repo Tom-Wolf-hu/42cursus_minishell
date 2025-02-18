@@ -4,7 +4,8 @@ CC = cc
 CFLAGS = -fsanitize=address -g -Wall -Wextra -Werror
 
 SRCS =	srcs/minishell.c \
-		srcs/msh_redirect.c
+		srcs/msh_redirect.c \
+		srcs/msh_operations.c
 # GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
 LIBFT_DIR = lib/libft
 LIBFT = libft.a

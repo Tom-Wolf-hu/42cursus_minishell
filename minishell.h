@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/18 12:46:05 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/18 13:35:43 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,8 @@ void	red_out(char *fd_name);
 void	red_out_append(char *fd_name);
 void	read_in_temp(char *delimeter, int fd_delimeter);
 void	red_del(char *delimeter);
+
+//msh_operations.c
+void	choose_op(t_redir e_red, char *name_d);
 
 #endif
