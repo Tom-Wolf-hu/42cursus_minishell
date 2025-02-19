@@ -1,8 +1,8 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -fsanitize=address -g
-# -Wall -Wextra -Werror
+CFLAGS = 
+# -Wall -Wextra -Werror -fsanitize=address -g
 
 SRCS = srcs/minishell.c srcs/check_line.c srcs/echo.c srcs/handle_export_unset.c 
 GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
