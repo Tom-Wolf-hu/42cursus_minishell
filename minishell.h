@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/18 18:26:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/19 15:58:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdbool.h>
 
 // #include "lib/get_next_line/get_next_line.h"
@@ -53,6 +55,14 @@ typedef struct s_pnode
 }	t_pnode;
 
 //minishell.c
+void	handle_echo(char *line);
+int 	ft_isspace(int c);
+int		is_empty(char *line);
+void	free_arr(char **arr);
+void	handle_export(char *line);
+void	handle_unset(char *line);
+int		check_line(char *line, int i);
+void	print_env(void);
 void	ft_error(void);
 void	sig_handler(int sig);
 int 	main(void);

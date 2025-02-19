@@ -2,11 +2,16 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -fsanitize=address -g -Wall -Wextra -Werror
+# -Wall -Wextra -Werror
 
 SRCS =	srcs/minishell.c \
+		srcs/check_line.c \ 
+		srcs/echo.c \
+		srcs/handle_export_unset.c \
 		srcs/msh_redirect.c \
-		srcs/msh_operations.c
-# GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
+		srcs/msh_operations.c \
+		srcs/msh_parse.c
+GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
 LIBFT_DIR = lib/libft
 LIBFT = libft.a
 
