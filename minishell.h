@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/17 18:33:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/19 12:50:50 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@
 #include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
 
-
+void	handle_echo(char *line);
+int ft_isspace(int c);
+int	is_empty(char *line);
+void	free_arr(char **arr);
+void	handle_export(char *line);
+void	handle_unset(char *line);
+int	check_line(char *line, int i);
+void	print_env(void);
 
 #endif

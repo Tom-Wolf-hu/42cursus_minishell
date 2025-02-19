@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/17 19:12:36 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/19 12:49:27 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,100 +97,6 @@ void	handle_cd(char *line)
 	free_arr(arr);
 }
 
-void	mywrite(char *line)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = ft_strlen(line);
-	if (line[i] == 34)
-		i++;
-	if (line[len - 1] == 34)
-		len--;
-	while (i < len)
-	{
-		write(1, &line[i], 1);
-		i++;
-	}
-}
-
-void	show_input(char **arr, int flag)
-{
-	int	i;
-	int len;
-
-	if (flag)
-		i = 2;
-	else
-		i = 1;
-	len = 0;
-	while (arr[len])
-		len++;
-	while (arr[i])
-	{
-		if (i == len - 1)
-		{
-			mywrite(arr[i]);
-			if (!flag)
-				write(1, "\n", 1);
-			return ;
-		}
-		mywrite(arr[i]);
-		write(1, " ", 1);
-		i++;
-	}
-}
-
-void	handle_echo(char *line)
-{
-	char	**arr;
-	int		i;
-
-	i = 0;
-	arr = ft_split(line, ' ');
-	if (!arr)
-		return (free(line), exit(1));
-	while (arr[i])
-		i++;
-	if (i == 1)
-		return (write(1, "\n", 1), free_arr(arr));
-	if (i == 2)
-	{
-		if (ft_strcmp(arr[1], "-n") == 0)
-			return (free_arr(arr));
-		else
-			return (mywrite(arr[1]), write(1, "\n", 1), (void)0);
-	}
-	if (i > 2)
-	{
-		if (ft_strcmp(arr[1], "-n") == 0)
-			return (show_input(arr, 1), free_arr(arr));
-		show_input(arr, 0);
-	}
-	free_arr(arr);
-}
-
-int ft_isspace(int c)
-{
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-}
-
-int	is_empty(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (!ft_isspace(line[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-
 void	print_env(void)
 {
 	int				i;
@@ -236,39 +142,6 @@ int	check_line(char *line, int i)
 		i++;
 	}
 	return (1);
-}
-
-void	handle_export(char *line)
-{
-	char	*arg;
-	char	*equals_pos;
-	char	*value;
-
-	if (ft_strlen(line) == 6 || check_line(line, 7))
-		print_env();
-	else
-	{
-		arg = line + 7;
-		equals_pos = ft_strchr(arg, '=');
-		if (equals_pos != NULL)
-		{
-			*equals_pos = '\0';
-			value = equals_pos + 1;
-			if (setenv(arg, value, 1) == -1)
-				perror("setenv");
-		}
-		else
-			printf("export: invalid syntax\n");
-	}
-}
-
-void	handle_unset(char *line)
-{
-	char	*arg;
-
-	arg = line + 6;
-	if (unsetenv(arg) == -1)
-		perror("unsetenv");
 }
 
 void	choose_cmd(char *line)
