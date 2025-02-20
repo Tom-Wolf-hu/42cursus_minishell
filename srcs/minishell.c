@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/19 16:51:08 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:23:19 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,15 +150,15 @@ void	choose_cmd(char *line)
 		return ;
 	if (ft_strcmp(line, "pwd") == 0)
 		ft_getcwd(line);
-	else if (ft_strncmp(line, "cd ", 3) == 0)
+	else if (ft_strncmp(line, "cd ", 3) == 0 || ft_strcmp(line, "cd") == 0)
 		handle_cd(line);
-	else if (ft_strncmp(line, "echo ", 5) == 0)
+	else if (ft_strncmp(line, "echo ", 5) == 0 || ft_strcmp(line, "echo") == 0)
 		handle_echo(line);
 	else if (ft_strcmp(line, "env") == 0)
 		print_env();
-	else if (ft_strncmp(line, "export ", 7) == 0)
+	else if (ft_strncmp(line, "export ", 7) == 0 || ft_strcmp(line, "export") == 0)
 		handle_export(line);
-	else if (ft_strncmp(line, "unset ", 6) == 0)
+	else if (ft_strncmp(line, "unset ", 6) == 0 || ft_strcmp(line, "unset") == 0)
 		handle_unset(line);
 	else
 		execute_cmd(line);
@@ -186,65 +186,6 @@ void	setup_signal_handlers(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-int get_var_name_size(char *str)
-{
-	int		start;
-	int		end;
-
-	start = 0;
-	end = 0;
-	while (str[start] && str[start] != '$')
-		start++;
-	if (str[start] != '$')
-		return 0;
-	start++;
-	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '\0' && str[end] != '$')
-		end++;
-	return (end - start);
-}
-
-void get_var_name(char *dest, char *str)
-{
-	int start = 0;
-	int end = 0;
-	int	i = 0;
-
-	while (str[start] != '\0' && str[start] != '$')
-		start++;
-	if (str[start] != '$')
-		return;
-	start++;
-	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '\0' && str[end] != '$')
-		end++;
-	while (start < end)
-	{
-		// printf("%c\n",  str[start]);
-		dest[i] = str[start];
-		i++;
-		start++;
-	}
-	dest[i] = '\0';
-}
-
-void	bridge_var(char **str)
-{
-	int size = get_var_name_size(*str);
-	char *var_name;
-	char *var_value;
-
-	if (size < 1)
-		return ;
-	var_name = malloc(size + 1);
-	if (!var_name)
-		return (free(str));
-	get_var_name(var_name, *str);
-	printf("%s\n", var_name);
-	// printf("%s\n", "hello");
-
-}
-
 int main(void)
 {
 	char	*line;
@@ -261,7 +202,7 @@ int main(void)
 		else
 		{
 			add_history(line);
-			bridge_var(&line);
+			// bridge_var(&line);
 			choose_cmd(line);
 		}
 		free(line);
