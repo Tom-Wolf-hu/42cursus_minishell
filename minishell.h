@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 18:15:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/20 18:59:32 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 #include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
 
-int		bridge_var(char **str);
+void	bridge_var(char **str);
 void	handle_echo(char *line);
 int		ft_isspace(int c);
 int		is_empty(char *line);

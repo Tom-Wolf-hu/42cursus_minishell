@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/20 18:27:31 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/20 18:59:24 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,6 @@ void	show_input(char **arr, int flag)
 	}
 }
 
-int	check_line_echo(char *line)
-{
-	char *line_to_check;
-
-	line_to_check = ft_strdup(line);
-	return (bridge_var(&line_to_check));
-}
-
 void	handle_echo(char *line)
 {
 	char	**arr;
@@ -72,8 +64,7 @@ void	handle_echo(char *line)
 	char	*line_to_check;
 
 	line_to_check = ft_strdup(line);
-	if (!bridge_var(&line_to_check))
-		return (write(1, "\n", 1), (void)0);
+	bridge_var(&line_to_check);
 	i = 0;
 	arr = ft_split(line_to_check, ' ');
 	if (!arr)
@@ -81,7 +72,9 @@ void	handle_echo(char *line)
 	while (arr[i])
 		i++;
 	if (i == 1)
-		return (write(1, "\n", 1), free_arr(arr), free(line_to_check), free(line));
+	{
+		return (write(1, "\n", 1), free_arr(arr), free(line_to_check));
+	}
 	if (i == 2)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
@@ -96,6 +89,6 @@ void	handle_echo(char *line)
 		show_input(arr, 0);
 	}
 	free_arr(arr);
-	free(line);
-	free(line_to_check);
+	// free(line);
+	// free(line_to_check);
 }

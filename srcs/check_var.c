@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 18:17:45 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/20 19:00:24 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int get_var_name_size(char *str)
 		return 0;
 	start++;
 	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '$' && str[end] != '=' && str[end] != '\0')
+	while (str[end] && str[end] != ' ' && str[end] != '\t' && str[end] != '$' && str[end] != '=' && str[end] != '\0')
 		end++;
 	return (end - start);
 }
@@ -40,7 +40,7 @@ void get_var_name(char *dest, char *str)
 		return;
 	start++;
 	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '\0' && str[end] != '$' && str[end] != '=')
+	while (str[end] && str[end] != ' ' && str[end] != '\t' && str[end] != '\0' && str[end] != '$' && str[end] != '=')
 		end++;
 	while (start < end)
 	{
@@ -135,7 +135,7 @@ void	change_str(char **str, char *name, char *value)
 	result[end] = '\0';
 	// printf("%s %d\n", result, ft_strlen(result));
 	i = end; // теперь индекс для result
-	while ((*str)[start] && (*str)[start] != ' ' && (*str)[start] != '$' && (*str)[start] != '=' && (*str)[start] != '\0')
+	while ((*str)[start] && (*str)[start] != ' ' && (*str)[start] != '$' && (*str)[start] != '=' && (*str)[start] != '\0' && (*str)[start] != '\t')
 		start++;
 	// printf("%d\n", start);
 	while ((*str)[start] && i < len)
@@ -150,7 +150,35 @@ void	change_str(char **str, char *name, char *value)
 	*str = result;
 }
 
-int bridge_var(char **str)
+void	remove_var_name(char **str, char *name)
+{
+	int	i = 0;
+	int	start = 0;
+	char	*result;
+	int		len = ft_strlen(*str) - ft_strlen(name) + 1;
+	
+	result = malloc(len);
+	if (!result)
+		return ;
+	while ((*str)[i] && (*str)[i] != '$')
+	{
+		result[i] = (*str)[i];
+		i++;
+	}
+	start = i;
+	i = i + ft_strlen(name) + 1;
+	while ((*str)[i])
+	{
+		result[start] = (*str)[i];
+		i++;
+		start++;
+	}
+	result[start] = '\0';
+	free(*str);
+	*str = result;
+}
+
+void	bridge_var(char **str)
 {
 	char *var_name;
 	int size;
@@ -160,26 +188,32 @@ int bridge_var(char **str)
 	if (size < 1)
 	{
 		printf("No variable found\n");
-		return 0;
+		return ;
 	}
 	var_name = malloc(size + 1);
 	if (!var_name)
-		return 0;
+		return ;
 	get_var_name(var_name, *str);
+	// printf("%s\n", var_name);
 	var_value = find_var_value(var_name);
 	if (var_value)
 	{
 		change_str(str, var_name, var_value);
 		// printf("%s\n", *str);
-		return (free(var_name), 1);
+		return (free(var_name));
 	}
-	printf("Variable not found in environ\n");
-	return (free(var_name), 0);
+	else
+	{
+		remove_var_name(str, var_name);
+	}
+	// printf("Variable not found in environ\n");
+	return (free(var_name));
 }
 
 // int main()
 // {
-//     char *str = strdup("echo $USER hello");  // Можешь заменить на $PS или $PATH
+//     char *str = strdup("echo $USERhello mam");  // Можешь заменить на $PS или $PATH
 //     bridge_var(&str);
+// 	printf("%s\n", str);
 // 	free(str);
 // }
