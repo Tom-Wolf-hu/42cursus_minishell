@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/19 16:02:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/20 13:31:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,26 +110,6 @@ void	print_env(void)
 	}
 }
 
-void	execute_cmd(char *line)
-{
-	pid_t	pid;
-	int		status;
-	char	*args[] = {line, NULL};
-	char	*env[] = {NULL};
-
-	pid = fork();
-	if (pid == 0)
-	{
-		execve("/usr/bin/ls", args, env);
-		perror("execve");
-		exit(127);
-	}
-	else if (pid > 0)
-		waitpid(pid, &status, 0);
-	else
-		perror("fork");
-}
-
 int	check_line(char *line, int i)
 {
 	int	len;
@@ -142,28 +122,6 @@ int	check_line(char *line, int i)
 		i++;
 	}
 	return (1);
-}
-
-void	choose_cmd(char *line)
-{
-	if (is_empty(line))
-		return ;
-	if (ft_strcmp(line, "pwd") == 0)
-		ft_getcwd(line);
-	else if (ft_strncmp(line, "cd", 2) == 0)
-		handle_cd(line);
-	else if (ft_strncmp(line, "echo", 4) == 0)
-		handle_echo(line);
-	else if (ft_strcmp(line, "env") == 0)
-		print_env();
-	else if (ft_strncmp(line, "export", 6) == 0)
-		handle_export(line);
-	else if (ft_strncmp(line, "unset", 5) == 0)
-		handle_unset(line);
-	else
-		execute_cmd(line);
-	// else
-		// printf("minishell: command not found: %s\n", line);
 }
 
 int main(void)

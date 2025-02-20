@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/19 15:58:39 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/20 13:46:48 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,9 @@ void	choose_op(t_tokentype e_red, char *name_d);
 void	add_node(t_pnode **node);
 void	nl_clear(t_pnode **node);
 void	back_to_firstnode(t_pnode **node);
+
+//msh_cmd.c
+void	execute_cmd(char *cmd, char **env);
+void	choose_cmd(char *line);
 
 #endif
