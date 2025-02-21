@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 17:05:16 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 19:40:03 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,29 @@ void	print_env(void)
 		i++;
 	}
 }
+/*
+int	execute_cmd(char *line)
+{
+	// extern char **environ;
+	pid_t	pid;
+	int		status;
+	char	*args[] = {line, NULL};
+	char	*env[] = {NULL};
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execve("/usr/bin/ls", args, env);
+		perror("execve");
+		exit(127);
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else
+		perror("fork");
+	return (WEXITSTATUS(status));
+}
+*/
 
 int	check_line(char *line, int i)
 {
@@ -127,7 +150,25 @@ int	check_line(char *line, int i)
 	return (1);
 }
 
-char	*remove_first_spaces(char *line)
+int	check_quastion_sign(char **line, int status)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '$')
+		{
+			if (line[i + 1] == '?')
+			{
+				change_to_exit_status(i, line, status);
+			}
+		}
+		i++;
+	}
+}
+
+char	*remove_first_spaces(char *line, int status)
 {
 	char	*new_line;
 	int		i;
@@ -141,13 +182,19 @@ char	*remove_first_spaces(char *line)
 	{
 		i++;
 	}
-	return (ft_strdup(line + i));
+	new_line = ft_strdup(line + i);
+	check_quastion_sign(&new_line, status);
+	return (new_line);
 }
+
 
 /*
 void	choose_cmd(char *line)
 {
-	char *new_line = remove_first_spaces(line);
+	static int status = 0;
+	char *new_line = remove_first_spaces(line, status);
+	
+	
 	if (!new_line)
 		return ;
 	if (ft_strcmp(new_line, "pwd") == 0)
@@ -163,7 +210,7 @@ void	choose_cmd(char *line)
 	else if (ft_strncmp(new_line, "unset ", 6) == 0 || ft_strcmp(new_line, "unset") == 0)
 		handle_unset(new_line);
 	else
-		execute_cmd(line);
+		status = execute_cmd(line);
 	// else
 		// printf("minishell: command not found: %s\n", line);
 }
