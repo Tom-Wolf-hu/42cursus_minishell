@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 14:54:00 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/21 20:43:24 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int get_var_name_size(char *str)
+int	get_var_name_size(char *str)
 {
 	int start = 0;
 	int end = 0;

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 17:00:31 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 20:55:29 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,24 @@ typedef enum e_token
 
 typedef struct s_pnode
 {
-	t_tokentype	toktype;
-	char		*strpart;
-	t_pnode		*next;
-	t_pnode		*prev;
+	t_tokentype		toktype;
+	char			*strpart;
+	struct s_pnode	*next;
+	struct s_pnode	*prev;
 }	t_pnode;
 
 //minishell.c
-void	handle_echo(char *line);
-int 	ft_isspace(int c);
-int		is_empty(char *line);
-void	free_arr(char **arr);
-void	handle_export(char *line);
-void	handle_unset(char *line);
-int		check_line(char *line, int i);
-void	print_env(void);
 void	ft_error(void);
 void	sig_handler(int sig);
+void	ft_getcwd(char *line);
+void	free_arr(char **arr);
+void	handle_cd(char *line);
+int		check_line(char *line, int i);
+int		check_quastion_sign(char **line, int status);
+char	*remove_first_spaces(char *line, int status);
+void	disable_ctrl_c_output(void);
+void	setup_signal_handlers(void);
+void	print_env(void);
 int 	main(void);
 
 //msh_redirect.c
@@ -86,17 +87,39 @@ void	back_to_firstnode(t_pnode **node);
 //msh_cmd.c
 char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
-void	execute_cmd(char *cmd, char **env);
+int		execute_cmd(char *cmd);
 int		is_builtin(char *cmd);
-void	choose_cmd(char *line, char **env);
+void	choose_cmd(char *line);
 
 //msh_env.c
 char	*cmd_acces(char *path, char *cmd);
 char	**dev_strarr(char *str, char delimeter);
 char	*env_variable_val(char *variable_name);
 
+//check_line.c
+int		ft_isspace(int c);
+int		is_empty(char *line);
 
+//check_var.c
+int		get_var_name_size(char *str);
+void	get_var_name(char *dest, char *str);
+int		cmp_names(char *name1, char *name2);
+char	*get_name(char *str);
+char	*find_var_value(char *var_name);
+void	change_str(char **str, char *name, char *value);
+void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
 
+//echo.c
+void	mywrite(char *line);
+void	show_input(char **arr, int flag);
+void	handle_echo(char *line);
+
+//handle_export_unset.c
+int		find_var_in_env(char *name);
+void	mysetenv(char *name, char *value);
+void	handle_export(char *line);
+void	my_unsetenv(char *name);
+void	handle_unset(char *line);
 
 #endif

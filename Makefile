@@ -14,13 +14,13 @@ SRCS =	srcs/minishell.c \
 		srcs/msh_cmd.c \
 		srcs/msh_env.c \
 		srcs/check_var.c
-GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
+# GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
 LIBFT_DIR = lib/libft
 LIBFT = libft.a
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
-GNL_OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(GNL_SRCS:.c=.o)))
+# GNL_OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(GNL_SRCS:.c=.o)))
 #notdir - оставляет только имена файлоа
 #addprefix добавляет к каждому имени файла objs/
 

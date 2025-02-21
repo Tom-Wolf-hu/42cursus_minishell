@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/20 20:45:27 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 21:06:35 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*cmd_path(char *cmd)
 	char	*path;
 	char	**arg;
 
+	path = NULL;
 	if (cmd[0] == '/' || ft_strncmp("./", cmd, 2) == 0)
 		path = ft_strdup(cmd);
 	else
@@ -55,25 +56,29 @@ char	*cmd_path(char *cmd)
 	return (path);
 }
 
-void	execute_cmd(char *cmd, char **env)
+int	execute_cmd(char *cmd)
 {
-	pid_t	pid;
-	int		status;
-	char	*cmdpath;
-	char	**cmdarg;
+	pid_t		pid;
+	int			status;
+	char		*cmdp;
+	char		**cmdarg;
+	extern char	**environ;
 	// char	*args[] = {cmd, NULL};
 
+	cmdp = cmd_path(cmd);
+	cmdarg = dev_strarr(cmd, ' ');
 	pid = fork();
-	if (pid == 0)
+	if (pid == 0 && cmdp && cmdarg)
 	{
-		execve(cmdpath, cmdarg, env);
-		perror("execve");
+		execve(cmdp, cmdarg, environ);
+		perror("Failed to execute the command.\n");
 		exit(127);
 	}
 	else if (pid > 0)
 		waitpid(pid, &status, 0);
 	else
-		perror("fork");
+		perror("Failed to create fork.\n");
+	return(WEXITSTATUS(status));
 }
 
 int	is_builtin(char *cmd)
@@ -100,14 +105,18 @@ My recommendation is that check for empty line we should later put in a previous
 I kept this part, still we didn't reach that phase.
 I'm little bit confused how the is_empty funtcion works. I would like to discuss it.
 */
-void	choose_cmd(char *cmd, char **env)
+void	choose_cmd(char *line)
 {
-	if (is_empty(cmd))
+	static int	status = 0;
+	// char		*new_line;
+
+	// new_line = remove_first_spaces(line, status);
+	if (is_empty(line))
 		return ;
-	if (is_builtin(cmd) == 0)
+	if (is_builtin(line) == 0)
 		return ;
 	else
-		execute_cmd(cmd, **env);
+		status = execute_cmd(line);
 	// else
 		// printf("minishell: command not found: %s\n", line);
 }

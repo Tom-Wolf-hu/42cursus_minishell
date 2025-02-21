@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/19 20:30:30 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/21 20:35:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	handle_export(char *line)
 }
 
 // Функция для удаления переменной из окружения
-void my_unsetenv(char *name) {
+void my_unsetenv(char *name)
+{
     int index = find_var_in_env(name);
     
     // Если переменная найдена

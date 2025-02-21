@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 19:40:03 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 20:27:16 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,18 +154,20 @@ int	check_quastion_sign(char **line, int status)
 {
 	int	i;
 
+	(void)status;
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '$')
+		if (*line[i] == '$')
 		{
-			if (line[i + 1] == '?')
-			{
-				change_to_exit_status(i, line, status);
-			}
+			// if (*line[i + 1] == '?')
+			// {
+			// 	change_to_exit_status(i, line, status);
+			// }
 		}
 		i++;
 	}
+	return (0);
 }
 
 char	*remove_first_spaces(char *line, int status)
@@ -177,8 +179,8 @@ char	*remove_first_spaces(char *line, int status)
 	new_line = NULL;
 	if (is_empty(line))
 		return (new_line);
-	while (line[i] && line[i] == ' ' || line[i] == '\t' || line[i] == '\n'
-		|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r')
+	while (line[i] && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n'
+		|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
 	{
 		i++;
 	}
@@ -239,11 +241,9 @@ void	setup_signal_handlers(void)
 int main(void)
 {
 	char	*line;
-	char	**env;
 
 	disable_ctrl_c_output();
 	setup_signal_handlers();
-	env = NULL;
 	while (1)
 	{
 		line = readline("> ");
@@ -254,7 +254,7 @@ int main(void)
 		else
 		{
 			add_history(line);
-			choose_cmd(line, env);
+			choose_cmd(line);
 		}
 		free(line);
 	}
