@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 14:34:22 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 17:00:31 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <termios.h>
 #include <stdbool.h>
 
 // #include "lib/get_next_line/get_next_line.h"
@@ -93,5 +94,9 @@ void	choose_cmd(char *line, char **env);
 char	*cmd_acces(char *path, char *cmd);
 char	**dev_strarr(char *str, char delimeter);
 char	*env_variable_val(char *variable_name);
+
+
+void	bridge_var(char **str);
+
 
 #endif
