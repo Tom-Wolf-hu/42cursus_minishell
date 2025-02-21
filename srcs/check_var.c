@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 19:00:24 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/21 14:54:00 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void	bridge_var(char **str)
 	size = get_var_name_size(*str);
 	if (size < 1)
 	{
-		printf("No variable found\n");
+		// printf("No variable found\n");
 		return ;
 	}
 	var_name = malloc(size + 1);

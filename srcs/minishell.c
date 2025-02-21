@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 18:23:19 by alex             ###   ########.fr       */
+/*   Updated: 2025/02/21 15:54:44 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	print_env(void)
 
 void	execute_cmd(char *line)
 {
+	// extern char **environ;
 	pid_t	pid;
 	int		status;
 	char	*args[] = {line, NULL};
@@ -144,22 +145,40 @@ int	check_line(char *line, int i)
 	return (1);
 }
 
+char	*remove_first_spaces(char *line)
+{
+	char	*new_line;
+	int		i;
+
+	i = 0;
+	new_line = NULL;
+	if (is_empty(line))
+		return (new_line);
+	while (line[i] && line[i] == ' ' || line[i] == '\t' || line[i] == '\n'
+		|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r')
+	{
+		i++;
+	}
+	return (ft_strdup(line + i));
+}
+
 void	choose_cmd(char *line)
 {
-	if (is_empty(line))
+	char *new_line = remove_first_spaces(line);
+	if (!new_line)
 		return ;
-	if (ft_strcmp(line, "pwd") == 0)
-		ft_getcwd(line);
-	else if (ft_strncmp(line, "cd ", 3) == 0 || ft_strcmp(line, "cd") == 0)
-		handle_cd(line);
-	else if (ft_strncmp(line, "echo ", 5) == 0 || ft_strcmp(line, "echo") == 0)
-		handle_echo(line);
-	else if (ft_strcmp(line, "env") == 0)
+	if (ft_strcmp(new_line, "pwd") == 0)
+		ft_getcwd(new_line);
+	else if (ft_strncmp(new_line, "cd ", 3) == 0 || ft_strcmp(new_line, "cd") == 0)
+		handle_cd(new_line);
+	else if (ft_strncmp(new_line, "echo ", 5) == 0 || ft_strcmp(new_line, "echo") == 0)
+		handle_echo(new_line);
+	else if (ft_strcmp(new_line, "env") == 0)
 		print_env();
-	else if (ft_strncmp(line, "export ", 7) == 0 || ft_strcmp(line, "export") == 0)
-		handle_export(line);
-	else if (ft_strncmp(line, "unset ", 6) == 0 || ft_strcmp(line, "unset") == 0)
-		handle_unset(line);
+	else if (ft_strncmp(new_line, "export ", 7) == 0 || ft_strcmp(new_line, "export") == 0)
+		handle_export(new_line);
+	else if (ft_strncmp(new_line, "unset ", 6) == 0 || ft_strcmp(new_line, "unset") == 0)
+		handle_unset(new_line);
 	else
 		execute_cmd(line);
 	// else
@@ -202,7 +221,7 @@ int main(void)
 		else
 		{
 			add_history(line);
-			// bridge_var(&line);
+			// check_signs(line);
 			choose_cmd(line);
 		}
 		free(line);
