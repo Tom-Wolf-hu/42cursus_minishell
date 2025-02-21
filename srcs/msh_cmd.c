@@ -6,25 +6,50 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/20 14:54:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/20 20:45:27 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*cmd_env_path(char *cmd, char **env)
+char	*shearch_cmd(char *cmd)
 {
-	
+	char	*result;
+	char	*env_varval;
+	char	**env_path;
+	int		i;
+
+	i = 0;
+	env_varval = env_variable_val("PATH");
+	if (!env_varval)
+		return (free(env_varval), NULL);
+	env_path = dev_strarr(env_varval, ':');
+	if (!env_path)
+		return (NULL);
+	while (env_path[i] != NULL)
+	{
+		result = cmd_acces(env_path[i], cmd);
+		if (result)
+			break ;
+		i++;
+	}
+	free_arr(env_path);
+	return (free(env_varval), result);
 }
 
-char	*cmd_path(char *cmd, char **env)
+char	*cmd_path(char *cmd)
 {
 	char	*path;
+	char	**arg;
 
 	if (cmd[0] == '/' || ft_strncmp("./", cmd, 2) == 0)
 		path = ft_strdup(cmd);
 	else
-		path = cmd_env_path(cmd, env);
+	{
+		arg = dev_strarr(cmd, ' ');
+		if (arg && arg[0])
+			path = shearch_cmd(arg[0]);
+	}
 	if (!path || access(path, X_OK) < 0)
 		return (NULL);
 	return (path);
@@ -34,13 +59,14 @@ void	execute_cmd(char *cmd, char **env)
 {
 	pid_t	pid;
 	int		status;
-	char	*path;
-	char	*args[] = {cmd, NULL};
+	char	*cmdpath;
+	char	**cmdarg;
+	// char	*args[] = {cmd, NULL};
 
 	pid = fork();
 	if (pid == 0)
 	{
-		execve("/usr/bin/ls", args, env);
+		execve(cmdpath, cmdarg, env);
 		perror("execve");
 		exit(127);
 	}

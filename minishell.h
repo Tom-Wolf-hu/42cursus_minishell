@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 13:46:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 14:34:22 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,15 @@ void	nl_clear(t_pnode **node);
 void	back_to_firstnode(t_pnode **node);
 
 //msh_cmd.c
+char	*shearch_cmd(char *cmd);
+char	*cmd_path(char *cmd);
 void	execute_cmd(char *cmd, char **env);
-void	choose_cmd(char *line);
+int		is_builtin(char *cmd);
+void	choose_cmd(char *line, char **env);
+
+//msh_env.c
+char	*cmd_acces(char *path, char *cmd);
+char	**dev_strarr(char *str, char delimeter);
+char	*env_variable_val(char *variable_name);
 
 #endif
