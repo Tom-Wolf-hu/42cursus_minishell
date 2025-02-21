@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/20 20:43:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 14:51:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,9 @@ int	check_line(char *line, int i)
 int main(void)
 {
 	char	*line;
+	char	**env;
 
+	env = NULL;
 	while (1)
 	{
 		signal(SIGINT, sig_handler);
@@ -143,7 +145,7 @@ int main(void)
 		else
 		{
 			add_history(line);
-			choose_cmd(line);
+			choose_cmd(line, env);
 		}
 		free(line);
 	}
