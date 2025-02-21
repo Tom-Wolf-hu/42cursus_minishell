@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/21 16:00:23 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:30:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,6 @@ void	show_input(char **arr, int flag)
 	}
 }
 
-int	check_quastion_sign(char *line)
-{
-	
-}
-
 void	handle_echo(char *line)
 {
 	char	**arr;
@@ -69,10 +64,7 @@ void	handle_echo(char *line)
 	char	*line_to_check;
 
 	line_to_check = ft_strdup(line);
-	if (!check_quastion_sign(line))
-	{
-		bridge_var(&line_to_check);
-	}
+	bridge_var(&line_to_check);
 	i = 0;
 	arr = ft_split(line_to_check, ' ');
 	if (!arr)

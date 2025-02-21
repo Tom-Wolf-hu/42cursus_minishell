@@ -13,13 +13,32 @@
 #include <sys/wait.h>
 #include <termios.h>
 
-int main()
+void change_to_exit_status(int i, char *line, char *status)
 {
-	int i = 0;
-	extern char** environ;
-	while (environ[i])
+	
+}
+
+int	check_quastion_sign(char **line, char *status)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
 	{
-		printf("%s\n", environ[i]);
+		if (line[i] == '$')
+		{
+			if (line[i + 1] == '?')
+			{
+				change_to_exit_status(i, line, status);
+			}
+		}
 		i++;
 	}
+}
+
+int main()
+{
+	char *line = strdup("hello $?");
+	check_quastion_sign(&line, "0");
+	printf("%s\n", line);
 }
