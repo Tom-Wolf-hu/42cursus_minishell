@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 15:04:09 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/20 20:35:01 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/21 21:49:10 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,22 @@
 
 char	*cmd_acces(char *path, char *cmd)
 {
-	char	*temp;
+	char	*temp1;
+	char	*temp2;
 
 	if (!path || !cmd)
 		return (NULL);
-	temp = ft_strjoin(path, "/");
-	free(path);
-	path = ft_strjoin(temp, cmd);
-	free(temp);
-	if (!path)
+	temp1 = ft_strdup(path);
+	temp2 = ft_strjoin(temp1, "/");
+	free(temp1);
+	temp1 = ft_strjoin(temp2, cmd);
+	free(temp2);
+	if (!temp1)
 		return (NULL);
-	if (access(path, X_OK) == 0)
-		return(path);
-	return (free(path), NULL);
+	if (access(temp1, X_OK) == 0)
+		return (temp1);
+	free(temp1);
+	return (NULL);
 }
 
 /*
@@ -36,6 +39,7 @@ char	**dev_strarr(char *str, char delimeter)
 {
 	char	**result;
 
+	result = NULL;
 	if (!str || delimeter == '\0')
 		return (NULL);
 	result = ft_split(str, delimeter);

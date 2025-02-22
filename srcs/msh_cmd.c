@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/21 21:06:35 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/22 13:48:58 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ char	*shearch_cmd(char *cmd)
 
 	i = 0;
 	env_varval = env_variable_val("PATH");
+	printf("'%s'\n", env_varval);
 	if (!env_varval)
 		return (free(env_varval), NULL);
 	env_path = dev_strarr(env_varval, ':');
@@ -34,7 +35,8 @@ char	*shearch_cmd(char *cmd)
 		i++;
 	}
 	free_arr(env_path);
-	return (free(env_varval), result);
+	// return (free(env_varval), result);
+	return (result);
 }
 
 char	*cmd_path(char *cmd)
@@ -66,9 +68,17 @@ int	execute_cmd(char *cmd)
 	// char	*args[] = {cmd, NULL};
 
 	cmdp = cmd_path(cmd);
+	printf("This is the cmdp: \t%s\n", cmdp);
 	cmdarg = dev_strarr(cmd, ' ');
+	// printf("This is the cmdarg: \t%s\n", cmdarg[0]);
+	print_arr(cmdarg);
+	if (!cmdp || !cmdarg)
+	{
+		ft_putendl_fd("The commandpath does not exists.", 2);
+		return (1);
+	}
 	pid = fork();
-	if (pid == 0 && cmdp && cmdarg)
+	if (pid == 0)
 	{
 		execve(cmdp, cmdarg, environ);
 		perror("Failed to execute the command.\n");

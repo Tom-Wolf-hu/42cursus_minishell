@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 20:55:29 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/22 13:35:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ void	choose_cmd(char *line);
 char	*cmd_acces(char *path, char *cmd);
 char	**dev_strarr(char *str, char delimeter);
 char	*env_variable_val(char *variable_name);
+
+//msh_utils.c
+void	print_arr(char **strarr);
 
 //check_line.c
 int		ft_isspace(int c);
