@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/22 13:35:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/22 19:44:00 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	read_in_temp(char *delimeter, int fd_delimeter);
 void	red_del(char *delimeter);
 
 //msh_operations.c
+void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
+void	ft_pipe(char *beforep, char *afterp);
 void	choose_op(t_tokentype e_red, char *name_d);
 
 //msh_parse.c
