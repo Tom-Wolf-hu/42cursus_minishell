@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/24 13:18:51 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/24 14:03:23 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,8 +254,8 @@ int main(void)
 		else
 		{
 			add_history(line);
-			// choose_cmd(line);
-			loop_analyzel(line);
+			choose_cmd(line);
+			// loop_analyzel(line);
 		}
 		free(line);
 	}

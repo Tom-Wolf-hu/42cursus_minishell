@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/24 13:07:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/24 13:44:42 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,28 @@ void	ft_pipe(char *beforep, char *afterp)
 	close(pipefd[1]);
 }
 
-void	choose_op(t_tokentype e_red, char *name_d)
+/*Previously it was the following function line
+
+void	choose_redirection(t_tokentype e_red, char *name_d)
+{
+	if (!name_d)
+	{
+		ft_putendl_fd("File name or delimiter does \
+			ot exist in choose_op.", STDERR_FILENO);
+		return ;
+	}
+	if (e_red == REDINPUT)
+		red_in(name_d);
+	else if (e_red == REDOUTPUT)
+		red_del(name_d);
+	else if (e_red == APPENDREDOUTPUT)
+		red_out_append(name_d);
+	else if (e_red == REDDELIMETER)
+		red_del(name_d);
+}
+*/
+
+void	choose_redirection(t_tokentype e_red, char *name_d)
 {
 	if (!name_d)
 	{
