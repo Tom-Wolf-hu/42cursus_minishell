@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   check_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:45:12 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/19 12:45:37 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:05:23 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+
+int	ft_isoperator(int c)
+{
+	return (c == '|' || c == '<' || c == '>' || c == '$' || c == '\'' || c == '\"');
+}
 
 int ft_isspace(int c)
 {
