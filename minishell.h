@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/24 13:42:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/25 19:06:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ char	*env_variable_val(char *variable_name);
 
 //msh_utils.c
 void	print_arr(char **strarr);
+void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
+char	*str_realloc(char *oldstr, size_t newsize);
 
 //msh_line_analizer.c
 char	save_word(char *line, char *word, int *j);
