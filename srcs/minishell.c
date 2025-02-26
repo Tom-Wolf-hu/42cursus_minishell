@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 13:28:04 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:28:00 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ int	ft_getcwd(char *line)
 	if (getcwd(buffer, size) == NULL)
 	{
 		perror("minishell: getcwd");
-		free(line);
-		exit(1);
 		return (free(line), exit(1), 1);
 	}
 	printf("%s\n", buffer);
@@ -116,29 +114,6 @@ int	print_env(void)
 	}
 	return (0);
 }
-/*
-int	execute_cmd(char *line)
-{
-	// extern char **environ;
-	pid_t	pid;
-	int		status;
-	char	*args[] = {line, NULL};
-	char	*env[] = {NULL};
-
-	pid = fork();
-	if (pid == 0)
-	{
-		execve("/usr/bin/ls", args, env);
-		perror("execve");
-		exit(127);
-	}
-	else if (pid > 0)
-		waitpid(pid, &status, 0);
-	else
-		perror("fork");
-	return (WEXITSTATUS(status));
-}
-*/
 
 int	check_line(char *line, int i)
 {
@@ -172,35 +147,6 @@ char	*remove_first_spaces(char *line)
 	return (new_line);
 }
 
-
-
-// void	choose_cmd(char *line)
-// {
-// 	static int status = 0;
-// 	char *new_line = remove_first_spaces(line, status);
-	
-	
-// 	if (!new_line)
-// 		return ;
-// 	if (ft_strcmp(new_line, "pwd") == 0)
-// 		ft_getcwd(new_line);
-// 	else if (ft_strncmp(new_line, "cd ", 3) == 0 || ft_strcmp(new_line, "cd") == 0)
-// 		handle_cd(new_line);
-// 	else if (ft_strncmp(new_line, "echo ", 5) == 0 || ft_strcmp(new_line, "echo") == 0)
-// 		handle_echo(new_line);
-// 	else if (ft_strcmp(new_line, "env") == 0)
-// 		print_env();
-// 	else if (ft_strncmp(new_line, "export ", 7) == 0 || ft_strcmp(new_line, "export") == 0)
-// 		handle_export(new_line);
-// 	else if (ft_strncmp(new_line, "unset ", 6) == 0 || ft_strcmp(new_line, "unset") == 0)
-// 		handle_unset(new_line);
-// 	else
-// 		status = execute_cmd(line);
-// 	// else
-// 		// printf("minishell: command not found: %s\n", line);
-// }
-
-
 void	disable_ctrl_c_output(void)
 {
 	struct termios	term;
@@ -223,7 +169,7 @@ void	setup_signal_handlers(void)
 
 int main(void)
 {
-	char	*line;
+	char			*line;
 	static int		status;
 
 	disable_ctrl_c_output();
@@ -239,8 +185,8 @@ int main(void)
 		{
 			add_history(line);
 			check_quastion_sign(&line, ft_itoa(status));
+			bridge_var(&line);
 			status = choose_cmd(line);
-			// loop_analyzel(line);
 		}
 		free(line);
 	}

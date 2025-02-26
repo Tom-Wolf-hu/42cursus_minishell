@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/26 13:29:59 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:16:32 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	handle_echo(char *line)
 	char	*line_to_check;
 
 	line_to_check = ft_strdup(line);
-	bridge_var(&line_to_check);
+	// bridge_var(&line_to_check);
 	i = 0;
 	arr = ft_split(line_to_check, ' ');
 	if (!arr)

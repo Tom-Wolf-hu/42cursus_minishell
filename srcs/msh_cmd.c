@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/26 13:30:55 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:16:23 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,24 +99,24 @@ int	execute_cmd(char *cmd)
 		waitpid(pid, &status, 0);
 	else
 		perror("Failed to create fork.\n");
-	return(WEXITSTATUS(status));
+	return (WEXITSTATUS(status));
 }
 
 int	is_builtin(char *cmd)
 {
 	int	status;
 
-	if (ft_strcmp(cmd, "pwd") == 0)
+	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
 		status = ft_getcwd(cmd);
-	else if (ft_strncmp(cmd, "cd", 2) == 0)
+	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
 		status = handle_cd(cmd);
-	else if (ft_strncmp(cmd, "echo", 4) == 0)
+	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
 		status = handle_echo(cmd);
 	else if (ft_strcmp(cmd, "env") == 0)
 		status = print_env();
-	else if (ft_strncmp(cmd, "export", 6) == 0)
+	else if (ft_strncmp(cmd, "export ", 7) == 0 || ft_strcmp(cmd, "export") == 0)
 		status = handle_export(cmd);
-	else if (ft_strncmp(cmd, "unset", 5) == 0)
+	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
 		status = handle_unset(cmd);
 	else
 		return (-1);
@@ -136,11 +136,17 @@ int	choose_cmd(char *line)
 	new_line = remove_first_spaces(line);
 	status = 0;
 	if (is_empty(new_line))
-		return (status);
+	{
+		return (free(new_line), status);
+	}
 	if (is_builtin(new_line) == 0)
-		return (status);
+	{
+		return (free(new_line), status);
+	}
 	else
+	{
 		status = execute_cmd(new_line);
-	return (status);
+	}
+	return (free(new_line), status);
 }
 
