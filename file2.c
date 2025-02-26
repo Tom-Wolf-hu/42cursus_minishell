@@ -75,3 +75,4 @@ int main()
 	check_quastion_sign(&line, "01234");
 	printf("%s\n", line);
 }// USAGE: check_quastion_sign(line_to_check, char* status)
+// добавить проверку для '
