@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 15:02:23 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:51:28 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_pnode
 }	t_pnode;
 
 //minishell.c
-void	ft_error(void);
+void	ft_error(char *error, int exit_status);
 void	sig_handler(int sig);
 int	ft_getcwd(char *line);
 void	free_arr(char **arr);
@@ -64,7 +64,7 @@ int	handle_cd(char *line);
 int		check_line(char *line, int i);
 int		check_quastion_sign(char **line, char *status);
 char	*remove_first_spaces(char *line);
-void	disable_ctrl_c_output(void);
+void	disable_ctrl_c_output(int status);
 void	setup_signal_handlers(void);
 int	print_env(void);
 int 	main(void);

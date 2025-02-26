@@ -6,16 +6,16 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 16:26:17 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:52:13 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_error(void)
+void	ft_error(char *error, int exit_status)
 {
-	perror("Error");
-	exit(1);
+	perror(error);
+	exit(exit_status);
 }
 
 void	sig_handler(int sig)
@@ -119,6 +119,8 @@ int	check_line(char *line, int i)
 {
 	int	len;
 
+	if (!line)
+		return (1);
 	len = ft_strlen(line);
 	while (i < len)
 	{
@@ -147,13 +149,14 @@ char	*remove_first_spaces(char *line)
 	return (new_line);
 }
 
-void	disable_ctrl_c_output(void)
+void	disable_ctrl_c_output(int status)
 {
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	status = 130;
 }
 
 void	setup_signal_handlers(void)
@@ -171,6 +174,8 @@ int	is_nummeric(char *line)
 {
 	int i = 0;
 
+	if (!line)
+		return (1);
 	while (line[i])
 	{
 		if (line[i] < '0' || line[i] > '9')
@@ -208,13 +213,11 @@ int main(void)
 	char			*line;
 	static int		status = 0;
 
-	disable_ctrl_c_output();
+	disable_ctrl_c_output(status);
 	setup_signal_handlers();
 	while (1)
 	{
 		line = readline("> ");
-		// if (!line)
-		// 	break ;
 		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
 		{
 			handle_exit(line, &status);
@@ -234,9 +237,4 @@ int main(void)
 	rl_clear_history();
 	free(line);
 }
-
-/* 
-найти переменную в строке
-выяснить длину значения
-выделить память (минус длина названия переменной, плюс длина значения)
-переписать массив и начиная с доллара начинать вписывать значение */
+// status after ctrl + c
