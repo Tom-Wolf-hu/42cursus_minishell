@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/26 14:16:32 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:23:48 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ void	show_input(char **arr, int flag)
 		i++;
 	}
 }
+
+// void	math_op(char *line)
+// {
+	
+// }
 
 int	handle_echo(char *line)
 {

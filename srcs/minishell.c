@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 14:28:00 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:01:18 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,19 +167,56 @@ void	setup_signal_handlers(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
+int	is_nummeric(char *line)
+{
+	int i = 0;
+
+	while (line[i])
+	{
+		if (line[i] < '0' || line[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	handle_exit(char *line, int *status)
+{
+	char **line_arr;
+
+	line_arr = ft_split(line, ' ');
+	if (line_arr[1])
+	{
+		if (!is_nummeric(line_arr[1]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", line_arr[1]);
+			*status = 255;
+			return (free_arr(line_arr), exit(*status));
+		}
+		*status = ft_atoi(line_arr[1]);
+	}
+	free_arr(line_arr);
+	free(line);
+	rl_clear_history();
+	exit(*status);
+}
+
 int main(void)
 {
 	char			*line;
-	static int		status;
+	static int		status = 0;
 
 	disable_ctrl_c_output();
 	setup_signal_handlers();
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, "exit") == 0)
+		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		{
+			handle_exit(line, &status);
 			break ;
-		else if (ft_strcmp(line, "clear") == 0)
+		}
+		if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
 			rl_clear_history();
 		else
 		{
