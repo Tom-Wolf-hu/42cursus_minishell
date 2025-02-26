@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/22 13:48:58 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:09:25 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ char	*cmd_path(char *cmd)
 	return (path);
 }
 
+/*
+This way the command execution won't be able to run paralel in the pipeline
+, because the parent process will wait everytime for the execution, and just after
+can call next tim the following command.
+
+The waitpid part should place outside from the the execute_cmd function. We need to 
+create a pid list, which will store all of the child process pids and after in the 
+parent process we can loop over all of the pids.
+
+void	
+*/
 int	execute_cmd(char *cmd)
 {
 	pid_t		pid;
