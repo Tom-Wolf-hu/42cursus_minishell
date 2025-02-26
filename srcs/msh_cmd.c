@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/26 14:16:23 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:14:00 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,20 +86,33 @@ int	execute_cmd(char *cmd)
 	if (!cmdp || !cmdarg)
 	{
 		ft_putendl_fd("The commandpath does not exists.", 2);
-		return (1);
+		return (127);
 	}
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(cmdp, cmdarg, environ);
-		perror("Failed to execute the command.\n");
-		exit(127);
+		if (execve(cmdp, cmdarg, environ) == -1)
+		{
+			perror("Failed to execute the command.\n");
+			exit(127);
+		}
 	}
 	else if (pid > 0)
+	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+		else
+			return (1);
+	}
 	else
+	{
 		perror("Failed to create fork.\n");
-	return (WEXITSTATUS(status));
+		return (1);
+	}
+	return (0);
 }
 
 int	is_builtin(char *cmd)

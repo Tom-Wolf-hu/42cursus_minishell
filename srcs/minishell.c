@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 16:01:18 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:26:17 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,8 @@ void	handle_exit(char *line, int *status)
 {
 	char **line_arr;
 
+	if (!line)
+		return ;
 	line_arr = ft_split(line, ' ');
 	if (line_arr[1])
 	{
@@ -211,12 +213,14 @@ int main(void)
 	while (1)
 	{
 		line = readline("> ");
+		// if (!line)
+		// 	break ;
 		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
 		{
 			handle_exit(line, &status);
 			break ;
 		}
-		if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
+		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
 			rl_clear_history();
 		else
 		{
