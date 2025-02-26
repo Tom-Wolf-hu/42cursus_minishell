@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/25 19:06:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/26 13:28:20 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ typedef struct s_pnode
 //minishell.c
 void	ft_error(void);
 void	sig_handler(int sig);
-void	ft_getcwd(char *line);
+int	ft_getcwd(char *line);
 void	free_arr(char **arr);
-void	handle_cd(char *line);
+int	handle_cd(char *line);
 int		check_line(char *line, int i);
-int		check_quastion_sign(char **line, int status);
-char	*remove_first_spaces(char *line, int status);
+int		check_quastion_sign(char **line, char *status);
+char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(void);
 void	setup_signal_handlers(void);
-void	print_env(void);
+int	print_env(void);
 int 	main(void);
 
 //msh_redirect.c
@@ -91,7 +91,7 @@ char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
 int		execute_cmd(char *cmd);
 int		is_builtin(char *cmd);
-void	choose_cmd(char *line);
+int		choose_cmd(char *line);
 
 //msh_env.c
 char	*cmd_acces(char *path, char *cmd);
@@ -126,13 +126,13 @@ void	bridge_var(char **str);
 //echo.c
 void	mywrite(char *line);
 void	show_input(char **arr, int flag);
-void	handle_echo(char *line);
+int	handle_echo(char *line);
 
 //handle_export_unset.c
 int		find_var_in_env(char *name);
-void	mysetenv(char *name, char *value);
-void	handle_export(char *line);
-void	my_unsetenv(char *name);
-void	handle_unset(char *line);
+int	mysetenv(char *name, char *value);
+int	handle_export(char *line);
+int	my_unsetenv(char *name);
+int	handle_unset(char *line);
 
 #endif

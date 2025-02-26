@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/24 14:03:23 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/26 13:28:04 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	sig_handler(int sig)
 	}
 }
 
-void	ft_getcwd(char *line)
+int	ft_getcwd(char *line)
 {
 	char	buffer[128];
 	size_t	size;
@@ -45,8 +45,10 @@ void	ft_getcwd(char *line)
 		perror("minishell: getcwd");
 		free(line);
 		exit(1);
+		return (free(line), exit(1), 1);
 	}
 	printf("%s\n", buffer);
+	return (0);
 }
 
 void	free_arr(char **arr)
@@ -65,7 +67,7 @@ void	free_arr(char **arr)
 	arr = NULL;
 }
 
-void	handle_cd(char *line)
+int	handle_cd(char *line)
 {
 	char	**arr;
 	char	*path;
@@ -74,14 +76,14 @@ void	handle_cd(char *line)
 	i = 0;
 	arr = ft_split(line, ' ');
 	if (!arr)
-		return (free(line), exit(1));
+		return (free(line), exit(1), 1);
 	while (arr[i])
 		i++;
 	if (i > 2)
 	{
 		printf("minishell: cd: too many arguments\n");
 		free_arr(arr);
-		return ;
+		return (1);
 	}
 	if (i == 1)
 	{
@@ -90,17 +92,18 @@ void	handle_cd(char *line)
 		{
 			printf("minishell: cd: HOME not set\n");
 			free_arr(arr);
-			return ;
+			return (1);
 		}
 	}
 	else
 		path = arr[1];
 	if (chdir(path) != 0)
-		perror("minishell: cd");
+		return (perror("minishell: cd"), 1);
 	free_arr(arr);
+	return (0);
 }
 
-void	print_env(void)
+int	print_env(void)
 {
 	int				i;
 	extern	char	**environ;
@@ -111,6 +114,7 @@ void	print_env(void)
 		printf("%s\n", environ[i]);
 		i++;
 	}
+	return (0);
 }
 /*
 int	execute_cmd(char *line)
@@ -150,27 +154,7 @@ int	check_line(char *line, int i)
 	return (1);
 }
 
-int	check_quastion_sign(char **line, int status)
-{
-	int	i;
-
-	(void)status;
-	i = 0;
-	while (line[i])
-	{
-		if (*line[i] == '$')
-		{
-			// if (*line[i + 1] == '?')
-			// {
-			// 	change_to_exit_status(i, line, status);
-			// }
-		}
-		i++;
-	}
-	return (0);
-}
-
-char	*remove_first_spaces(char *line, int status)
+char	*remove_first_spaces(char *line)
 {
 	char	*new_line;
 	int		i;
@@ -185,38 +169,37 @@ char	*remove_first_spaces(char *line, int status)
 		i++;
 	}
 	new_line = ft_strdup(line + i);
-	check_quastion_sign(&new_line, status);
 	return (new_line);
 }
 
 
-/*
-void	choose_cmd(char *line)
-{
-	static int status = 0;
-	char *new_line = remove_first_spaces(line, status);
+
+// void	choose_cmd(char *line)
+// {
+// 	static int status = 0;
+// 	char *new_line = remove_first_spaces(line, status);
 	
 	
-	if (!new_line)
-		return ;
-	if (ft_strcmp(new_line, "pwd") == 0)
-		ft_getcwd(new_line);
-	else if (ft_strncmp(new_line, "cd ", 3) == 0 || ft_strcmp(new_line, "cd") == 0)
-		handle_cd(new_line);
-	else if (ft_strncmp(new_line, "echo ", 5) == 0 || ft_strcmp(new_line, "echo") == 0)
-		handle_echo(new_line);
-	else if (ft_strcmp(new_line, "env") == 0)
-		print_env();
-	else if (ft_strncmp(new_line, "export ", 7) == 0 || ft_strcmp(new_line, "export") == 0)
-		handle_export(new_line);
-	else if (ft_strncmp(new_line, "unset ", 6) == 0 || ft_strcmp(new_line, "unset") == 0)
-		handle_unset(new_line);
-	else
-		status = execute_cmd(line);
-	// else
-		// printf("minishell: command not found: %s\n", line);
-}
-*/
+// 	if (!new_line)
+// 		return ;
+// 	if (ft_strcmp(new_line, "pwd") == 0)
+// 		ft_getcwd(new_line);
+// 	else if (ft_strncmp(new_line, "cd ", 3) == 0 || ft_strcmp(new_line, "cd") == 0)
+// 		handle_cd(new_line);
+// 	else if (ft_strncmp(new_line, "echo ", 5) == 0 || ft_strcmp(new_line, "echo") == 0)
+// 		handle_echo(new_line);
+// 	else if (ft_strcmp(new_line, "env") == 0)
+// 		print_env();
+// 	else if (ft_strncmp(new_line, "export ", 7) == 0 || ft_strcmp(new_line, "export") == 0)
+// 		handle_export(new_line);
+// 	else if (ft_strncmp(new_line, "unset ", 6) == 0 || ft_strcmp(new_line, "unset") == 0)
+// 		handle_unset(new_line);
+// 	else
+// 		status = execute_cmd(line);
+// 	// else
+// 		// printf("minishell: command not found: %s\n", line);
+// }
+
 
 void	disable_ctrl_c_output(void)
 {
@@ -241,6 +224,7 @@ void	setup_signal_handlers(void)
 int main(void)
 {
 	char	*line;
+	static int		status;
 
 	disable_ctrl_c_output();
 	setup_signal_handlers();
@@ -254,7 +238,8 @@ int main(void)
 		else
 		{
 			add_history(line);
-			choose_cmd(line);
+			check_quastion_sign(&line, ft_itoa(status));
+			status = choose_cmd(line);
 			// loop_analyzel(line);
 		}
 		free(line);
