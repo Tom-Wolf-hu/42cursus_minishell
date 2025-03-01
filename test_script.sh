@@ -31,8 +31,11 @@ echo $ User
 echo $USER
 echo $uSER
 echo $ USER
+| wc -l >>test_file1
+
+
 
 # remove test files
 # rm -f test_exec
-rm -f test_file1
-rm -f test_file2
+# rm -f test_file1
+# rm -f test_file2
