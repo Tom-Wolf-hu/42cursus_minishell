@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/02 15:38:31 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/02 16:44:24 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,19 @@ int	count_delimeter(char *line, char delimeter)
 	return (count);
 }
 
+void	redir_prep(char *filename, char delimeter, int count)
+{
+	if (delimeter == '<' && count == 1)
+		printf("The redirectiom: redin.\n");
+	else if (delimeter == '<' && count == 2)
+		printf("The redirectiom: heredoc.\n");
+	else if (delimeter == '>' && count == 1)
+		printf("The redirectiom: redout.\n");
+	else if (delimeter == '>' && count == 2)
+		printf("The redirectiom: redoutappend.\n");
+	printf("This is the redirection filename: \n%s\n\n", filename);
+}
+
 void	redir_case(char *line, int *i)
 {
 	char	*filename;
@@ -62,7 +75,7 @@ void	redir_case(char *line, int *i)
 			return ;
 		}
 	}
-	printf("This is the redirection filename: \n%s\n", filename);
+	redir_prep(filename, delimeter, count);
 	free(filename);
 }
 
