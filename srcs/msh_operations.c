@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/01 18:17:06 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/02 14:42:09 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	choose_redirection(t_tokentype e_red, char *name_d)
 {
 	if (!name_d)
 	{
-		ft_putendl_fd("File name or delimiter does \
-			ot exist in choose_op.", STDERR_FILENO);
+		ft_putendl_fd("Filename or delimiter does \
+			not exist in choose_op.", STDERR_FILENO);
 		return ;
 	}
 	if (e_red == REDINPUT)
@@ -68,7 +68,7 @@ char	*allocate_word(char *line, int len)
 	return (word);
 }
 
-char	*save_w(char *line, char delimeter, int *i)
+char	*save_w(char *line, char delimeter)
 {
 	int		start;
 	int		end;

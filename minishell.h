@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 18:52:18 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/02 14:42:58 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	red_del(char *delimeter);
 void	choose_redirection(t_tokentype e_red, char *name_d);
 int		count_deilemeter(char *line, char delimeter);
 char	*allocate_word(char *line, int len);
-char	*save_w(char *line, char delimeter, int *i);
-void	check_redirect(char *line);
+char	*save_w(char *line, char delimeter);
+// void	check_redirect(char *line);
 
 //msh_parse.c
 void	add_node(t_pnode **node);
