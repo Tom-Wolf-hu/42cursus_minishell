@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/26 14:16:23 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/02 17:55:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*shearch_cmd(char *cmd)
 
 	i = 0;
 	env_varval = env_variable_val("PATH");
-	printf("'%s'\n", env_varval);
+	// printf("'%s'\n", env_varval);
 	if (!env_varval)
 		return (free(env_varval), NULL);
 	env_path = dev_strarr(env_varval, ':');
@@ -79,10 +79,10 @@ int	execute_cmd(char *cmd)
 	// char	*args[] = {cmd, NULL};
 
 	cmdp = cmd_path(cmd);
-	printf("This is the cmdp: \t%s\n", cmdp);
+	// printf("This is the cmdp: \t%s\n", cmdp);
 	cmdarg = dev_strarr(cmd, ' ');
 	// printf("This is the cmdarg: \t%s\n", cmdarg[0]);
-	print_arr(cmdarg);
+	// print_arr(cmdarg);
 	if (!cmdp || !cmdarg)
 	{
 		ft_putendl_fd("The commandpath does not exists.", 2);
