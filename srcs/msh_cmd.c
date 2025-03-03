@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/26 16:14:00 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:47:30 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,11 +136,6 @@ int	is_builtin(char *cmd)
 	return (status);
 }
 
-/*
-My recommendation is that check for empty line we should later put in a previous checking funtion.
-I kept this part, still we didn't reach that phase.
-I'm little bit confused how the is_empty funtcion works. I would like to discuss it.
-*/
 int	choose_cmd(char *line)
 {
 	int		status;
