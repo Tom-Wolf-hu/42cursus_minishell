@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 14:50:49 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:07:50 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	sig_handler(int sig)
 	}
 }
 
-int	ft_getcwd(char *line)
+int	ft_getcwd(char *line, int fd)
 {
 	char	buffer[128];
 	size_t	size;
@@ -45,7 +45,9 @@ int	ft_getcwd(char *line)
 		perror("minishell: getcwd");
 		return (free(line), exit(1), 1);
 	}
-	printf("%s\n", buffer);
+	// printf("%s\n", buffer);
+	write(fd, buffer, ft_strlen(buffer));
+	write(fd, "\n", 1);
 	return (0);
 }
 
@@ -101,7 +103,7 @@ int	handle_cd(char *line)
 	return (0);
 }
 
-int	print_env(void)
+int	print_env(int fd)
 {
 	int				i;
 	extern	char	**environ;
@@ -109,7 +111,9 @@ int	print_env(void)
 	i = 0;
 	while (environ[i])
 	{
-		printf("%s\n", environ[i]);
+		// printf("%s\n", environ[i]);
+		write(fd, environ[i], ft_strlen(environ[i]));
+		write(fd, "\n", 1);
 		i++;
 	}
 	return (0);

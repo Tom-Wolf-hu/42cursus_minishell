@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_redir_cmd_call.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 14:33:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 15:13:05 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,5 @@ int	redir_cmd_s(char *line)
 		else
 			cmd_case(line, cmd, &i, &cmdlen);
 	}
-	return (free(cmd), choose_cmd(cmd));
+	return (free(cmd), choose_cmd(cmd, st));
 }

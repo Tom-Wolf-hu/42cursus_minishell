@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 14:50:11 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:02:28 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,28 +115,28 @@ int	execute_cmd(char *cmd)
 	return (0);
 }
 
-int	is_builtin(char *cmd)
+int	is_builtin(char *cmd, int fd)
 {
 	int	status;
 
 	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
-		status = ft_getcwd(cmd);
+		status = ft_getcwd(cmd, fd);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
 		status = handle_cd(cmd);
 	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
-		status = handle_echo(cmd);
+		status = handle_echo(cmd, fd);
 	else if (ft_strcmp(cmd, "env") == 0)
-		status = print_env();
+		status = print_env(fd);
 	else if (ft_strncmp(cmd, "export ", 7) == 0 || ft_strcmp(cmd, "export") == 0)
-		status = handle_export(cmd);
+		status = handle_export(cmd, fd);
 	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
-		status = handle_unset(cmd);
+		status = handle_unset(cmd, fd);
 	else
 		return (-1);
 	return (status);
 }
 
-int	choose_cmd(char *line)
+int	choose_cmd(char *line, t_store	*st)
 {
 	int		status;
 	char	*new_line;
@@ -147,7 +147,7 @@ int	choose_cmd(char *line)
 	{
 		return (free(new_line), status);
 	}
-	if (is_builtin(new_line) == 0)
+	if (is_builtin(new_line, st->fd) == 0)
 	{
 		return (free(new_line), status);
 	}
