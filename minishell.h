@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/02 17:48:01 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 14:08:38 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ typedef struct s_pnode
 	struct s_pnode	*next;
 	struct s_pnode	*prev;
 }	t_pnode;
+
+typedef	struct s_store
+{
+	int		save_stdin;
+	int		save_stdout;
+	pid_t	*childs;
+}	t_store;
+
 
 //minishell.c
 void	ft_error(void);
@@ -121,7 +129,8 @@ void	loop_analyzel(char *line);
 void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 void	ft_pipe(char *beforep, char *afterp);
 
-
+//msh_redir_cmd_utils.c
+t_store	*init_store(void);
 
 //check_line.c
 int		ft_isoperator(int c);
