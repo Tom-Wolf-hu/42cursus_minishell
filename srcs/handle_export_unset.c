@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/26 15:14:53 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:11:03 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ int mysetenv(char *name, char *value)
 	return (0);
 }
 
-int	handle_export(char *line)
+int	handle_export(char *line, int fd)
 {
 	char	*arg;
 	char	*equals_pos;
 	char	*value;
 
 	if (ft_strlen(line) == 6 || check_line(line, 7))
-		return (print_env());
+		return (print_env(fd));
 	else
 	{
 		arg = line + 7;
@@ -92,7 +92,7 @@ int	handle_export(char *line)
 			return (mysetenv(arg, value));
 		}
 		else
-			return (printf("export: invalid syntax\n"), 1);
+			return (write(fd, "export: invalid syntax\n", ft_strlen("export: invalid syntax\n")), 1);
 	}
 	return (0);
 }
@@ -120,13 +120,14 @@ int my_unsetenv(char *name)
 	return (0);
 }
 
-int	handle_unset(char *line)
+int	handle_unset(char *line, int fd)
 {
 	char	*arg;
 
 	arg = line + 6;
 	if (arg && *arg != '\0')
 		return (my_unsetenv(arg));
-	printf("unset: invalid syntax\n");
+	// printf("unset: invalid syntax\n");
+	write(fd, "unset: invalid syntax\n", ft_strlen("unset: invalid syntax\n"));
 	return (1);
 }

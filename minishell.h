@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 18:13:08 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 18:58:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,21 +60,22 @@ typedef	struct s_store
 	int		save_stdin;
 	int		save_stdout;
 	pid_t	*childs;
+	int		fd;
 }	t_store;
 
 
 //minishell.c
-void	ft_error(void);
+void	ft_error(char *error, int exit_status);
 void	sig_handler(int sig);
-int		ft_getcwd(char *line);
+int		ft_getcwd(char *line, int fd);
 void	free_arr(char **arr);
 int		handle_cd(char *line);
 int		check_line(char *line, int i);
 int		check_quastion_sign(char **line, char *status);
 char	*remove_first_spaces(char *line);
-void	disable_ctrl_c_output(void);
+void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
-int		print_env(void);
+int		print_env(int fd);
 int 	main(void);
 
 //msh_redirect.c
@@ -107,8 +108,8 @@ void	back_to_firstnode(t_pnode **node);
 char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
 int		execute_cmd(char *cmd);
-int		is_builtin(char *cmd);
-int		choose_cmd(char *line);
+int		is_builtin(char *cmd, int fd);
+int		choose_cmd(char *line, t_store  *st);
 
 //msh_env.c
 char	*cmd_acces(char *path, char *cmd);
@@ -151,15 +152,15 @@ void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
 
 //echo.c
-void	mywrite(char *line);
-void	show_input(char **arr, int flag);
-int		handle_echo(char *line);
+void	mywrite(char *line, int fd);
+void	show_input(char **arr, int fd, int flag);
+int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
 int		find_var_in_env(char *name);
 int		mysetenv(char *name, char *value);
-int		handle_export(char *line);
+int		handle_export(char *line, int fd);
 int		my_unsetenv(char *name);
-int		handle_unset(char *line);
+int		handle_unset(char *line, int fd);
 
 #endif

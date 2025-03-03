@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/02 17:48:08 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 15:07:50 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_error(void)
+void	ft_error(char *error, int exit_status)
 {
-	perror("Error");
-	exit(1);
+	perror(error);
+	exit(exit_status);
 }
 
 void	sig_handler(int sig)
@@ -34,7 +34,7 @@ void	sig_handler(int sig)
 	}
 }
 
-int	ft_getcwd(char *line)
+int	ft_getcwd(char *line, int fd)
 {
 	char	buffer[128];
 	size_t	size;
@@ -45,7 +45,9 @@ int	ft_getcwd(char *line)
 		perror("minishell: getcwd");
 		return (free(line), exit(1), 1);
 	}
-	printf("%s\n", buffer);
+	// printf("%s\n", buffer);
+	write(fd, buffer, ft_strlen(buffer));
+	write(fd, "\n", 1);
 	return (0);
 }
 
@@ -101,7 +103,7 @@ int	handle_cd(char *line)
 	return (0);
 }
 
-int	print_env(void)
+int	print_env(int fd)
 {
 	int				i;
 	extern	char	**environ;
@@ -109,7 +111,9 @@ int	print_env(void)
 	i = 0;
 	while (environ[i])
 	{
-		printf("%s\n", environ[i]);
+		// printf("%s\n", environ[i]);
+		write(fd, environ[i], ft_strlen(environ[i]));
+		write(fd, "\n", 1);
 		i++;
 	}
 	return (0);
@@ -119,6 +123,8 @@ int	check_line(char *line, int i)
 {
 	int	len;
 
+	if (!line)
+		return (1);
 	len = ft_strlen(line);
 	while (i < len)
 	{
@@ -147,13 +153,14 @@ char	*remove_first_spaces(char *line)
 	return (new_line);
 }
 
-void	disable_ctrl_c_output(void)
+void	disable_ctrl_c_output(int *status)
 {
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	*status = 130;
 }
 
 void	setup_signal_handlers(void)
@@ -167,19 +174,60 @@ void	setup_signal_handlers(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
+int	is_nummeric(char *line)
+{
+	int i = 0;
+
+	if (!line)
+		return (1);
+	while (line[i])
+	{
+		if (line[i] < '0' || line[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	handle_exit(char *line, int *status)
+{
+	char **line_arr;
+
+	if (!line)
+		return ;
+	line_arr = ft_split(line, ' ');
+	if (line_arr[1])
+	{
+		if (!is_nummeric(line_arr[1]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", line_arr[1]);
+			*status = 255;
+			return (free_arr(line_arr), exit(*status));
+		}
+		*status = ft_atoi(line_arr[1]);
+	}
+	free_arr(line_arr);
+	free(line);
+	rl_clear_history();
+	exit(*status);
+}
+
 int main(void)
 {
 	char			*line;
-	static int		status;
+	static int		status = 0;
 
-	disable_ctrl_c_output();
+	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || ft_strcmp(line, "exit") == 0)
+		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		{
+			handle_exit(line, &status);
 			break ;
-		else if (ft_strcmp(line, "clear") == 0)
+		}
+		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
 			rl_clear_history();
 		else
 		{
@@ -194,9 +242,4 @@ int main(void)
 	rl_clear_history();
 	free(line);
 }
-
-/* 
-найти переменную в строке
-выяснить длину значения
-выделить память (минус длина названия переменной, плюс длина значения)
-переписать массив и начиная с доллара начинать вписывать значение */
+// status after ctrl + c

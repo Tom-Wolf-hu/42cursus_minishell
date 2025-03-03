@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/02 17:55:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 15:02:28 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,49 +86,57 @@ int	execute_cmd(char *cmd)
 	if (!cmdp || !cmdarg)
 	{
 		ft_putendl_fd("The commandpath does not exists.", 2);
-		return (1);
+		return (127);
 	}
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(cmdp, cmdarg, environ);
-		perror("Failed to execute the command.\n");
-		exit(127);
+		if (execve(cmdp, cmdarg, environ) == -1)
+		{
+			perror("Failed to execute the command.\n");
+			exit(127);
+		}
 	}
 	else if (pid > 0)
+	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+		else
+			return (1);
+	}
 	else
+	{
 		perror("Failed to create fork.\n");
-	return (WEXITSTATUS(status));
+		return (1);
+	}
+	return (0);
 }
 
-int	is_builtin(char *cmd)
+int	is_builtin(char *cmd, int fd)
 {
 	int	status;
 
 	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
-		status = ft_getcwd(cmd);
+		status = ft_getcwd(cmd, fd);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
 		status = handle_cd(cmd);
 	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
-		status = handle_echo(cmd);
+		status = handle_echo(cmd, fd);
 	else if (ft_strcmp(cmd, "env") == 0)
-		status = print_env();
+		status = print_env(fd);
 	else if (ft_strncmp(cmd, "export ", 7) == 0 || ft_strcmp(cmd, "export") == 0)
-		status = handle_export(cmd);
+		status = handle_export(cmd, fd);
 	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
-		status = handle_unset(cmd);
+		status = handle_unset(cmd, fd);
 	else
 		return (-1);
 	return (status);
 }
 
-/*
-My recommendation is that check for empty line we should later put in a previous checking funtion.
-I kept this part, still we didn't reach that phase.
-I'm little bit confused how the is_empty funtcion works. I would like to discuss it.
-*/
-int	choose_cmd(char *line)
+int	choose_cmd(char *line, t_store	*st)
 {
 	int		status;
 	char	*new_line;
@@ -139,7 +147,7 @@ int	choose_cmd(char *line)
 	{
 		return (free(new_line), status);
 	}
-	if (is_builtin(new_line) == 0)
+	if (is_builtin(new_line, st->fd) == 0)
 	{
 		return (free(new_line), status);
 	}

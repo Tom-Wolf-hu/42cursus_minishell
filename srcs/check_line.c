@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:45:12 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/02 17:07:15 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 14:51:00 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	is_empty(char *line)
 	int	i;
 
 	i = 0;
+	if (!line)
+		return (1);
 	while (line[i])
 	{
 		if (!ft_isspace(line[i]))
