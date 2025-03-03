@@ -6,13 +6,13 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/26 14:16:32 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:06:43 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	mywrite(char *line)
+void	mywrite(char *line, int fd)
 {
 	int	i;
 	int	len;
@@ -25,12 +25,12 @@ void	mywrite(char *line)
 		len--;
 	while (i < len)
 	{
-		write(1, &line[i], 1);
+		write(fd, &line[i], 1);
 		i++;
 	}
 }
 
-void	show_input(char **arr, int flag)
+void	show_input(char **arr, int fd, int flag)
 {
 	int	i;
 	int len;
@@ -46,25 +46,24 @@ void	show_input(char **arr, int flag)
 	{
 		if (i == len - 1)
 		{
-			mywrite(arr[i]);
+			mywrite(arr[i], fd);
 			if (!flag)
-				write(1, "\n", 1);
+				write(fd, "\n", 1);
 			return ;
 		}
-		mywrite(arr[i]);
-		write(1, " ", 1);
+		mywrite(arr[i], fd);
+		write(fd, " ", 1);
 		i++;
 	}
 }
 
-int	handle_echo(char *line)
+int	handle_echo(char *line, int fd)
 {
 	char	**arr;
 	int		i;
 	char	*line_to_check;
 
 	line_to_check = ft_strdup(line);
-	// bridge_var(&line_to_check);
 	i = 0;
 	arr = ft_split(line_to_check, ' ');
 	if (!arr)
@@ -73,23 +72,21 @@ int	handle_echo(char *line)
 		i++;
 	if (i == 1)
 	{
-		return (write(1, "\n", 1), free_arr(arr), free(line_to_check), 0);
+		return (write(fd, "\n", 1), free_arr(arr), free(line_to_check), 0);
 	}
 	if (i == 2)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
 			return (free_arr(arr), free(line), free(line_to_check), 0);
 		else
-			return (mywrite(arr[1]), write(1, "\n", 1), 0);
+			return (mywrite(arr[1], fd), write(1, "\n", 1), 0);
 	}
 	if (i > 2)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
-			return (show_input(arr, 1), free_arr(arr), 0);
-		show_input(arr, 0);
+			return (show_input(arr, fd, 1), free_arr(arr), 0);
+		show_input(arr, fd, 0);
 	}
 	free_arr(arr);
 	return (0);
-	// free(line);
-	// free(line_to_check);
 }

@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -g
+CFLAGS = 
 # -Wall -Wextra -Werror
 
 SRCS =	srcs/minishell.c \
