@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 10:08:42 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/03 14:51:37 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,26 @@ typedef struct s_pnode
 	struct s_pnode	*prev;
 }	t_pnode;
 
+typedef	struct s_store
+{
+	int		save_stdin;
+	int		save_stdout;
+	pid_t	*childs;
+}	t_store;
+
+
 //minishell.c
 void	ft_error(char *error, int exit_status);
 void	sig_handler(int sig);
-int	ft_getcwd(char *line);
+int		ft_getcwd(char *line);
 void	free_arr(char **arr);
-int	handle_cd(char *line);
+int		handle_cd(char *line);
 int		check_line(char *line, int i);
 int		check_quastion_sign(char **line, char *status);
 char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
-int	print_env(void);
+int		print_env(void);
 int 	main(void);
 
 //msh_redirect.c
@@ -76,10 +84,19 @@ void	red_out_append(char *fd_name);
 void	read_in_temp(char *delimeter, int fd_delimeter);
 void	red_del(char *delimeter);
 
+//msh_redir_cmd_call.c
+int		count_delimeter(char *line, char delimeter);
+void	redir_prep(char *filename, char delimeter, int count);
+void	redir_case(char *line, int *i);
+void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
+int		redir_cmd_s(char *line);
+
 //msh_operations.c
-void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
-void	ft_pipe(char *beforep, char *afterp);
 void	choose_redirection(t_tokentype e_red, char *name_d);
+// int		count_deilemeter(char *line, char delimeter);
+// char	*allocate_word(char *line, int len);
+// char	*save_w(char *line, char delimeter);
+// void	check_redirect(char *line);
 
 //msh_parse.c
 void	add_node(t_pnode **node);
@@ -108,9 +125,17 @@ char	save_word(char *line, char *word, int *j);
 void	analyze_line(char *line, int *j);
 void	loop_analyzel(char *line);
 
+//msh_pipe.c
+void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
+void	ft_pipe(char *beforep, char *afterp);
+
+//msh_redir_cmd_utils.c
+t_store	*init_store(void);
+
 //check_line.c
 int		ft_isoperator(int c);
 int		ft_isspace(int c);
+int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
 
 //check_var.c
@@ -126,13 +151,13 @@ void	bridge_var(char **str);
 //echo.c
 void	mywrite(char *line);
 void	show_input(char **arr, int flag);
-int	handle_echo(char *line);
+int		handle_echo(char *line);
 
 //handle_export_unset.c
 int		find_var_in_env(char *name);
-int	mysetenv(char *name, char *value);
-int	handle_export(char *line);
-int	my_unsetenv(char *name);
-int	handle_unset(char *line);
+int		mysetenv(char *name, char *value);
+int		handle_export(char *line);
+int		my_unsetenv(char *name);
+int		handle_unset(char *line);
 
 #endif

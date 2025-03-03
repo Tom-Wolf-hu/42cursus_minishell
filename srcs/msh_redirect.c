@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:08:11 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/17 19:28:43 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/02/26 16:10:54 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	red_in(char *fd_name)
 	fd_redin = open(fd_name, O_RDONLY);
 	if (fd_redin < 0)
 	{
-		perror("Failed to open file descriptor for input file.\n");
+		perror("Failed to open file descriptor for input file");
 		return ;
 	}
 	if (dup2(fd_redin, STDIN_FILENO) < 0)
-		perror("Failed to duplicate input file's file descriptor.\n");
+		perror("Failed to duplicate input file's file descriptor");
 	close(fd_redin);
 }
 
@@ -34,11 +34,11 @@ void	red_out(char *fd_name)
 	fd_redout = open(fd_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_redout < 0)
 	{
-		perror("Failed to open file descriptor for output file.\n");
+		perror("Failed to open file descriptor for output file");
 		return ;
 	}
 	if (dup2(fd_redout, STDOUT_FILENO) < 0)
-		perror("Failed to duplicate output file's file descriptor.\n");
+		perror("Failed to duplicate output file's file descriptor");
 	close(fd_redout);
 }
 
@@ -49,11 +49,11 @@ void	red_out_append(char *fd_name)
 	fd_redoutap = open(fd_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd_redoutap < 0)
 	{
-		perror("Failed to open file descriptor for output file.\n");
+		perror("Failed to open file descriptor for output file");
 		return ;
 	}
 	if (dup2(fd_redoutap, STDOUT_FILENO) < 0)
-		perror("Failed to duplicate output file's file descriptor.\n");
+		perror("Failed to duplicate output file's file descriptor");
 	close(fd_redoutap);
 }
 
@@ -77,17 +77,23 @@ void	read_in_temp(char *delimeter, int fd_delimeter)
 void	red_del(char *delimeter)
 {
 	int	fd_delimeter;
+	char *tmp_file;
 
-	fd_delimeter = open(delimeter, O_RDWR | O_CREAT | O_APPEND, 0644);
+	tmp_file = ".heredoc_file";
+	fd_delimeter = open(tmp_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd_delimeter < 0)
 	{
-		perror("Failed to open file descriptor for temporary file.\n");
+		perror("Failed to open file descriptor for temporary file");
 		return ;
 	}
 	read_in_temp(delimeter, fd_delimeter);
-	if (unlink(delimeter) < 0)
-		perror("Failed to unlink the temporary file.\n");
-	if (dup2(fd_delimeter, STDIN_FILENO) < 0)
-		perror("Failed to duplicate temporary file's file descriptor.\n");
 	close(fd_delimeter);
+	fd_delimeter = open(tmp_file, O_RDONLY);
+	if (fd_delimeter < 0)
+		perror("Failed to reopen file descriptor for tmp_file");
+	if (dup2(fd_delimeter, STDIN_FILENO) < 0)
+		perror("Failed to duplicate temporary file's file descriptor");
+	close(fd_delimeter);
+	if (unlink(tmp_file) < 0)
+		perror("Failed to unlink the temporary file");
 }

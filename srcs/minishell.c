@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 14:32:08 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:50:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,8 @@ int main(void)
 			add_history(line);
 			check_quastion_sign(&line, ft_itoa(status));
 			bridge_var(&line);
-			status = choose_cmd(line);
+			// status = choose_cmd(line);
+			status = redir_cmd_s(line);
 		}
 		free(line);
 	}
