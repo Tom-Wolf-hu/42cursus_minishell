@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 19:01:57 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 19:22:26 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	count_delimeter(char *line, char delimeter)
 	return (count);
 }
 
-void	redir_prep(char *filename, char delimeter, int count)
+void	redir_prep(char *filename, char delimeter, int count, t_store *st)
 {
 	t_tokentype e_red;
 
@@ -44,10 +44,10 @@ void	redir_prep(char *filename, char delimeter, int count)
 		printf("Wrong delimeter: %c\n", delimeter);
 		return ;
 	}
-	choose_redirection(e_red, filename);
+	choose_redirection(e_red, filename, st);
 }
 
-void	redir_case(char *line, int *i)
+void	redir_case(char *line, int *i, t_store *st)
 {
 	char	*filename;
 	char	delimeter;
@@ -70,7 +70,7 @@ void	redir_case(char *line, int *i)
 			return ;
 		}
 	}
-	redir_prep(filename, delimeter, count);
+	redir_prep(filename, delimeter, count, st);
 	free(filename);
 }
 
@@ -106,7 +106,7 @@ int	redir_cmd_s(char *line)
 	while (line[i])
 	{
 		if (skip_whites(line, &i) && ft_isoperator(line[i]))
-			redir_case(line, &i);
+			redir_case(line, &i, &st);
 		else
 			cmd_case(line, cmd, &i, &cmdlen);
 	}

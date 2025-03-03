@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 18:57:02 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 19:26:42 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init_store(t_store	*st)
 		return ;
 	}
 	st->childs = NULL;
+	st->fd = 1;
 }
 
 void	reset_fds(t_store *st)
@@ -43,13 +44,14 @@ void	reset_fds(t_store *st)
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
+	close(st->fd);
 }
 
 int	cmd_fds_reset(char **cmd, t_store *st)
 {
 	int	status;
 
-	status = choose_cmd(*cmd);
+	status = choose_cmd(*cmd, st);
 	reset_fds(st);
 	free(*cmd);
 	return (status);

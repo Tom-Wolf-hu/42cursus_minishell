@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 18:58:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 19:39:51 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,20 +80,20 @@ int 	main(void);
 
 //msh_redirect.c
 void	red_in(char *fd_name);
-void	red_out(char *fd_name);
-void	red_out_append(char *fd_name);
+int		red_out(char *fd_name);
+int		red_out_append(char *fd_name);
 void	read_in_temp(char *delimeter, int fd_delimeter);
 void	red_del(char *delimeter);
 
 //msh_redir_cmd_call.c
 int		count_delimeter(char *line, char delimeter);
-void	redir_prep(char *filename, char delimeter, int count);
-void	redir_case(char *line, int *i);
+void	redir_prep(char *filename, char delimeter, int count, t_store *st);
+void	redir_case(char *line, int *i, t_store *st);
 void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
 int		redir_cmd_s(char *line);
 
 //msh_operations.c
-void	choose_redirection(t_tokentype e_red, char *name_d);
+void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
 // int		count_deilemeter(char *line, char delimeter);
 // char	*allocate_word(char *line, int len);
 // char	*save_w(char *line, char delimeter);
