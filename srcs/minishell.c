@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/02/26 16:52:13 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:08:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,14 +149,14 @@ char	*remove_first_spaces(char *line)
 	return (new_line);
 }
 
-void	disable_ctrl_c_output(int status)
+void	disable_ctrl_c_output(int *status)
 {
 	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	status = 130;
+	*status = 130;
 }
 
 void	setup_signal_handlers(void)
@@ -213,7 +213,7 @@ int main(void)
 	char			*line;
 	static int		status = 0;
 
-	disable_ctrl_c_output(status);
+	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
 	while (1)
 	{
