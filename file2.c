@@ -49,14 +49,20 @@ void change_to_exit_status(int i, char **line, char *status)
 	*line = result;
 }
 
-int	check_question_sign(char **line, char *status)
+int	check_quastion_sign(char **line, char *status)
 {
 	int	i;
+	int	flag;
 
+	flag = 0;
 	i = 0;
 	while ((*line)[i])
 	{
-		if ((*line)[i] == '$')
+		if ((*line)[i] == '\'' && flag == 0)
+			flag = 1;
+		else if ((*line)[i] == '\'' && flag == 1)
+			flag = 0;
+		if ((*line)[i] == '$' && flag == 0)
 		{
 			if ((*line)[i + 1] == '?')
 			{
@@ -69,9 +75,10 @@ int	check_question_sign(char **line, char *status)
 	return (0);
 }
 
+
 int main()
 {
-	char *line = strdup("hello $? hel$?lo");
+	char *line = strdup("hello '$?' 'hel$?lo'");
 	check_quastion_sign(&line, "01234");
 	printf("%s\n", line);
 }// USAGE: check_quastion_sign(line_to_check, char* status)
