@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 14:08:38 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 18:13:08 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,9 @@ void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 void	ft_pipe(char *beforep, char *afterp);
 
 //msh_redir_cmd_utils.c
-t_store	*init_store(void);
+void	init_store(t_store	*st);
+void	reset_fds(t_store *st);
+int		cmd_fds_reset(char **cmd, t_store *st);
 
 //check_line.c
 int		ft_isoperator(int c);
