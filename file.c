@@ -6,9 +6,18 @@ int get_var_name_size(char *str)
 {
 	int start = 0;
 	int end = 0;
+	int	flag = 0;
 
-	while (str[start] && str[start] != '$')
+	while (str[start])
+	{
+		if ((str)[start] == '\'' && flag == 0)
+			flag = 1;
+		else if ((str)[start] == '\'' && flag == 1)
+			flag = 0;
+		if (str[start] == '$' && flag == 0)
+			break ;
 		start++;
+	}
 	if (str[start] != '$')
 		return 0;
 	start++;
@@ -158,7 +167,7 @@ int bridge_var(char **str)
 	size = get_var_name_size(*str);
 	if (size < 1)
 	{
-		printf("No variable found\n");
+		// printf("No variable found\n");
 		return 0;
 	}
 	var_name = malloc(size + 1);
@@ -172,13 +181,14 @@ int bridge_var(char **str)
 		printf("%s\n", *str);
 		return (free(var_name), 1);
 	}
-	printf("Variable not found in environ\n");
+	// printf("Variable not found in environ\n");
 	return (free(var_name), 0);
 }
 
 int main()
 {
-    char *str = strdup("echo $USER hello");  // Можешь заменить на $PS или $PATH
+    char *str = strdup("echo '$USER' hello");  // Можешь заменить на $PS или $PATH
     bridge_var(&str);
+	printf("%s\n", str);
 	free(str);
 }
