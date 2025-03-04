@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 14:26:01 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 18:08:42 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,9 @@ char	*cmd_path(char *cmd)
 	return (path);
 }
 
-/*
-This way the command execution won't be able to run paralel in the pipeline
-, because the parent process will wait everytime for the execution, and just after
-can call next tim the following command.
-
-The waitpid part should place outside from the the execute_cmd function. We need to 
-create a pid list, which will store all of the child process pids and after in the 
-parent process we can loop over all of the pids.
-
-void	
-*/
-int	execute_cmd(char *cmd)
+int	execute_cmd(char *cmd, t_store *st)
 {
 	pid_t		pid;
-	int			status;
 	char		*cmdp;
 	char		**cmdarg;
 	extern char	**environ;
@@ -98,15 +86,7 @@ int	execute_cmd(char *cmd)
 		}
 	}
 	else if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else if (WIFSIGNALED(status))
-			return (128 + WTERMSIG(status));
-		else
-			return (1);
-	}
+		save_chpid(pid, st);
 	else
 	{
 		perror("Failed to create fork.\n");
@@ -138,6 +118,13 @@ int	is_builtin(char *cmd, int fd)
 	return (status);
 }
 
+/*
+Because the pipe connection haven't implemented yet, that reason the
+wait_child function called the choose_cmd function. However later, when
+the pipe connection also implemented, we need to move this function the
+end of the pipline.
+*/
+
 int	choose_cmd(char *line, t_store	*st)
 {
 	int		status;
@@ -155,7 +142,8 @@ int	choose_cmd(char *line, t_store	*st)
 	}
 	else
 	{
-		status = execute_cmd(new_line);
+		status = execute_cmd(new_line, st);
+		status = wait_child(st);
 	}
 	return (free(new_line), status);
 }

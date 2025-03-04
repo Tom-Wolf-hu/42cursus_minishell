@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 19:39:51 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:33:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef	struct s_store
 {
 	int		save_stdin;
 	int		save_stdout;
+	int		pidcount;
 	pid_t	*childs;
 	int		fd;
 }	t_store;
@@ -107,7 +108,7 @@ void	back_to_firstnode(t_pnode **node);
 //msh_cmd.c
 char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
-int		execute_cmd(char *cmd);
+int		execute_cmd(char *cmd, t_store *st);
 int		is_builtin(char *cmd, int fd);
 int		choose_cmd(char *line, t_store  *st);
 
@@ -134,6 +135,8 @@ void	ft_pipe(char *beforep, char *afterp);
 void	init_store(t_store	*st);
 void	reset_fds(t_store *st);
 int		cmd_fds_reset(char **cmd, t_store *st);
+void	save_chpid(pid_t pid, t_store *st);
+int		wait_child(t_store *st);
 
 //check_line.c
 int		ft_isoperator(int c);

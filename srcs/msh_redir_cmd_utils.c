@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 14:05:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:31:03 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_store(t_store	*st)
 	}
 	st->childs = NULL;
 	st->fd = 1;
+	st->pidcount = 0;
 }
 
 void	reset_fds(t_store *st)
@@ -55,5 +56,48 @@ int	cmd_fds_reset(char **cmd, t_store *st)
 	status = choose_cmd(*cmd, st);
 	reset_fds(st);
 	free(*cmd);
+	return (status);
+}
+
+void	save_chpid(pid_t pid, t_store *st)
+{
+	int	pidlen;
+
+	pidlen = 0;
+	if (st->pidcount == 0 || st->pidcount > pidlen)
+	{
+		pidlen += 5;
+		st->childs = ft_realloc(st->childs, st->pidcount * sizeof(pid_t),
+				pidlen * sizeof(pid_t));
+		if (!st->childs)
+		{
+			perror("Failed to allocate memory for pid array");
+			return ;
+		}
+	}
+	st->childs[st->pidcount] = pid;
+	st->pidcount++;
+}
+
+int	wait_child(t_store *st)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	while (i < st->pidcount)
+	{
+		waitpid(st->childs[i], &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+		else
+			return (1);
+		i++;
+	}
+	free(st->childs);
+	st->childs = NULL;
+	st->pidcount = 0;
 	return (status);
 }
