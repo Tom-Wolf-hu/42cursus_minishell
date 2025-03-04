@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 15:02:28 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:26:01 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	execute_cmd(char *cmd)
 		perror("Failed to create fork.\n");
 		return (1);
 	}
+	free(cmdp);
+	free_arr(cmdarg);
 	return (0);
 }
 

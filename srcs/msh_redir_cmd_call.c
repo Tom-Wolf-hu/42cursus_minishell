@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 19:22:26 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 13:48:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	redir_cmd_s(char *line)
 	init_store(&st);
 	if (!line || ft_strlen(line) < 1)
 		return (1);
-	cmd = ft_calloc(ft_strlen(line), sizeof(char));
+	cmd = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 	if (!cmd)
 	{
 		perror("Error in memory allocation for the command.");

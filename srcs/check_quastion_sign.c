@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quastion_sign.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/03 15:22:50 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:15:12 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int	check_quastion_sign(char **line, char *status)
 		}
 		i++;
 	}
+	free(status);
 	return (0);
 }
