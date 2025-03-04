@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 19:26:42 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 12:55:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	reset_fds(t_store *st)
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
-	close(st->fd);
+	if (st->fd > 2)
+		close(st->fd);
 }
 
 int	cmd_fds_reset(char **cmd, t_store *st)
