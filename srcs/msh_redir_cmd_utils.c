@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 17:31:03 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 18:54:11 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	wait_child(t_store *st)
 	int	status;
 
 	i = 0;
+	status = 0;
 	while (i < st->pidcount)
 	{
 		waitpid(st->childs[i], &status, 0);

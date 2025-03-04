@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 19:56:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/04 19:26:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,27 @@ void	ft_pipe(char *beforep, char *afterp)
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
+}
+
+void temp_redline(char *line)
+{
+	int	fd_readl;
+	int	i;
+
+	i = 0;
+	fd_readl = open(".temp_readline", O_WRONLY | O_CREAT, 0644);
+	if (fd_readl < 0)
+	{
+		perror("Failed open fd_readl filedescriptor.");
+		return ;
+	}
+	while (line[i])
+	{
+		if (line[i] == '|')
+			write(fd_readl, "\n", 1);
+		else
+			write(fd_readl, line[i], 1);
+		i++;
+	}
+	close(fd_readl);
 }
