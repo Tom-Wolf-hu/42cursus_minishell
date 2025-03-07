@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/04 19:26:35 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/07 15:06:28 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,10 @@ void	analyze_line(char *line, int *j);
 void	loop_analyzel(char *line);
 
 //msh_pipe.c
-void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
-void	ft_pipe(char *beforep, char *afterp);
-void 	temp_redline(char *line);
+// void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
+// void	ft_pipe(char *beforep, char *afterp);
+void	ft_pipe(void);
+void 	temp_readline(char *line);
 
 //msh_redir_cmd_utils.c
 void	init_store(t_store	*st);

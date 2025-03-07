@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:08:11 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 19:37:58 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:34:50 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,5 @@ void	red_del(char *delimeter)
 		perror("Failed to duplicate temporary file's file descriptor");
 	close(fd_delimeter);
 	if (unlink(tmp_file) < 0)
-		perror("Failed to unlink the temporary file");
+		perror("Failed to unlink the heredoc temporary file");
 }
