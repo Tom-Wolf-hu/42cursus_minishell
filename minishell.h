@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/08 12:44:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 18:27:47 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
+void	run_ex(char **line, int *status);
 int 	main(void);
 
 //msh_redirect.c
@@ -91,7 +92,7 @@ int		count_delimeter(char *line, char delimeter);
 void	redir_prep(char *filename, char delimeter, int count, t_store *st);
 void	redir_case(char *line, int *i, t_store *st);
 void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
-int		redir_cmd_s(char *line);
+int		redir_cmd_s(char *line, t_store *st);
 
 //msh_operations.c
 void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
@@ -132,7 +133,7 @@ void	loop_analyzel(char *line);
 // void	ft_pipe(char *beforep, char *afterp);
 void	ft_pipe(void);
 void 	temp_readline(char *line);
-int		read_readline(void);
+int		read_readline(t_store *st);
 
 //msh_redir_cmd_utils.c
 void	init_store(t_store	*st);

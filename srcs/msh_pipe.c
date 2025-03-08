@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/08 13:29:11 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 18:25:54 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void temp_readline(char *line)
 	close(fd_readl);
 }
 
-int	read_readline(void)
+int	read_readline(t_store *st)
 {
 	int		fd_readl;
 	char	*line;
@@ -127,12 +127,13 @@ int	read_readline(void)
 	line = get_next_line(fd_readl);
 	while (line != NULL)
 	{
-		status = redir_cmd_s(line);
+		status = redir_cmd_s(line, st);
 		free(line);
 		line = get_next_line(fd_readl);
 		if (line != NULL)
 			ft_pipe();
 	}
+	status = wait_child(st);
 	close(fd_readl);
 	if (unlink(".temp_readline") < 0)
 		perror("Failed to unlink the temp_readline temporary file");

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/08 12:44:55 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 18:16:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,20 @@ void	handle_exit(char *line, int *status)
 	exit(*status);
 }
 
+void	run_ex(char **line, int *status)
+{
+	t_store	st;
+
+	init_store(&st);
+	add_history(*line);
+	check_quastion_sign(line, ft_itoa(*status));
+	bridge_var(line);
+	// status = choose_cmd(line);
+	// status = redir_cmd_s(line);
+	temp_readline(*line);
+	*status = read_readline(&st);
+}
+
 int main(void)
 {
 	char			*line;
@@ -230,15 +244,7 @@ int main(void)
 		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
 			rl_clear_history();
 		else
-		{
-			add_history(line);
-			check_quastion_sign(&line, ft_itoa(status));
-			bridge_var(&line);
-			// status = choose_cmd(line);
-			// status = redir_cmd_s(line);
-			temp_readline(line);
-			status = read_readline();
-		}
+			run_ex(&line, &status);
 		free(line);
 	}
 	rl_clear_history();

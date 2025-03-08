@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 13:48:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 18:28:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,14 @@ void	cmd_case(char *line, char *cmd, int *i, int *cmdlen)
 	cmd[*cmdlen] = '\0';
 }
 
-int	redir_cmd_s(char *line)
+int	redir_cmd_s(char *line, t_store	*st)
 {
 	char	*cmd;
 	int		i;
 	int		cmdlen;
-	t_store	st;
 
 	i = 0;
 	cmdlen = 0;
-	init_store(&st);
 	if (!line || ft_strlen(line) < 1)
 		return (1);
 	cmd = ft_calloc(ft_strlen(line) + 1, sizeof(char));
@@ -106,9 +104,9 @@ int	redir_cmd_s(char *line)
 	while (line[i])
 	{
 		if (skip_whites(line, &i) && ft_isoperator(line[i]))
-			redir_case(line, &i, &st);
+			redir_case(line, &i, st);
 		else
 			cmd_case(line, cmd, &i, &cmdlen);
 	}
-	return (cmd_fds_reset(&cmd, &st));
+	return (cmd_fds_reset(&cmd, st));
 }
