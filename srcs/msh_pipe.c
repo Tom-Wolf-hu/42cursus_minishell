@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/07 15:05:01 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:29:11 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,13 @@ void temp_readline(char *line)
 		if (line[i] == '|')
 			write(fd_readl, "\n", 1);
 		else
-			write(fd_readl, line[i], 1);
+			write(fd_readl, &line[i], 1);
 		i++;
 	}
 	close(fd_readl);
 }
 
-int	read_temp(void)
+int	read_readline(void)
 {
 	int		fd_readl;
 	char	*line;
@@ -125,13 +125,13 @@ int	read_temp(void)
 		return (1);
 	}
 	line = get_next_line(fd_readl);
-	status = redir_cmd_s(line);
 	while (line != NULL)
 	{
-		ft_pipe();
 		status = redir_cmd_s(line);
 		free(line);
 		line = get_next_line(fd_readl);
+		if (line != NULL)
+			ft_pipe();
 	}
 	close(fd_readl);
 	if (unlink(".temp_readline") < 0)

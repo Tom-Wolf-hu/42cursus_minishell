@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/07 15:06:28 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 12:44:14 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #include <termios.h>
 #include <stdbool.h>
 
-// #include "lib/get_next_line/get_next_line.h"
+#include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
 
 typedef enum e_token
@@ -132,6 +132,7 @@ void	loop_analyzel(char *line);
 // void	ft_pipe(char *beforep, char *afterp);
 void	ft_pipe(void);
 void 	temp_readline(char *line);
+int		read_readline(void);
 
 //msh_redir_cmd_utils.c
 void	init_store(t_store	*st);

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 18:49:24 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:02:03 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,9 @@ int	choose_cmd(char *line, t_store	*st)
 	else
 	{
 		status = execute_cmd(new_line, st);
-		printf("exit status execute_cmd: %i\n", status);
+		// printf("exit status execute_cmd: %i\n", status);
 		status = wait_child(st);
-		printf("exit status wait_child: %i\n", status);
+		// printf("exit status wait_child: %i\n", status);
 	}
 	return (free(new_line), status);
 }
