@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_pipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/10 17:59:56 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/10 20:25:48 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	read_readline(t_store *st)
 	line = get_next_line(fd_readl);
 	while (line != NULL)
 	{
-		write(1, "1passed1\n", 9);
+		// write(1, "1passed1\n", 9);
 		status = redir_cmd_s(line, st);
 		free(line);
 		line = get_next_line(fd_readl);
@@ -151,7 +151,7 @@ int	read_readline(t_store *st)
 			ft_pipe(st);
 		}
 	}
-	write(1, "1passed3\n", 9);
+	// write(1, "1passed3\n", 9);
 	status = wait_child(st);
 	reset_fds(st);
 	close(fd_readl);
