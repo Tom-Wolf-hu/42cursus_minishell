@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:08:11 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/26 16:10:54 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:34:50 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	red_in(char *fd_name)
 	close(fd_redin);
 }
 
-void	red_out(char *fd_name)
+int	red_out(char *fd_name)
 {
 	int	fd_redout;
 
@@ -35,14 +35,17 @@ void	red_out(char *fd_name)
 	if (fd_redout < 0)
 	{
 		perror("Failed to open file descriptor for output file");
-		return ;
+		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd_redout, STDOUT_FILENO) < 0)
+	{
 		perror("Failed to duplicate output file's file descriptor");
-	close(fd_redout);
+		exit(EXIT_FAILURE);
+	}
+	return (fd_redout);
 }
 
-void	red_out_append(char *fd_name)
+int	red_out_append(char *fd_name)
 {
 	int	fd_redoutap;
 
@@ -50,11 +53,14 @@ void	red_out_append(char *fd_name)
 	if (fd_redoutap < 0)
 	{
 		perror("Failed to open file descriptor for output file");
-		return ;
+		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd_redoutap, STDOUT_FILENO) < 0)
+	{
 		perror("Failed to duplicate output file's file descriptor");
-	close(fd_redoutap);
+		exit(EXIT_FAILURE);
+	}
+	return (fd_redoutap);
 }
 
 void	read_in_temp(char *delimeter, int fd_delimeter)
@@ -95,5 +101,5 @@ void	red_del(char *delimeter)
 		perror("Failed to duplicate temporary file's file descriptor");
 	close(fd_delimeter);
 	if (unlink(tmp_file) < 0)
-		perror("Failed to unlink the temporary file");
+		perror("Failed to unlink the heredoc temporary file");
 }

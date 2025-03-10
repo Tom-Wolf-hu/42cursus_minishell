@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/10 15:34:38 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/10 20:13:00 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,11 +212,26 @@ void	handle_exit(char *line, int *status)
 	exit(*status);
 }
 
+void	run_ex(char **line, int *status)
+{
+	t_store	st;
+
+	init_store(&st);
+	add_history(*line);
+	check_quastion_sign(line, ft_itoa(*status));
+	bridge_var(line);
+	// status = choose_cmd(line);
+	// status = redir_cmd_s(line);
+	temp_readline(*line);
+	*status = read_readline(&st);
+}
+
 int main(void)
 {
 	char			*line;
 	static int		status = 0;
 
+	// check_tty();
 	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
 	while (1)
@@ -234,6 +249,7 @@ int main(void)
 			add_history(line);
 			check_quastion_sign(&line, ft_itoa(status));
 			bridge_var(&line);
+			// status = choose_cmd(line);
 			status = redir_cmd_s(line);
 		}
 		free(line);

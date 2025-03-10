@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_redir_cmd_call.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 15:13:05 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:28:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	count_delimeter(char *line, char delimeter)
 	return (count);
 }
 
-void	redir_prep(char *filename, char delimeter, int count)
+void	redir_prep(char *filename, char delimeter, int count, t_store *st)
 {
 	t_tokentype e_red;
 
@@ -44,10 +44,10 @@ void	redir_prep(char *filename, char delimeter, int count)
 		printf("Wrong delimeter: %c\n", delimeter);
 		return ;
 	}
-	choose_redirection(e_red, filename);
+	choose_redirection(e_red, filename, st);
 }
 
-void	redir_case(char *line, int *i)
+void	redir_case(char *line, int *i, t_store *st)
 {
 	char	*filename;
 	char	delimeter;
@@ -70,7 +70,7 @@ void	redir_case(char *line, int *i)
 			return ;
 		}
 	}
-	redir_prep(filename, delimeter, count);
+	redir_prep(filename, delimeter, count, st);
 	free(filename);
 }
 
@@ -85,19 +85,17 @@ void	cmd_case(char *line, char *cmd, int *i, int *cmdlen)
 	cmd[*cmdlen] = '\0';
 }
 
-int	redir_cmd_s(char *line)
+int	redir_cmd_s(char *line, t_store	*st)
 {
 	char	*cmd;
 	int		i;
 	int		cmdlen;
-	t_store	*st;
 
 	i = 0;
 	cmdlen = 0;
-	st = init_store();
 	if (!line || ft_strlen(line) < 1)
 		return (1);
-	cmd = ft_calloc(ft_strlen(line), sizeof(char));
+	cmd = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 	if (!cmd)
 	{
 		perror("Error in memory allocation for the command.");
@@ -106,9 +104,9 @@ int	redir_cmd_s(char *line)
 	while (line[i])
 	{
 		if (skip_whites(line, &i) && ft_isoperator(line[i]))
-			redir_case(line, &i);
+			redir_case(line, &i, st);
 		else
 			cmd_case(line, cmd, &i, &cmdlen);
 	}
-	return (free(cmd), choose_cmd(cmd, st));
+	return (cmd_fds_reset(&cmd, st));
 }

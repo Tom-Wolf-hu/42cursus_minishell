@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   msh_operations.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 14:51:17 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:25:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	choose_redirection(t_tokentype e_red, char *name_d)
+void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
 {
 	if (!name_d)
 	{
@@ -23,9 +23,9 @@ void	choose_redirection(t_tokentype e_red, char *name_d)
 	if (e_red == REDINPUT)
 		red_in(name_d);
 	else if (e_red == REDOUTPUT)
-		red_out(name_d);
+		st->fd = red_out(name_d);
 	else if (e_red == APPENDREDOUTPUT)
-		red_out_append(name_d);
+		st->fd = red_out_append(name_d);
 	else if (e_red == REDDELIMETER)
 		red_del(name_d);
 }

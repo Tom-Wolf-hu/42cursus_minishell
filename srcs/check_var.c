@@ -3,27 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/02/21 20:43:24 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/03 15:28:41 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	get_var_name_size(char *str)
+int get_var_name_size(char *str)
 {
 	int start = 0;
 	int end = 0;
+	int	flag = 0;
 
-	while (str[start] && str[start] != '$')
+	while (str[start])
+	{
+		if ((str)[start] == '\'' && flag == 0)
+			flag = 1;
+		else if ((str)[start] == '\'' && flag == 1)
+			flag = 0;
+		if (str[start] == '$' && flag == 0)
+			break ;
 		start++;
+	}
 	if (str[start] != '$')
 		return 0;
 	start++;
 	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '\t' && str[end] != '$' && str[end] != '=' && str[end] != '\0')
+	while (str[end] && str[end] != ' ' && str[end] != '$' && str[end] != '=' && str[end] != '\0')
 		end++;
 	return (end - start);
 }

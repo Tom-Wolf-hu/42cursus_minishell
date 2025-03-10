@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_line_analizer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:06:36 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/03 10:09:35 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/09 17:57:50 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	analyze_line(char *line, int *j)
 	char	op2;
 	int		temp;
 
+	(void)op2;
 	beforeop = calloc(strlen(line), sizeof(char));
 	afterop = calloc(strlen(line), sizeof(char));
 	if (!beforeop || !afterop)

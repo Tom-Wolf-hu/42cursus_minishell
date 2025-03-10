@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 15:12:35 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:53:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #include <termios.h>
 #include <stdbool.h>
 
-// #include "lib/get_next_line/get_next_line.h"
+#include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
 
 typedef enum e_token
@@ -59,6 +59,7 @@ typedef	struct s_store
 {
 	int		save_stdin;
 	int		save_stdout;
+	int		pidcount;
 	pid_t	*childs;
 	int		fd;
 }	t_store;
@@ -76,24 +77,25 @@ char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
+void	run_ex(char **line, int *status);
 int 	main(void);
 
 //msh_redirect.c
 void	red_in(char *fd_name);
-void	red_out(char *fd_name);
-void	red_out_append(char *fd_name);
+int		red_out(char *fd_name);
+int		red_out_append(char *fd_name);
 void	read_in_temp(char *delimeter, int fd_delimeter);
 void	red_del(char *delimeter);
 
 //msh_redir_cmd_call.c
 int		count_delimeter(char *line, char delimeter);
-void	redir_prep(char *filename, char delimeter, int count);
-void	redir_case(char *line, int *i);
+void	redir_prep(char *filename, char delimeter, int count, t_store *st);
+void	redir_case(char *line, int *i, t_store *st);
 void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
-int		redir_cmd_s(char *line);
+int		redir_cmd_s(char *line, t_store *st);
 
 //msh_operations.c
-void	choose_redirection(t_tokentype e_red, char *name_d);
+void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
 // int		count_deilemeter(char *line, char delimeter);
 // char	*allocate_word(char *line, int len);
 // char	*save_w(char *line, char delimeter);
@@ -107,7 +109,7 @@ void	back_to_firstnode(t_pnode **node);
 //msh_cmd.c
 char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
-int		execute_cmd(char *cmd);
+int		execute_cmd(char *cmd, t_store *st);
 int		is_builtin(char *cmd, int fd);
 int		choose_cmd(char *line, t_store  *st);
 
@@ -127,11 +129,18 @@ void	analyze_line(char *line, int *j);
 void	loop_analyzel(char *line);
 
 //msh_pipe.c
-void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
-void	ft_pipe(char *beforep, char *afterp);
+// void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
+// void	ft_pipe(char *beforep, char *afterp);
+void	ft_pipe(t_store *st);
+void 	temp_readline(char *line);
+int		read_readline(t_store *st);
 
 //msh_redir_cmd_utils.c
-t_store	*init_store(void);
+void	init_store(t_store	*st);
+void	reset_fds(t_store *st);
+int		cmd_fds_reset(char **cmd, t_store *st);
+void	save_chpid(pid_t pid, t_store *st);
+int		wait_child(t_store *st);
 
 //check_line.c
 int		ft_isoperator(int c);
@@ -160,5 +169,14 @@ int		mysetenv(char *name, char *value);
 int		handle_export(char *line, int fd);
 int		my_unsetenv(char *name);
 int		handle_unset(char *line, int fd);
+
+
+/*
+The following file includes functions for checking 
+state of different aspect of minishell
+*/
+//test_funcs.c
+void	fds_state(void);
+void	check_tty();
 
 #endif

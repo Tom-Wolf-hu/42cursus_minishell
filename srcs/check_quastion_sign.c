@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quastion_sign.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/02/26 13:06:40 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:15:12 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,17 @@ void change_to_exit_status(int i, char **line, char *status)
 int	check_quastion_sign(char **line, char *status)
 {
 	int	i;
+	int	flag;
 
+	flag = 0;
 	i = 0;
 	while ((*line)[i])
 	{
-		if ((*line)[i] == '$')
+		if ((*line)[i] == '\'' && flag == 0)
+			flag = 1;
+		else if ((*line)[i] == '\'' && flag == 1)
+			flag = 0;
+		if ((*line)[i] == '$' && flag == 0)
 		{
 			if ((*line)[i + 1] == '?')
 			{
@@ -65,5 +71,6 @@ int	check_quastion_sign(char **line, char *status)
 		}
 		i++;
 	}
+	free(status);
 	return (0);
 }
