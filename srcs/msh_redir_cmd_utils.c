@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/04 18:54:11 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:53:21 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ void	init_store(t_store	*st)
 
 void	reset_fds(t_store *st)
 {
+	// fds_state();
+	// check_tty();
+	// printf("%i\n", st->save_stdin);
+	// printf("%i\n", STDIN_FILENO);
 	if (dup2(st->save_stdin, STDIN_FILENO) < 0)
 	{
 		perror("Failed to reset STDIN_FILENO");
@@ -40,13 +44,14 @@ void	reset_fds(t_store *st)
 	}
 	if (dup2(st->save_stdout, STDOUT_FILENO) < 0)
 	{
-		perror("Failed to reset STDIN_FILENO");
+		perror("Failed to reset STDOUT_FILENO");
 		exit(EXIT_FAILURE);
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
 	if (st->fd > 2)
 		close(st->fd);
+	// fds_state();
 }
 
 int	cmd_fds_reset(char **cmd, t_store *st)
@@ -54,7 +59,7 @@ int	cmd_fds_reset(char **cmd, t_store *st)
 	int	status;
 
 	status = choose_cmd(*cmd, st);
-	reset_fds(st);
+	// reset_fds(st);
 	free(*cmd);
 	return (status);
 }

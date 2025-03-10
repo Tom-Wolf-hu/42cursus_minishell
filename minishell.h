@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/08 18:27:47 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/10 12:53:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	loop_analyzel(char *line);
 //msh_pipe.c
 // void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 // void	ft_pipe(char *beforep, char *afterp);
-void	ft_pipe(void);
+void	ft_pipe(t_store *st);
 void 	temp_readline(char *line);
 int		read_readline(t_store *st);
 
@@ -169,5 +169,14 @@ int		mysetenv(char *name, char *value);
 int		handle_export(char *line, int fd);
 int		my_unsetenv(char *name);
 int		handle_unset(char *line, int fd);
+
+
+/*
+The following file includes functions for checking 
+state of different aspect of minishell
+*/
+//test_funcs.c
+void	fds_state(void);
+void	check_tty();
 
 #endif

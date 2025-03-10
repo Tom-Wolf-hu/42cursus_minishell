@@ -19,7 +19,8 @@ SRCS =	srcs/minishell.c \
 		srcs/check_quastion_sign.c \
 		srcs/msh_redir_cmd_call.c \
 		srcs/msh_pipe.c \
-		srcs/msh_redir_cmd_utils.c
+		srcs/msh_redir_cmd_utils.c \
+		srcs/test_funcs.c
 # GNL_SRCS = lib/get_next_line/get_next_line.c lib/get_next_line/get_next_line_utils.c
 LIBFT_DIR = lib/libft
 LIBFT = libft.a

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/08 18:16:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/10 12:54:14 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ int main(void)
 	char			*line;
 	static int		status = 0;
 
+	// check_tty();
 	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
 	while (1)
