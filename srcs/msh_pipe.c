@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/12 16:34:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:34:13 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ int	read_readline(t_store *st)
 	line = get_next_line(fd_readl);
 	while (line != NULL)
 	{
+		// write(1, "1passed1\n", 9);
 		// write(1, "1passed1\n", 9);
 		status = redir_cmd_s(line, st);
 		free(line);
