@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/10 17:59:56 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/12 16:34:04 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,27 +72,34 @@ void	ft_pipe(t_store *st)
 	int	pipefd[2];
 
 	(void)st;
-	// fds_state();
 	// check_tty();
 	// printf("%i\n", st->save_stdin);
+	// printf("%i\n", st->save_stdout);
 	// printf("%i\n", STDIN_FILENO);
+	// printf("%i\n", STDOUT_FILENO);
 	write(1, "passed1\n", 8);
 	if (pipe(pipefd) < 0)
 	{
 		perror("Pipe creation failed.\n");
 		return ;
 	}
+	// fds_state();
 	write(1, "passed2\n", 8);
-	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+	if (dup2(pipefd[1], STDOUT_FILENO) < 0)
 	{
-		perror("Failed to duplicate pipefd[0]");
+		perror("Failed to duplicate pipefd[1]");
 		close(pipefd[0]);
 		close(pipefd[1]);
 		return ;
 	}
 	write(1, "passed3\n", 8);
-	if (dup2(pipefd[1], STDOUT_FILENO) < 0)
-		perror("Failed to duplicate pipefd[1]");
+	if (dup2(pipefd[0], STDIN_FILENO) < 0)
+	{
+		perror("Failed to duplicate pipefd[0]");
+		// close(pipefd[0]);
+		// close(pipefd[1]);
+		// return ;
+	}
 	fds_state();
 	write(1, "passed4\n", 8);
 	close(pipefd[0]);
@@ -103,7 +110,7 @@ void	ft_pipe(t_store *st)
 	printf("%i\n", STDIN_FILENO);
 }
 
-void temp_readline(char *line)
+void temp_readline(char *line, t_store *st)
 {
 	int	fd_readl;
 	int	i;
@@ -118,7 +125,10 @@ void temp_readline(char *line)
 	while (line[i])
 	{
 		if (line[i] == '|')
+		{
+			st->pipecount++;
 			write(fd_readl, "\n", 1);
+		}
 		else
 			write(fd_readl, &line[i], 1);
 		i++;
@@ -141,18 +151,18 @@ int	read_readline(t_store *st)
 	line = get_next_line(fd_readl);
 	while (line != NULL)
 	{
-		write(1, "1passed1\n", 9);
+		// write(1, "1passed1\n", 9);
 		status = redir_cmd_s(line, st);
 		free(line);
 		line = get_next_line(fd_readl);
 		if (line != NULL)
 		{
-			write(1, "1passed2\n", 9);
+			// write(1, "1passed2\n", 9);
 			ft_pipe(st);
 		}
 	}
-	write(1, "1passed3\n", 9);
-	status = wait_child(st);
+	// write(1, "1passed3\n", 9);
+	status = wait_child(st, status);
 	reset_fds(st);
 	close(fd_readl);
 	if (unlink(".temp_readline") < 0)

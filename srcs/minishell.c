@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/10 12:54:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/12 11:52:27 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void	run_ex(char **line, int *status)
 	bridge_var(line);
 	// status = choose_cmd(line);
 	// status = redir_cmd_s(line);
-	temp_readline(*line);
+	temp_readline(*line, &st);
 	*status = read_readline(&st);
 }
 

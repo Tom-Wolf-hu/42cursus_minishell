@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/10 12:53:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/12 18:37:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef	struct s_store
 {
 	int		save_stdin;
 	int		save_stdout;
+	int		pipecount;
 	int		pidcount;
 	pid_t	*childs;
 	int		fd;
@@ -110,8 +111,10 @@ void	back_to_firstnode(t_pnode **node);
 char	*shearch_cmd(char *cmd);
 char	*cmd_path(char *cmd);
 int		execute_cmd(char *cmd, t_store *st);
-int		is_builtin(char *cmd, int fd);
-int		choose_cmd(char *line, t_store  *st);
+int		is_builtin(char *cmd);
+void	execute_builtin(char *cmd, int fd, int *status);
+int 	builtin_check(char *cmd, t_store *st, int *status);
+int		choose_cmd(char *line, t_store *st);
 
 //msh_env.c
 char	*cmd_acces(char *path, char *cmd);
@@ -132,7 +135,7 @@ void	loop_analyzel(char *line);
 // void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 // void	ft_pipe(char *beforep, char *afterp);
 void	ft_pipe(t_store *st);
-void 	temp_readline(char *line);
+void 	temp_readline(char *line, t_store *st);
 int		read_readline(t_store *st);
 
 //msh_redir_cmd_utils.c
@@ -140,7 +143,7 @@ void	init_store(t_store	*st);
 void	reset_fds(t_store *st);
 int		cmd_fds_reset(char **cmd, t_store *st);
 void	save_chpid(pid_t pid, t_store *st);
-int		wait_child(t_store *st);
+int		wait_child(t_store *st, int status);
 
 //check_line.c
 int		ft_isoperator(int c);

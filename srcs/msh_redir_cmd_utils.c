@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/10 17:53:21 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/12 12:50:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_store(t_store	*st)
 		perror("Failed to duplicate standard output");
 		return ;
 	}
+	st->pidcount = 0;
 	st->childs = NULL;
 	st->fd = 1;
 	st->pidcount = 0;
@@ -84,22 +85,20 @@ void	save_chpid(pid_t pid, t_store *st)
 	st->pidcount++;
 }
 
-int	wait_child(t_store *st)
+int	wait_child(t_store *st, int status)
 {
 	int	i;
-	int	status;
+	int	temp_status;
 
 	i = 0;
-	status = 0;
+	temp_status = 0;
 	while (i < st->pidcount)
 	{
-		waitpid(st->childs[i], &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else if (WIFSIGNALED(status))
-			return (128 + WTERMSIG(status));
-		else
-			return (1);
+		waitpid(st->childs[i], &temp_status, 0);
+		if (WIFEXITED(temp_status))
+			status = WEXITSTATUS(temp_status);
+		else if (WIFSIGNALED(temp_status))
+			status = 128 + WTERMSIG(temp_status);
 		i++;
 	}
 	free(st->childs);
