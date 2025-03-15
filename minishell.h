@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/15 18:38:12 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 19:20:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef	struct s_store
 {
 	int		pipecount;
 	int		pidcount;
+	int		cmd_num;
 	pid_t	*childs;
 	int		save_stdin;
 	int		save_stdout;
@@ -138,6 +139,9 @@ void	loop_analyzel(char *line);
 // void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 // void	ft_pipe(char *beforep, char *afterp);
 // void	ft_pipe(t_store *st);
+void	pipe_read(t_store *st);
+void	pipe_write(t_store *st);
+void	chproc_fd(t_store *st);
 void	gnl_readline(t_store *st, int *status);
 void 	temp_readline(char *line, t_store *st);
 int		read_readline(t_store *st);

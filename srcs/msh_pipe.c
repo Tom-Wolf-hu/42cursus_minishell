@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 18:34:36 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 19:27:49 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,59 @@ void	ft_pipe(t_store *st)
 }
 */
 
+void	pipe_read(t_store *st)
+{
+	if (st->fd_exin > 2 && st->cmd_num == 1)
+	{
+		if (dup2(st->pipefd[0], st->fd_exin) < 0)
+		{
+			perror("Failed to duplicate pipefd[0] to st->fd_exin.");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		if (dup2(st->pipefd[0], STDIN_FILENO) < 0)
+		{
+			perror("Failed to duplicate pipefd[0] to stdin.");
+			exit(EXIT_FAILURE);
+		}
+	}
+	close(st->pipefd[0]);
+}
 
+void	pipe_write(t_store *st)
+{
+	if (st->fd_exout > 2 && st->cmd_num == st->pipecount + 1)
+	{
+		if (dup2(st->pipefd[1], st->fd_exout) < 0)
+		{
+			perror("Failed to duplicate pipefd[0] to st->fd_exout.");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		if (dup2(st->pipefd[1], STDOUT_FILENO) < 0)
+		{
+			perror("Failed to duplicate pipefd[0] to stdout.");
+			exit(EXIT_FAILURE);
+		}
+	}
+	close(st->pipefd[1]);
+}
+
+void	chproc_fd(t_store *st)
+{
+	if (st->pipecount > 0)
+	{
+		pipe_read(st);
+		pipe_write(st);
+	}
+	close(st->save_stdin);
+	close(st->save_stdout);
+	close(st->fd_readl);
+}
 
 void	gnl_readline(t_store *st, int *status)
 {
@@ -164,6 +216,7 @@ void	gnl_readline(t_store *st, int *status)
 	line = get_next_line(st->fd_readl);
 	while (line != NULL)
 	{
+		st->cmd_num++;
 		if (st->pipecount > 0)
 		{
 			if (pipe(st->pipefd) < 0)
@@ -215,21 +268,7 @@ int	read_readline(t_store *st)
 		perror("Failed open fd_readl filedescriptor.");
 		return (1);
 	}
-	line = get_next_line(st->fd_readl);
-	while (line != NULL)
-	{
-		// write(1, "1passed1\n", 9);
-		// write(1, "1passed1\n", 9);
-		status = redir_cmd_s(line, st);
-		free(line);
-		line = get_next_line(st->fd_readl);
-		if (line != NULL)
-		{
-			// write(1, "1passed2\n", 9);
-			ft_pipe(st);
-		}
-	}
-	// write(1, "1passed3\n", 9);
+	gnl_readline(st, &status);
 	status = wait_child(st, status);
 	reset_fds(st);
 	if (unlink(".temp_readline") < 0)

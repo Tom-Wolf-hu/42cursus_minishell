@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 17:56:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 19:24:38 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	init_store(t_store	*st)
 	st->fd_exin = 0;
 	st->fd_exout = 1;
 	st->pidcount = 0;
+	st->cmd_num = 0;
 }
 
 void	reset_fds(t_store *st)
