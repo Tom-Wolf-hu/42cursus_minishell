@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/12 18:59:43 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 13:53:06 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int builtin_check(char *cmd, t_store *st, int *status)
 		return (0);
 	if (st->pipecount == 0)
 	{
-		execute_builtin(cmd, st->fd, status);
+		execute_builtin(cmd, st->fd_exout, status);
 		return (1);
 	}
 	pid = fork();
@@ -156,7 +156,7 @@ int builtin_check(char *cmd, t_store *st, int *status)
 	}
 	if (pid == 0)
 	{
-		execute_builtin(cmd, st->fd, status);
+		execute_builtin(cmd, st->fd_exout, status);
 		exit(*status);
 	}
 	else if (pid > 0)
@@ -164,7 +164,7 @@ int builtin_check(char *cmd, t_store *st, int *status)
 	return (1);
 }
 
-int	choose_cmd(char *line, t_store	*st)
+int	choose_cmd(char *line, t_store *st)
 {
 	int		status;
 	char	*new_line;

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/12 12:50:02 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 17:56:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	init_store(t_store	*st)
 	}
 	st->pidcount = 0;
 	st->childs = NULL;
-	st->fd = 1;
+	st->fd_exin = 0;
+	st->fd_exout = 1;
 	st->pidcount = 0;
 }
 
@@ -50,8 +51,11 @@ void	reset_fds(t_store *st)
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
-	if (st->fd > 2)
-		close(st->fd);
+	close(st->fd_readl);
+	if (st->fd_exin > 2)
+		close(st->fd_exin);
+	if (st->fd_exout > 2)
+		close(st->fd_exout);
 	// fds_state();
 }
 

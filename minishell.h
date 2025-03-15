@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/13 17:28:27 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 18:38:12 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ typedef struct s_pnode
 
 typedef	struct s_store
 {
-	int		save_stdin;
-	int		save_stdout;
 	int		pipecount;
 	int		pidcount;
 	pid_t	*childs;
-	int		fd;
+	int		save_stdin;
+	int		save_stdout;
+	int		fd_readl;
+	int		fd_exin;
+	int		fd_exout;
+	int		pipefd[2];
 }	t_store;
 
 
@@ -134,7 +137,8 @@ void	loop_analyzel(char *line);
 //msh_pipe.c
 // void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
 // void	ft_pipe(char *beforep, char *afterp);
-void	ft_pipe(t_store *st);
+// void	ft_pipe(t_store *st);
+void	gnl_readline(t_store *st, int *status);
 void 	temp_readline(char *line, t_store *st);
 int		read_readline(t_store *st);
 

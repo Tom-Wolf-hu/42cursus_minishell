@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/13 17:34:13 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/15 18:34:36 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ the function will just create the pipe. What we will need test later if
 is enough if we redericted just the stdin and stdout, or we need to pass
 the redirected file descriptors to the pipe function.
 
-*/
 
 void	ft_pipe(t_store *st)
 {
@@ -110,7 +109,76 @@ void	ft_pipe(t_store *st)
 	printf("%i\n", STDIN_FILENO);
 }
 
-void temp_readline(char *line, t_store *st)
+
+This option for pipe reuse idea. However very difficult to connect with
+the existing functions. This reason I try the filedescriptor managger idea.
+
+void	ft_pifork(t_store *st, int pipefd[2])
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("Failed to fork.");
+		return ;
+	}
+	if (pid == 0)
+	{
+		if (st->fd_exin != 0)
+		{
+			dup2(st->fd_exin, STDIN_FILENO);
+		}
+	}
+	else
+		
+}
+
+void	ft_pipe(t_store *st)
+{
+	int		pipefd[2][2];
+	int		i;
+
+	i = 0;
+	if (st->pidcount < 1)
+		return ;
+	while (i < st->pidcount)
+	{
+		if (pipe(pipefd[i % 2]) < 0)
+		{
+			perror("Pipe creation failed.\n");
+			return ;
+		}
+		ft_pifork(st, pipefd[i % 2]);
+		i++;
+	}
+}
+*/
+
+
+
+void	gnl_readline(t_store *st, int *status)
+{
+	char	*line;
+
+	line = get_next_line(st->fd_readl);
+	while (line != NULL)
+	{
+		if (st->pipecount > 0)
+		{
+			if (pipe(st->pipefd) < 0)
+			{
+				perror("Failed to create pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+		*status = redir_cmd_s(line, st);
+		free(line);
+		line = get_next_line(st->fd_readl);
+	}
+}
+
+void	temp_readline(char *line, t_store *st)
 {
 	int	fd_readl;
 	int	i;
@@ -138,24 +206,23 @@ void temp_readline(char *line, t_store *st)
 
 int	read_readline(t_store *st)
 {
-	int		fd_readl;
 	char	*line;
 	int		status;
 
-	fd_readl = open(".temp_readline", O_RDONLY);
-	if (fd_readl < 0)
+	st->fd_readl = open(".temp_readline", O_RDONLY);
+	if (st->fd_readl < 0)
 	{
 		perror("Failed open fd_readl filedescriptor.");
 		return (1);
 	}
-	line = get_next_line(fd_readl);
+	line = get_next_line(st->fd_readl);
 	while (line != NULL)
 	{
 		// write(1, "1passed1\n", 9);
 		// write(1, "1passed1\n", 9);
 		status = redir_cmd_s(line, st);
 		free(line);
-		line = get_next_line(fd_readl);
+		line = get_next_line(st->fd_readl);
 		if (line != NULL)
 		{
 			// write(1, "1passed2\n", 9);
@@ -165,7 +232,6 @@ int	read_readline(t_store *st)
 	// write(1, "1passed3\n", 9);
 	status = wait_child(st, status);
 	reset_fds(st);
-	close(fd_readl);
 	if (unlink(".temp_readline") < 0)
 		perror("Failed to unlink the temp_readline temporary file");
 	return (status);
