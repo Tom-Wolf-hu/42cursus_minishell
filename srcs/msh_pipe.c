@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/10 20:25:48 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/10 20:47:22 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	read_readline(t_store *st)
 		line = get_next_line(fd_readl);
 		if (line != NULL)
 		{
-			write(1, "1passed2\n", 9);
+			// write(1, "1passed2\n", 9);
 			ft_pipe(st);
 		}
 	}
