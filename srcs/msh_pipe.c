@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/17 11:58:34 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 18:52:22 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,13 +153,14 @@ void	ft_pipe(t_store *st)
 		i++;
 	}
 }
-*/
+
+In this pipe_read function the redirection not correct
 
 void	pipe_read(t_store *st)
 {
 	if (st->fd_exin > 2 && st->cmd_num == 1)
 	{
-		if (dup2(st->pipefd[0], st->fd_exin) < 0)
+		if (dup2(st->pipefd[st->cmd_num % 2][0], st->fd_exin) < 0)
 		{
 			perror("Failed to duplicate pipefd[0] to st->fd_exin.");
 			exit(EXIT_FAILURE);
@@ -167,38 +168,57 @@ void	pipe_read(t_store *st)
 	}
 	else
 	{
-		if (dup2(st->pipefd[0], STDIN_FILENO) < 0)
+		if (dup2(st->pipefd[st->cmd_num % 2][0], STDIN_FILENO) < 0)
 		{
 			perror("Failed to duplicate pipefd[0] to stdin.");
 			exit(EXIT_FAILURE);
 		}
 	}
-	close(st->pipefd[0]);
+	close(st->pipefd[st->cmd_num % 2][0]);
 	if (st->fd_exin > 2)
 		close(st->fd_exin);
+}
+
+*/
+
+void	pipe_read(t_store *st)
+{
+	if (st->fd_exin > 0)
+	{
+		if (dup2(st->fd_exin, STDIN_FILENO) < 0)
+		{
+			perror("Failed to duplicate st->fd_exin to stdin.");
+			exit(EXIT_FAILURE);
+		}
+		close(st->fd_exin);
+	}
+	if (st->cmd_num < st->pipecount)
+		close(st->pipefd[st->cmd_num % 2][0]);
+	// st->fd_exin = st->pipefd[st->cmd_num % 2][0];
 }
 
 void	pipe_write(t_store *st)
 {
 	if (st->fd_exout > 2 && st->cmd_num == st->pipecount + 1)
 	{
-		if (dup2(st->pipefd[1], st->fd_exout) < 0)
+		if (dup2(st->fd_exout, STDOUT_FILENO) < 0)
 		{
-			perror("Failed to duplicate pipefd[0] to st->fd_exout.");
+			perror("Failed to duplicate st->fd_exout to stdout.");
 			exit(EXIT_FAILURE);
 		}
-	}
-	else
-	{
-		if (dup2(st->pipefd[1], STDOUT_FILENO) < 0)
-		{
-			perror("Failed to duplicate pipefd[0] to stdout.");
-			exit(EXIT_FAILURE);
-		}
-	}
-	close(st->pipefd[1]);
-	if (st->fd_exout > 2)
 		close(st->fd_exout);
+	}
+	else if (st->cmd_num < st->pipecount)
+	{
+		printf("%d\n", st->pipefd[st->cmd_num % 2][1]);
+		fds_state();
+		if (dup2(st->pipefd[st->cmd_num % 2][1], STDOUT_FILENO) < 0)
+		{
+			perror("Failed to duplicate pipefd[1] to stdout.");
+			exit(EXIT_FAILURE);
+		}
+		close(st->pipefd[st->cmd_num % 2][1]);
+	}
 }
 
 void	chproc_fd(t_store *st)
@@ -214,25 +234,22 @@ void	chproc_fd(t_store *st)
 	// close(st->fd_readl);
 }
 
+void	parent_fd(t_store *st)
+{
+	if (st->fd_exin > 0)
+		close(st->fd_exin);
+	close(st->pipefd[st->cmd_num % 2][1]);
+	st->fd_exin = st->pipefd[st->cmd_num % 2][0];
+}
+
 void	pipe_create(t_store *st)
 {
-	if (st->pipecount > 0)
+	if (st->pipecount > 0 && st->cmd_num <= st->pipecount)
 	{
-		if (st->cmd_num % 2 == 1 && st->cmd_num <= st->pipecount)
+		if (pipe(st->pipefd[st->cmd_num % 2]) < 0)
 		{
-			if (pipe(st->pipefd1) < 0)
-			{
-				perror("Failed to create pipe");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else if (st->cmd_num % 2 == 0 && st->cmd_num <= st->pipecount)
-		{
-			if (pipe(st->pipefd2) < 0)
-			{
-				perror("Failed to create pipe");
-				exit(EXIT_FAILURE);
-			}
+			perror("Failed to create pipe");
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -246,6 +263,7 @@ void	gnl_readline(t_store *st, int *status)
 	{
 		st->cmd_num++;
 		pipe_create(st);
+		// write(1, "passed1\n", 8);
 		*status = redir_cmd_s(line, st);
 		free(line);
 		line = get_next_line(st->fd_readl);
@@ -268,6 +286,7 @@ void	temp_readline(char *line, t_store *st)
 	{
 		if (line[i] == '|')
 		{
+			write(1, "pipe\n", 5);
 			st->pipecount++;
 			write(fd_readl, "\n", 1);
 		}
@@ -291,8 +310,8 @@ int	read_readline(t_store *st)
 	gnl_readline(st, &status);
 	status = wait_child(st, status);
 	reset_fds(st);
-	printf("after reset: \n");
-	fds_state();
+	// printf("after reset: \n");
+	// fds_state();
 	if (unlink(".temp_readline") < 0)
 		perror("Failed to unlink the temp_readline temporary file");
 	return (status);

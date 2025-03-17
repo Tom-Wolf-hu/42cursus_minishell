@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/16 20:07:42 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 18:15:10 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,27 @@ void	init_store(t_store	*st)
 	st->childs = NULL;
 	st->fd_exin = 0;
 	st->fd_exout = 1;
-	st->pidcount = 0;
+	st->pipecount = 0;
 	st->cmd_num = 0;
 }
 
 void	reset_fds(t_store *st)
 {
 	// fds_state();
-	// check_tty();
-	// printf("%i\n", st->save_stdin);
-	// printf("%i\n", STDIN_FILENO);
+	// printf("%d\n", st->save_stdin);
+	// printf("%d\n", STDIN_FILENO);
+	// printf("%d\n", st->save_stdout);
+	// printf("%d\n", STDOUT_FILENO);
 	// int originalstdin = 0;
 	// int originalstdout = 1;
 	
 	// (originalstdin);
-	if (dup2(STDIN_FILENO, st->save_stdin) < 0)
+	if (dup2(st->save_stdin, STDIN_FILENO) < 0)
 	{
 		perror("Failed to reset STDIN_FILENO");
 		exit(EXIT_FAILURE);
 	}
-	if (dup2(STDOUT_FILENO, st->save_stdout) < 0)
+	if (dup2(st->save_stdout, STDOUT_FILENO) < 0)
 	{
 		perror("Failed to reset STDOUT_FILENO");
 		exit(EXIT_FAILURE);
@@ -58,10 +59,11 @@ void	reset_fds(t_store *st)
 	close(st->save_stdout);
 	close(st->fd_readl);
 	if (st->fd_exin > 2)
-		close(st->fd_exin);
+	close(st->fd_exin);
 	if (st->fd_exout > 2)
-		close(st->fd_exout);
-	// fds_state();
+	close(st->fd_exout);
+	check_tty();
+	fds_state();
 }
 
 int	cmd_fds_reset(char **cmd, t_store *st)

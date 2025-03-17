@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/16 16:56:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 19:06:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ int	execute_cmd(char *cmd, t_store *st)
 		}
 	}
 	else if (pid > 0)
+	{
 		save_chpid(pid, st);
+		parent_fd(st);
+	}
 	else
 	{
 		perror("Failed to create fork.\n");
@@ -155,11 +158,12 @@ int builtin_check(char *cmd, t_store *st, int *status)
 	if (pid == 0)
 	{
 		chproc_fd(st);
-		execute_builtin(cmd, st->fd_exout, status);
+		// execute_builtin(cmd, st->fd_exout, status);
+		execute_builtin(cmd, STDOUT_FILENO, status);
 		exit(*status);
 	}
-	else if (pid > 0)
-		save_chpid(pid, st);
+	save_chpid(pid, st);
+	parent_fd(st);
 	return (1);
 }
 
@@ -168,7 +172,7 @@ int	choose_cmd(char *line, t_store *st)
 	int		status;
 	char	*new_line;
 
-	fds_state();
+	// fds_state();
 	new_line = remove_first_spaces(line);
 	status = 0;
 	if (is_empty(new_line))
