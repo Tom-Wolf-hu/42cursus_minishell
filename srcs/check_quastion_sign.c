@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quastion_sign.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/04 14:15:12 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:56:56 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,3 +74,11 @@ int	check_quastion_sign(char **line, char *status)
 	free(status);
 	return (0);
 }
+
+// int main()
+// {
+// 	char *str1 = strdup("Hello, world! \'$?\'");
+// 	char *num = strdup("255");
+// 	check_quastion_sign(&str1, num);
+// 	printf("%s\n", str1);
+// }

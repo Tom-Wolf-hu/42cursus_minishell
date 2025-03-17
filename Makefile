@@ -1,8 +1,8 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-
+CFLAGS = 
+# -Wall -Wextra -Werror
 SRCS =	srcs/minishell.c \
 		srcs/check_line.c \
 		srcs/echo.c \

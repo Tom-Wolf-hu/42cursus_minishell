@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/03/03 15:28:41 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:56:42 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ void get_var_name(char *dest, char *str)
 	int start = 0;
 	int end = 0;
 	int i = 0;
+	int flag = 0;
 
 	while (str[start] != '\0' && str[start] != '$')
+	{
 		start++;
+	}
 	if (str[start] != '$')
-		return;
+		return ;
 	start++;
 	end = start;
 	while (str[end] && str[end] != ' ' && str[end] != '\t' && str[end] != '\0' && str[end] != '$' && str[end] != '=')
@@ -187,17 +190,157 @@ void	remove_var_name(char **str, char *name)
 	*str = result;
 }
 
+void	remove_single_quotes(char **str)
+{
+	char *new_str = NULL;
+	int i = 0;
+	int len = 0;
+	int j = 0;
+	// printf("str before: %s\n", *str);
+	while ((*str)[i])
+    {
+        if ((*str)[i] != '\'')
+            len++;
+        i++;
+    }
+	new_str = malloc(len + 1);
+	if (!new_str)
+		return ;
+	i = 0;
+	while ((*str)[i])
+	{
+		if ((*str)[i] != '\'')
+		{
+			new_str[j] = (*str)[i];
+			j++;
+		}
+		i++;
+	}
+	new_str[j] = '\0';
+	// printf("str after: %s\n", new_str);
+	free(*str);
+	*str = new_str;
+}
+
+// int	get_len_double_quotes(char **str)
+// {
+// 	int i = 0;
+// 	int len = 0;
+// 	int	flag = 0;
+
+// 	while ((*str)[i])
+// 	{
+// 		if ((*str)[i] == '\'' && flag == 0)
+// 			flag = 1;
+// 		else if ((*str)[i] == '\'' && flag == 1)
+// 			flag = 0;
+// 		if ((*str)[i] != '\"' && flag == 0)
+// 		{
+// 			len++;
+// 		}
+// 		i++;
+// 	}
+// 	return (len);
+// }
+
+// void	remove_double_quotes(char **str)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	char *new_str = NULL;
+// 	int len = get_len_double_quotes(str);
+// 	int	flag = 0;
+
+// 	new_str = malloc(len + 1);
+// 	if (!new_str)
+// 		return ;
+// 	len = 0;
+// 	while ((*str)[i])
+// 	{
+// 		if ((*str)[i] == '\'' && flag == 0)
+// 			flag = 1;
+// 		else if ((*str)[i] == '\'' && flag == 1)
+// 			flag = 0;
+// 		if ((*str)[i] != '\"' && flag == 0)
+// 		{
+// 			new_str[j] = (*str)[i];
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	new_str[j] = '\0';
+// 	free(*str);
+// 	*str = new_str;
+// }
+
+int get_len_double_quotes(char **str)
+{
+    int i = 0;
+    int len = 0;
+    int flag_single = 0;  // Флаг для одинарных кавычек
+    int flag_double = 0;  // Флаг для двойных кавычек
+
+    while ((*str)[i])
+    {
+        // Переключаем флаг для одинарных кавычек
+        if ((*str)[i] == '\'' && flag_double == 0)
+            flag_single = !flag_single;
+        
+        // Переключаем флаг для двойных кавычек
+        if ((*str)[i] == '\"' && flag_single == 0)
+            flag_double = !flag_double;
+
+        // Увеличиваем длину только для символов, которые не в двойных кавычках
+        if ((*str)[i] != '\"' && flag_single == 0)
+        {
+            len++;
+        }
+        i++;
+    }
+    return len;
+}
+
+void remove_double_quotes(char **str)
+{
+    int i = 0;
+    int j = 0;
+    char *new_str = NULL;
+    int flag_single = 0;
+    int flag_double = 0;
+
+    new_str = malloc(get_len_double_quotes(str) + 1);
+    if (!new_str)
+        return ;
+    while ((*str)[i])
+    {
+        if ((*str)[i] == '\'' && flag_double == 0)
+            flag_single = !flag_single;
+        if ((*str)[i] == '\"' && flag_single == 0)
+            flag_double = !flag_double;
+        if ((*str)[i] != '\"' || flag_single == 1)
+        {
+            new_str[j] = (*str)[i];
+            j++;
+        }
+        i++;
+    }
+    new_str[j] = '\0';
+    free(*str);
+    *str = new_str;
+}
+
 void	bridge_var(char **str)
 {
 	char *var_name;
 	int size;
 	char *var_value;
 
+	remove_double_quotes(str);
 	size = get_var_name_size(*str);
+	// printf("size: %d\n", size);
 	if (size < 1)
 	{
-		// printf("No variable found\n");
-		return ;
+		return (remove_single_quotes(str));
 	}
 	var_name = malloc(size + 1);
 	if (!var_name)
@@ -221,8 +364,11 @@ void	bridge_var(char **str)
 
 // int main()
 // {
-//     char *str = strdup("echo $USERhello mam");  // Можешь заменить на $PS или $PATH
+//     char *str = strdup("echo \'\"$?\"\'mam");  // Можешь заменить на $PS или $PATH
 //     bridge_var(&str);
+// 	// remove_double_quotes(&str);
 // 	printf("%s\n", str);
 // 	free(str);
 // }
+
+// -L../lib/libft -lft
