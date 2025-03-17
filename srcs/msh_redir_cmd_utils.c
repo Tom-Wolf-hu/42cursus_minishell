@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 19:24:38 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/16 20:07:42 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,16 @@ void	reset_fds(t_store *st)
 	// check_tty();
 	// printf("%i\n", st->save_stdin);
 	// printf("%i\n", STDIN_FILENO);
-	if (dup2(st->save_stdin, STDIN_FILENO) < 0)
+	// int originalstdin = 0;
+	// int originalstdout = 1;
+	
+	// (originalstdin);
+	if (dup2(STDIN_FILENO, st->save_stdin) < 0)
 	{
 		perror("Failed to reset STDIN_FILENO");
 		exit(EXIT_FAILURE);
 	}
-	if (dup2(st->save_stdout, STDOUT_FILENO) < 0)
+	if (dup2(STDOUT_FILENO, st->save_stdout) < 0)
 	{
 		perror("Failed to reset STDOUT_FILENO");
 		exit(EXIT_FAILURE);

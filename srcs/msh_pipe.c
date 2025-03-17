@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 19:27:49 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 11:58:34 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,8 @@ void	pipe_read(t_store *st)
 		}
 	}
 	close(st->pipefd[0]);
+	if (st->fd_exin > 2)
+		close(st->fd_exin);
 }
 
 void	pipe_write(t_store *st)
@@ -195,6 +197,8 @@ void	pipe_write(t_store *st)
 		}
 	}
 	close(st->pipefd[1]);
+	if (st->fd_exout > 2)
+		close(st->fd_exout);
 }
 
 void	chproc_fd(t_store *st)
@@ -203,10 +207,34 @@ void	chproc_fd(t_store *st)
 	{
 		pipe_read(st);
 		pipe_write(st);
+		fds_state();
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
-	close(st->fd_readl);
+	// close(st->fd_readl);
+}
+
+void	pipe_create(t_store *st)
+{
+	if (st->pipecount > 0)
+	{
+		if (st->cmd_num % 2 == 1 && st->cmd_num <= st->pipecount)
+		{
+			if (pipe(st->pipefd1) < 0)
+			{
+				perror("Failed to create pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (st->cmd_num % 2 == 0 && st->cmd_num <= st->pipecount)
+		{
+			if (pipe(st->pipefd2) < 0)
+			{
+				perror("Failed to create pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
 }
 
 void	gnl_readline(t_store *st, int *status)
@@ -217,14 +245,7 @@ void	gnl_readline(t_store *st, int *status)
 	while (line != NULL)
 	{
 		st->cmd_num++;
-		if (st->pipecount > 0)
-		{
-			if (pipe(st->pipefd) < 0)
-			{
-				perror("Failed to create pipe");
-				exit(EXIT_FAILURE);
-			}
-		}
+		pipe_create(st);
 		*status = redir_cmd_s(line, st);
 		free(line);
 		line = get_next_line(st->fd_readl);
@@ -259,10 +280,9 @@ void	temp_readline(char *line, t_store *st)
 
 int	read_readline(t_store *st)
 {
-	char	*line;
 	int		status;
 
-	st->fd_readl = open(".temp_readline", O_RDONLY);
+	st->fd_readl = open(".temp_readline", O_RDONLY | O_CLOEXEC);
 	if (st->fd_readl < 0)
 	{
 		perror("Failed open fd_readl filedescriptor.");
@@ -271,6 +291,8 @@ int	read_readline(t_store *st)
 	gnl_readline(st, &status);
 	status = wait_child(st, status);
 	reset_fds(st);
+	printf("after reset: \n");
+	fds_state();
 	if (unlink(".temp_readline") < 0)
 		perror("Failed to unlink the temp_readline temporary file");
 	return (status);

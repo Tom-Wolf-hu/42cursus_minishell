@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 13:53:06 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/16 16:56:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,8 @@ int	execute_cmd(char *cmd, t_store *st)
 	if (pid == 0)
 	{
 		// check_tty();
-		close(st->save_stdin);
-		close(st->save_stdout);
-		// close(st->fd);
-		fds_state();
+		chproc_fd(st);
+		// fds_state();
 		if (execve(cmdp, cmdarg, environ) == -1)
 		{
 			perror("Failed to execute the command.\n");
@@ -156,6 +154,7 @@ int builtin_check(char *cmd, t_store *st, int *status)
 	}
 	if (pid == 0)
 	{
+		chproc_fd(st);
 		execute_builtin(cmd, st->fd_exout, status);
 		exit(*status);
 	}
@@ -169,6 +168,7 @@ int	choose_cmd(char *line, t_store *st)
 	int		status;
 	char	*new_line;
 
+	fds_state();
 	new_line = remove_first_spaces(line);
 	status = 0;
 	if (is_empty(new_line))

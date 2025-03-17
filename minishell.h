@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/15 19:20:19 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 11:43:01 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef	struct s_store
 	int		fd_readl;
 	int		fd_exin;
 	int		fd_exout;
-	int		pipefd[2];
+	int		pipefd1[2];
+	int		pipefd2[2];
 }	t_store;
 
 

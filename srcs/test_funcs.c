@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:35:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/10 12:40:22 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:47:55 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	fds_state(void)
 	int	fd_i;
 
 	fd_i = 0;
-	while (fd_i < 15)
+	while (fd_i < 25)
 	{
 		if (fcntl(fd_i, F_GETFD) != -1)
 			printf("\033[1;32mThe [%d] fd is open.\033[0m\n", fd_i);
