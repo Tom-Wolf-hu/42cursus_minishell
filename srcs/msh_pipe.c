@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/17 15:06:20 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/17 16:00:55 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,11 @@ void	ft_pipe(t_store *st)
 }
 */
 
+
+
+
+
+// wasn't commented before
 void	pipe_read(t_store *st)
 {
 	if (st->fd_exin > 2 && st->cmd_num == 1)

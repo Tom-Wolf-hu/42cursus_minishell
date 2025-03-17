@@ -3,10 +3,16 @@ NAME = minishell
 CC = cc
 CFLAGS = 
 # -Wall -Wextra -Werror
-SRCS =	srcs/minishell.c \
+
+# Указываем все исходники вручную, включая файлы из подкаталогов
+SRCS =	srcs/builtins/echo.c \
+		srcs/builtins/get_pwd.c \
+		srcs/builtins/handle_cd.c \
+		srcs/builtins/handle_exit.c \
+		srcs/builtins/handle_export_unset.c \
+		srcs/builtins/print_env.c \
+		srcs/minishell.c \
 		srcs/check_line.c \
-		srcs/echo.c \
-		srcs/handle_export_unset.c \
 		srcs/msh_redirect.c \
 		srcs/msh_operations.c \
 		srcs/msh_parse.c \
@@ -34,10 +40,17 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFT_DIR) -lft -lreadline
 
+# Правило для компиляции исходных файлов из подкаталогов srcs
+$(OBJS_DIR)/%.o: srcs/builtins/%.c
+	mkdir -p $(OBJS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Правило для других исходных файлов, например, из srcs
 $(OBJS_DIR)/%.o: srcs/%.c
 	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Правило для файлов в lib/get_next_line
 $(OBJS_DIR)/%.o: lib/get_next_line/%.c
 	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
