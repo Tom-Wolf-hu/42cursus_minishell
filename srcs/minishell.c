@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 13:03:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 13:38:16 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,20 +172,18 @@ char *get_command_path(char *cmd)
 	{
 		if (!finish_write_cmd_path(&buffer, path_arr[i], cmd))
 		{
-			// free_arr(path_arr);
+			free_arr(path_arr);
 			return (NULL);
 		}
 		if (access(buffer, X_OK) == 0)
 		{
-			// free_arr(path_arr);
+			free_arr(path_arr);
 			return (buffer);
 		}
 		free(buffer);
 		i++;
 	}
-	if (buffer)
-		free(buffer);
-	// free_arr(path_arr);
+	free_arr(path_arr);
     return NULL;
 }
 
