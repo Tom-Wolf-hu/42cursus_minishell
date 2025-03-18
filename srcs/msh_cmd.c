@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/15 13:53:06 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:03:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,11 @@ int	is_builtin(char *cmd)
 
 void	execute_builtin(char *cmd, int fd, int *status)
 {
+	if (!cmd)
+		return ;
+	*status = 1;
+	if (fd != 0)
+		dup2(fd, STDOUT_FILENO);
 	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(cmd, fd);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)

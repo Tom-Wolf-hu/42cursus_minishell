@@ -115,10 +115,10 @@ void	execute_command_single(char *cmd)
 
 // -----------------PIPES------------------
 
-void execute_pipe_commands(char *cmd)
+void execute_pipe_commands(char *cmd, int fd, int *status)
 {
-	char **commands;  // Массив для команд
-	char **cmd_args;
+	char **commands; // {"ls -l", "wc -l"}
+	char **cmd_args; // {"ls", "-l"}
 	int num_commands = 0;
 	int i;
 	int pipefd[2];
@@ -144,23 +144,16 @@ void execute_pipe_commands(char *cmd)
 		if (pid == 0)
 		{
 			if (i > 0)
-			{
-				if (dup2(prev_fd, STDIN_FILENO) == -1)
-				{
-					perror("dup2 stdin");
-					exit(EXIT_FAILURE);
-				}
-			}
+				dup2(prev_fd, STDIN_FILENO);
 			if (i < num_commands - 1)
-			{
-				if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-				{
-					perror("dup2 stdout");
-					exit(EXIT_FAILURE);
-				}
-			}
+				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
+			if (is_builtin(commands[i]))
+			{
+				execute_builtin(commands[i], fd, status);
+				exit(EXIT_SUCCESS);
+			}
 			cmd_args = ft_split(commands[i], ' ');
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
@@ -181,8 +174,9 @@ void execute_pipe_commands(char *cmd)
 	free(commands);
 }
 
-int main() {
-    char *cmd = "cat file.txt";  // Пример команды с несколькими пайпами
+int main()
+{
+    char *cmd = "cat file.txt | wc -l";  // Пример команды с несколькими пайпами
     execute_pipe_commands(cmd);
     return 0;
 }
