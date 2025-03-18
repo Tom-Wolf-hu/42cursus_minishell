@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 16:56:13 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:41:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,5 +191,7 @@ state of different aspect of minishell
 //test_funcs.c
 void	fds_state(void);
 void	check_tty();
+void	monitor_fds(t_store *st);
+void	delete_file(char *monitor_file);
 
 #endif

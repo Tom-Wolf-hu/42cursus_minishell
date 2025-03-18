@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/17 18:52:22 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:26:31 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,8 @@ void	pipe_write(t_store *st)
 	}
 	else if (st->cmd_num < st->pipecount)
 	{
-		printf("%d\n", st->pipefd[st->cmd_num % 2][1]);
-		fds_state();
+		// printf("%d\n", st->pipefd[st->cmd_num % 2][1]);
+		// fds_state();
 		if (dup2(st->pipefd[st->cmd_num % 2][1], STDOUT_FILENO) < 0)
 		{
 			perror("Failed to duplicate pipefd[1] to stdout.");
@@ -227,7 +227,6 @@ void	chproc_fd(t_store *st)
 	{
 		pipe_read(st);
 		pipe_write(st);
-		fds_state();
 	}
 	close(st->save_stdin);
 	close(st->save_stdout);
@@ -286,7 +285,7 @@ void	temp_readline(char *line, t_store *st)
 	{
 		if (line[i] == '|')
 		{
-			write(1, "pipe\n", 5);
+			// write(1, "pipe\n", 5);
 			st->pipecount++;
 			write(fd_readl, "\n", 1);
 		}
@@ -301,6 +300,7 @@ int	read_readline(t_store *st)
 {
 	int		status;
 
+	monitor_fds(st);
 	st->fd_readl = open(".temp_readline", O_RDONLY | O_CLOEXEC);
 	if (st->fd_readl < 0)
 	{

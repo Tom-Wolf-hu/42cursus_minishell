@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/17 18:15:10 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:26:59 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	reset_fds(t_store *st)
 	close(st->fd_exin);
 	if (st->fd_exout > 2)
 	close(st->fd_exout);
-	check_tty();
-	fds_state();
+	// check_tty();
+	// fds_state();
 }
 
 int	cmd_fds_reset(char **cmd, t_store *st)
