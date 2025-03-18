@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 16:35:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 13:26:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:22:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	fds_state(void)
 	}
 }
 
-void check_tty()
+void check_tty(void)
 {
 	if (isatty(STDIN_FILENO))
 		printf("\033[1;33mSTDIN is a terminal.\033[0m\n");
@@ -37,6 +37,33 @@ void check_tty()
 		printf("\033[1;32mSTDOUT is a terminal.\033[0m\n");
 	else
 		printf("\033[1;31mSTDOUT NOT a terminal.\033[0m\n");
+}
+
+void	fds_state_f(FILE *fd_monit)
+{
+	int	fd_i;
+
+	fd_i = 0;
+	while (fd_i < 25)
+	{
+		if (fcntl(fd_i, F_GETFD) != -1)
+			fprintf(fd_monit, "\033[1;32mThe [%d] fd is open.\033[0m\n", fd_i);
+		else
+			fprintf(fd_monit, "\033[1;31mThe [%d] fd is closed.\033[0m\n", fd_i);
+		fd_i++;
+	}
+}
+
+void check_tty_f(FILE *fd_monit)
+{
+	if (isatty(STDIN_FILENO))
+		fprintf(fd_monit, "\033[1;33mSTDIN is a terminal.\033[0m\n");
+	else
+		fprintf(fd_monit, "\033[1;31mSTDIN NOT a terminal.\033[0m\n");
+	if (isatty(STDOUT_FILENO))
+		fprintf(fd_monit, "\033[1;32mSTDOUT is a terminal.\033[0m\n");
+	else
+		fprintf(fd_monit, "\033[1;31mSTDOUT NOT a terminal.\033[0m\n");
 }
 
 void	delete_file(char *monitor_file)
@@ -50,29 +77,90 @@ void	delete_file(char *monitor_file)
 	}
 }
 
-void	wr_openfd(t_store *st, char *name, FILE *fd_monit)
+void	wr_openfd(int fd, char *name, FILE *fd_monit, int opt)
 {
-	fprintf(fd_monit, "\033[1;32mThe %s's fd[%d] is opened\
-		in the %d process.\033[0m\n", name, st->fd_exin, 1);
+	pid_t	pid;
+
+	pid = getpid();
+	if (opt == 1)
+	{
+		fprintf(fd_monit, "\033[1;32mThe %s's fd[%d] is OPENED"
+			"in the %d process.\033[0m\n", name, fd, pid);
+	}
+	else if (opt == 2)
+	{
+		fprintf(fd_monit, "\033[1;31mThe %s's fd[%d] is CLOSED"
+			"in the %d process.\033[0m\n", name, fd, pid);
+	}
+	else if (opt == 3)
+	{
+		fprintf(fd_monit, "\033[1;33mThe %s's fd[%d] is duplicated"
+			"in the %d process.\033[0m\n", name, fd, pid);
+	}
 }
 
-void	monitor_fds(t_store *st)
+void	fds_type(t_fds fds, t_store *st, int *fd, char **name)
+{
+	if (fds == SAVE_STDIN)
+	{
+		*fd = st->save_stdin;
+		*name = "Save Standard Input";
+	}
+	else if (fds == SAVE_STDOUT)
+	{
+		*fd = st->save_stdout;
+		*name = "Save Standard Output";
+	}
+	else if (fds == FD_READL)
+	{
+		*fd = st->fd_readl;
+		*name = "Temporary readline file";
+	}
+	else if (fds == FD_EXIN)
+	{
+		*fd = st->fd_exin;
+		*name = "Execution Input";
+	}
+	else if (fds == FD_EXOUT)
+	{
+		*fd = st->fd_exout;
+		*name = "Execution Output";
+	}
+	else if (fds == PIPEFD_R)
+	{
+		*fd = st->pipefd[st->cmd_num % 2][0];
+		*name = "Pipe read";
+	}
+	else if (fds == PIPEFD_W)
+	{
+		*fd = st->pipefd[st->cmd_num % 2][1];
+		*name = "Pipe write";
+	}
+}
+
+void	monitor_fds(t_store *st, t_fds fds, int opt)
 {
 	char	*monitor_file;
 	char	*name;
 	FILE	*fd_monit;
+	int		fd;
 
-	name = "Execution input";
+	fd = -1;
+	name = NULL;
 	monitor_file = ".fds_monitoring.txt";
-	(void)st;
+	fds_type(fds, st, &fd, &name);
 	fd_monit = fopen(monitor_file, "a");
 	if (!fd_monit)
 	{
 		perror("Failed to open temporaryfile for fds monitoring");
 		exit(EXIT_FAILURE);
 	}
-	fprintf(fd_monit, "\033[1;32mProba %d\033[0m\n", 12);
-	(void)name;
+	// fprintf(fd_monit, "\033[1;32mProba %d\033[0m\n", 12);
+	wr_openfd(fd, name, fd_monit, opt);
+	fprintf(fd_monit, "\n");
+	fds_state_f(fd_monit);
+	fprintf(fd_monit, "\n--------------------------------------------\n");
+	// check_tty_f(fd_monit);
 	fclose(fd_monit);
 	// delete_file(monitor_file);
 }

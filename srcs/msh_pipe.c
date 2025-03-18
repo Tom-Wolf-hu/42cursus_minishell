@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 12:26:31 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:02:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ void	pipe_read(t_store *st)
 
 void	pipe_read(t_store *st)
 {
+	// monitor_fds(st);
 	if (st->fd_exin > 0)
 	{
 		if (dup2(st->fd_exin, STDIN_FILENO) < 0)
@@ -300,7 +301,7 @@ int	read_readline(t_store *st)
 {
 	int		status;
 
-	monitor_fds(st);
+	// monitor_fds(st);
 	st->fd_readl = open(".temp_readline", O_RDONLY | O_CLOEXEC);
 	if (st->fd_readl < 0)
 	{

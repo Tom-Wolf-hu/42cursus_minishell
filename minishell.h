@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 12:41:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:16:53 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ typedef enum e_token
 	ARGUMENT,
 	WORD
 }	t_tokentype;
+
+typedef enum e_fds
+{
+	SAVE_STDIN,
+	SAVE_STDOUT,
+	FD_READL,
+	FD_EXIN,
+	FD_EXOUT,
+	PIPEFD_W,
+	PIPEFD_R
+}	t_fds;
 
 typedef struct s_pnode
 {
@@ -191,7 +202,11 @@ state of different aspect of minishell
 //test_funcs.c
 void	fds_state(void);
 void	check_tty();
-void	monitor_fds(t_store *st);
+void	fds_state_f(FILE *fd_monit);
+void 	check_tty_f(FILE *fd_monit);
 void	delete_file(char *monitor_file);
+void	wr_openfd(int fd, char *name, FILE *fd_monit, int opt);
+void	fds_type(t_fds fds, t_store *st, int *fd, char **name);
+void	monitor_fds(t_store *st, t_fds fds, int opt);
 
 #endif
