@@ -6,11 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 13:38:16 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 19:56:43 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	g_status = 0;
 
 void	ft_error(char *error, int exit_status)
 {
@@ -22,6 +24,7 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_status = 130;
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -160,6 +163,14 @@ char *get_command_path(char *cmd)
 	char *path;
 	int i;
 
+	if (!cmd)
+		return (NULL);
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	buffer = NULL;
 	path = getenv("PATH");
 	if (!path)
@@ -195,6 +206,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	int i;
 	int pipefd[2];
 	pid_t pid;
+	int prev_fd;
 
 	commands = ft_split(cmd, '|');
 	if (!commands)
@@ -203,13 +215,14 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	while (commands[num_commands])
 		num_commands++;
 
-	int prev_fd = 0;
+	prev_fd = 0;
 	for (i = 0; i < num_commands; i++)
 	{
 		pipe(pipefd);
 
 		pid = fork();
-		if (pid == -1) {
+		if (pid == -1)
+		{
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
@@ -219,21 +232,22 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				dup2(prev_fd, STDIN_FILENO);
 			if (i < num_commands - 1)
 				dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[0]);
-			close(pipefd[1]);
 			if (is_builtin(commands[i]))
 			{
-				if (i < num_commands - 1)
-					dup2(pipefd[1], STDOUT_FILENO);
+				// if (i < num_commands - 1)
+					// dup2(pipefd[1], STDOUT_FILENO);
+				printf("commands[i]: %s\n", commands[i]);
 				execute_builtin(commands[i], fd, status);
 				exit(*status);
 			}
+			close(pipefd[0]);
+			close(pipefd[1]);
 			cmd_args = ft_split(commands[i], ' ');
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
 			{
-				perror("Command not found");
-				exit(EXIT_FAILURE);
+				printf("%s: Command not found\n", cmd);
+				exit(127);
 			}
 			execve(path, cmd_args, NULL);
 			perror("execve");
@@ -247,18 +261,75 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			waitpid(pid, status, 0);
 		else
 			waitpid(pid, NULL, 0);
+		if (WIFEXITED(*status))
+			*status = WEXITSTATUS(*status);
 	}
 	for (i = 0; i < num_commands; i++)
 		free(commands[i]);
 	free(commands);
 }
 
+void	execute_command_single(char *cmd, int *status)
+{
+	char **cmd_arr;
+	char *path;
+	int pid;
+	int wstatus;
+
+	if (is_builtin(cmd))
+		return (execute_builtin(cmd, 1, status));
+	cmd_arr = ft_split(cmd, ' ');
+	if (!cmd_arr || !*cmd_arr)
+		exit(EXIT_FAILURE);
+	path = get_command_path(cmd_arr[0]);
+	if (!path)
+	{
+		*status = 127;
+		printf("%s: Command not found\n", cmd);// ---------------------------------------------------
+		return ;
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		if (!path)
+			exit(EXIT_FAILURE);
+		execve(path, cmd_arr, NULL);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &wstatus, 0);
+		if (WIFEXITED(wstatus))
+		{
+			*status = WEXITSTATUS(wstatus);
+		}
+		else if (WIFSIGNALED(wstatus))
+		{
+			*status = 128 + WTERMSIG(wstatus);
+		}
+		// printf("cmd has worked!\n");
+	}
+	else
+	{
+		perror("fork");
+		*status = 1;
+	}
+	free_arr(cmd_arr);
+}
+
 void	run_ex(char **line, int *status)
 {
+	if (is_empty(*line))
+		return ;
 	add_history(*line);
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
+	if (!ft_strchr(*line, '|'))
+		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
+	// if (is_builtin(*line))
+		// execute_builtin(*line, 1, status);
 }
 
 int main(void)
@@ -272,6 +343,11 @@ int main(void)
 	while (1)
 	{
 		line = readline("> ");
+		if (g_status == 130)
+		{
+			status = g_status;
+			g_status = 0;
+		}
 		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
 		{
 			handle_exit(line, &status);
@@ -287,3 +363,10 @@ int main(void)
 	free(line);
 }
 // status after ctrl + c
+
+// не рабатает:
+// cd
+// export
+// env | wc -l
+// полное отсутсвие redirections
+// ps aux | grep bash | awk '{print $2}'
