@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 19:37:28 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/19 12:01:16 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct s_pnode
 	struct s_pnode	*prev;
 }	t_pnode;
 
-typedef	struct s_store
+typedef struct s_store
 {
 	int		pipecount;
 	int		pidcount;
@@ -88,7 +88,6 @@ typedef	struct s_store
 	int		fd_exout;
 	int		pipefd[2][2];
 }	t_store;
-
 
 //minishell.c
 void	ft_error(char *error, int exit_status);
