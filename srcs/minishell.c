@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/12 11:52:27 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:55:08 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ int main(void)
 	setup_signal_handlers();
 	while (1)
 	{
+		monitor_fds(NULL, -1, START_FD);
 		line = readline("> ");
 		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
 		{
@@ -247,6 +248,7 @@ int main(void)
 		else
 			run_ex(&line, &status);
 		free(line);
+		monitor_fds(NULL, -1, END_FD);
 	}
 	rl_clear_history();
 	free(line);

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 18:02:20 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:52:56 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ void	pipe_read(t_store *st)
 
 void	pipe_read(t_store *st)
 {
-	// monitor_fds(st);
 	if (st->fd_exin > 0)
 	{
 		if (dup2(st->fd_exin, STDIN_FILENO) < 0)
@@ -191,10 +190,15 @@ void	pipe_read(t_store *st)
 			perror("Failed to duplicate st->fd_exin to stdin.");
 			exit(EXIT_FAILURE);
 		}
+		monitor_fds(st, FD_EXIN, DUPLICATE_FD);
 		close(st->fd_exin);
+		monitor_fds(st, FD_EXIN, CLOSE_FD);
 	}
 	if (st->cmd_num < st->pipecount)
+	{
 		close(st->pipefd[st->cmd_num % 2][0]);
+		monitor_fds(st, PIPEFD_R, CLOSE_FD);
+	}
 	// st->fd_exin = st->pipefd[st->cmd_num % 2][0];
 }
 
@@ -207,7 +211,9 @@ void	pipe_write(t_store *st)
 			perror("Failed to duplicate st->fd_exout to stdout.");
 			exit(EXIT_FAILURE);
 		}
+		monitor_fds(st, FD_EXOUT, DUPLICATE_FD);
 		close(st->fd_exout);
+		monitor_fds(st, FD_EXOUT, CLOSE_FD);
 	}
 	else if (st->cmd_num < st->pipecount)
 	{
@@ -218,7 +224,9 @@ void	pipe_write(t_store *st)
 			perror("Failed to duplicate pipefd[1] to stdout.");
 			exit(EXIT_FAILURE);
 		}
+		monitor_fds(st, PIPEFD_W, DUPLICATE_FD);
 		close(st->pipefd[st->cmd_num % 2][1]);
+		monitor_fds(st, PIPEFD_W, CLOSE_FD);
 	}
 }
 
@@ -230,15 +238,21 @@ void	chproc_fd(t_store *st)
 		pipe_write(st);
 	}
 	close(st->save_stdin);
+	monitor_fds(st, SAVE_STDIN, CLOSE_FD);
 	close(st->save_stdout);
+	monitor_fds(st, SAVE_STDOUT, CLOSE_FD);
 	// close(st->fd_readl);
 }
 
 void	parent_fd(t_store *st)
 {
 	if (st->fd_exin > 0)
+	{
 		close(st->fd_exin);
+		monitor_fds(st, FD_EXIN, CLOSE_FD);
+	}
 	close(st->pipefd[st->cmd_num % 2][1]);
+	monitor_fds(st, PIPEFD_W, CLOSE_FD);
 	st->fd_exin = st->pipefd[st->cmd_num % 2][0];
 }
 
@@ -251,6 +265,8 @@ void	pipe_create(t_store *st)
 			perror("Failed to create pipe");
 			exit(EXIT_FAILURE);
 		}
+		monitor_fds(st, PIPEFD_W, OPEN_FD);
+		monitor_fds(st, PIPEFD_R, OPEN_FD);
 	}
 }
 
@@ -282,6 +298,7 @@ void	temp_readline(char *line, t_store *st)
 		perror("Failed open fd_readl filedescriptor.");
 		return ;
 	}
+	monitor_fds(st, FD_READL, OPEN_FD);
 	while (line[i])
 	{
 		if (line[i] == '|')
@@ -295,19 +312,20 @@ void	temp_readline(char *line, t_store *st)
 		i++;
 	}
 	close(fd_readl);
+	monitor_fds(st, FD_READL, CLOSE_FD);
 }
 
 int	read_readline(t_store *st)
 {
 	int		status;
 
-	// monitor_fds(st);
 	st->fd_readl = open(".temp_readline", O_RDONLY | O_CLOEXEC);
 	if (st->fd_readl < 0)
 	{
 		perror("Failed open fd_readl filedescriptor.");
 		return (1);
 	}
+	monitor_fds(st, FD_READL, OPEN_FD);
 	gnl_readline(st, &status);
 	status = wait_child(st, status);
 	reset_fds(st);

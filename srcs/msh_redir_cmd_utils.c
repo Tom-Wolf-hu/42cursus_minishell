@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 12:26:59 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:42:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ void	init_store(t_store	*st)
 		perror("Failed to duplicate standard input");
 		return ;
 	}
+	monitor_fds(st, SAVE_STDIN, OPEN_FD);
 	st->save_stdout = dup(STDOUT_FILENO);
 	if (st->save_stdout < 0)
 	{
 		perror("Failed to duplicate standard output");
 		return ;
 	}
+	monitor_fds(st, SAVE_STDOUT, OPEN_FD);
 	st->pidcount = 0;
 	st->childs = NULL;
 	st->fd_exin = 0;
@@ -50,18 +52,29 @@ void	reset_fds(t_store *st)
 		perror("Failed to reset STDIN_FILENO");
 		exit(EXIT_FAILURE);
 	}
+	monitor_fds(st, SAVE_STDIN, DUPLICATE_FD);
 	if (dup2(st->save_stdout, STDOUT_FILENO) < 0)
 	{
 		perror("Failed to reset STDOUT_FILENO");
 		exit(EXIT_FAILURE);
 	}
+	monitor_fds(st, SAVE_STDOUT, DUPLICATE_FD);
 	close(st->save_stdin);
+	monitor_fds(st, SAVE_STDIN, CLOSE_FD);
 	close(st->save_stdout);
+	monitor_fds(st, SAVE_STDOUT, CLOSE_FD);
 	close(st->fd_readl);
+	monitor_fds(st, FD_READL, CLOSE_FD);
 	if (st->fd_exin > 2)
-	close(st->fd_exin);
+	{
+		close(st->fd_exin);
+		monitor_fds(st, FD_EXIN, CLOSE_FD);
+	}
 	if (st->fd_exout > 2)
-	close(st->fd_exout);
+	{
+		close(st->fd_exout);
+		monitor_fds(st, FD_EXOUT, CLOSE_FD);
+	}
 	// check_tty();
 	// fds_state();
 }

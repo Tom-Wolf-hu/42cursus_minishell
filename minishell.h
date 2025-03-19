@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 18:16:53 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:37:28 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,15 @@ typedef enum e_fds
 	PIPEFD_W,
 	PIPEFD_R
 }	t_fds;
+
+typedef enum e_wopt
+{
+	START_FD,
+	END_FD,
+	OPEN_FD,
+	CLOSE_FD,
+	DUPLICATE_FD,
+}	t_wopt;
 
 typedef struct s_pnode
 {
@@ -203,10 +212,12 @@ state of different aspect of minishell
 void	fds_state(void);
 void	check_tty();
 void	fds_state_f(FILE *fd_monit);
+void	init_fds_struct(int fd_struct[9], t_store *st);
+void	struct_fds_state(FILE *fd_monit, t_store *st);
 void 	check_tty_f(FILE *fd_monit);
 void	delete_file(char *monitor_file);
-void	wr_openfd(int fd, char *name, FILE *fd_monit, int opt);
+void	wr_openfd(int fd, char *name, FILE *fd_monit, t_wopt wopt);
 void	fds_type(t_fds fds, t_store *st, int *fd, char **name);
-void	monitor_fds(t_store *st, t_fds fds, int opt);
+void	monitor_fds(t_store *st, t_fds fds, t_wopt wopt);
 
 #endif
