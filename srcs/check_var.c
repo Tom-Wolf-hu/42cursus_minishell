@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 14:56:42 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/20 17:21:34 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,16 +190,20 @@ void	remove_var_name(char **str, char *name)
 	*str = result;
 }
 
-void	remove_single_quotes(char **str)
+void	remove_chars(char **str, char ch)
 {
 	char *new_str = NULL;
 	int i = 0;
 	int len = 0;
 	int j = 0;
+
+	// printf("i'm in func remove_chars\n");
+	if (!*str || !str || ch == '\0')
+		return ;
 	// printf("str before: %s\n", *str);
 	while ((*str)[i])
     {
-        if ((*str)[i] != '\'')
+        if ((*str)[i] != ch)
             len++;
         i++;
     }
@@ -209,7 +213,7 @@ void	remove_single_quotes(char **str)
 	i = 0;
 	while ((*str)[i])
 	{
-		if ((*str)[i] != '\'')
+		if ((*str)[i] != ch)
 		{
 			new_str[j] = (*str)[i];
 			j++;
@@ -221,57 +225,6 @@ void	remove_single_quotes(char **str)
 	free(*str);
 	*str = new_str;
 }
-
-// int	get_len_double_quotes(char **str)
-// {
-// 	int i = 0;
-// 	int len = 0;
-// 	int	flag = 0;
-
-// 	while ((*str)[i])
-// 	{
-// 		if ((*str)[i] == '\'' && flag == 0)
-// 			flag = 1;
-// 		else if ((*str)[i] == '\'' && flag == 1)
-// 			flag = 0;
-// 		if ((*str)[i] != '\"' && flag == 0)
-// 		{
-// 			len++;
-// 		}
-// 		i++;
-// 	}
-// 	return (len);
-// }
-
-// void	remove_double_quotes(char **str)
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	char *new_str = NULL;
-// 	int len = get_len_double_quotes(str);
-// 	int	flag = 0;
-
-// 	new_str = malloc(len + 1);
-// 	if (!new_str)
-// 		return ;
-// 	len = 0;
-// 	while ((*str)[i])
-// 	{
-// 		if ((*str)[i] == '\'' && flag == 0)
-// 			flag = 1;
-// 		else if ((*str)[i] == '\'' && flag == 1)
-// 			flag = 0;
-// 		if ((*str)[i] != '\"' && flag == 0)
-// 		{
-// 			new_str[j] = (*str)[i];
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	new_str[j] = '\0';
-// 	free(*str);
-// 	*str = new_str;
-// }
 
 int get_len_double_quotes(char **str)
 {
@@ -335,12 +288,13 @@ void	bridge_var(char **str)
 	int size;
 	char *var_value;
 
-	remove_double_quotes(str);
+	// remove_double_quotes(str);
 	size = get_var_name_size(*str);
 	// printf("size: %d\n", size);
 	if (size < 1)
 	{
-		return (remove_single_quotes(str));
+		// return (remove_single_quotes(str));
+		return ;
 	}
 	var_name = malloc(size + 1);
 	if (!var_name)

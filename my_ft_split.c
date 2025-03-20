@@ -1,16 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/13 15:31:27 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/20 17:03:51 by alex             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "libft.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int	count_words(const char *s, char c)
 {
@@ -27,6 +16,7 @@ int	count_words(const char *s, char c)
 			in_single_quote = 1;
 		else if (*s == '\'' && in_single_quote)
 			in_single_quote = 0;
+
 		if (*s != c && !in_single_quote && !in_word)
 		{
 			in_word = 1;
@@ -63,7 +53,7 @@ char	*get_next_word(const char **s, char c)
 	const char	*start;
 	char		*word;
 	int			length;
-	int			i;
+	int			i = 0;
 
 	while (**s == c && **s)
 		(*s)++;
@@ -74,7 +64,6 @@ char	*get_next_word(const char **s, char c)
 	word = (char *)malloc(length + 1);
 	if (!word)
 		return (NULL);
-	i = 0;
 	while (i < length)
 	{
 		word[i] = start[i];
@@ -86,9 +75,8 @@ char	*get_next_word(const char **s, char c)
 
 char	**clean_all(char **result)
 {
-	int	i;
+	int	i = 0;
 
-	i = 0;
 	while (result[i] != NULL)
 	{
 		free(result[i]);
@@ -122,15 +110,15 @@ char	**ft_split(char const *s, char c)
 	return (result);
 }
 
-// int main() {
-//     const char *str = "xxxxxxxxhello! 'z zd'";
-//     char delimiter = ' ';
-//     char **result = ft_split(str, delimiter);
-// 	if (result) {
-//         int i = 0;
-//         while (result[i] != NULL) {
-//             printf("%s\n", result[i]);
-//             i++;
-//         }
-//     }
-// }
+int main() {
+    const char *str = "''xxxxxxxxhello! 'z zd' 'hell o'";
+    char delimiter = ' ';
+    char **result = ft_split(str, delimiter);
+	if (result) {
+        int i = 0;
+        while (result[i] != NULL) {
+            printf("%s\n", result[i]);
+            i++;
+        }
+    }
+}

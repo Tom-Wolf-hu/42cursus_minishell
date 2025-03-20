@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 12:33:08 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/20 17:04:48 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef	struct s_store
 
 
 //minishell.c
+void	remove_chars(char **str, char ch);
 void	execute_pipe_commands(char *cmd, int fd, int *status);
 int		is_nummeric(char *line);
 void	handle_exit(char *line, int *status);

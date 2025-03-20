@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/17 16:10:39 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/20 13:39:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int find_var_in_env(char *name)
 	i = 0;
     while (environ[i])
 	{
-        if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 && environ[i][ft_strlen(name)] == '=')
+        // if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 && environ[i][ft_strlen(name)] == '=')
+		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0)
             return (i);
         i++;
     }
@@ -30,45 +31,43 @@ int find_var_in_env(char *name)
 
 int mysetenv(char *name, char *value)
 {
-	int index;
-	char *new_var;
+	int		index;
+	char	*new_var;
 
 	index = find_var_in_env(name);
 	if (index != -1)
-	{
 		free(environ[index]);
-		new_var = malloc(strlen(name) + strlen(value) + 2);
-		if (new_var == NULL)
-			return (perror("malloc"), 1);
-		strcpy(new_var, name); // Копируем имя переменной
-		strcat(new_var, "=");  // Добавляем знак '='
-		strcat(new_var, value); // Добавляем значение переменной
-		environ[index] = new_var; // Обновляем переменную окружения
+
+	// Если value == NULL, не добавляем '='
+	if (value)
+		new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
+	else
+		new_var = malloc(ft_strlen(name) + 1);
+
+	if (new_var == NULL)
+		return (perror("malloc"), 1);
+
+	strcpy(new_var, name);
+	if (value)
+	{
+		strcat(new_var, "=");
+		strcat(new_var, value);
 	}
+	
+	if (index != -1)
+		environ[index] = new_var;
 	else
 	{
-		// Если переменной нет, добавим её в окружение
 		int count = 0;
-		while (environ[count]) count++; // Считаем количество переменных в окружении
-		environ = realloc(environ, sizeof(char*) * (count + 2)); // Выделяем место для новой переменной
-		if (environ == NULL) {
-			perror("realloc");
-			return (1);
-		}
-		
-		new_var = malloc(strlen(name) + strlen(value) + 2); // +2 для '=' и '\0'
-		if (new_var == NULL) {
-			perror("malloc");
-			return (1);
-		}
-		
-		// Строку создаём вручную
-		strcpy(new_var, name);  // Копируем имя переменной
-		strcat(new_var, "=");   // Добавляем знак '='
-		strcat(new_var, value); // Добавляем значение переменной
-		
-		environ[count] = new_var; // Добавляем в окружение
-		environ[count + 1] = NULL; // Обязательно завершаем массив NULL
+		while (environ[count])
+			count++;
+
+		environ = realloc(environ, sizeof(char*) * (count + 2));
+		if (environ == NULL)
+			return (perror("realloc"), 1);
+
+		environ[count] = new_var;
+		environ[count + 1] = NULL;
 	}
 	return (0);
 }
@@ -89,10 +88,10 @@ int	handle_export(char *line, int fd)
 		{
 			*equals_pos = '\0';
 			value = equals_pos + 1;
-			return (mysetenv(arg, value));
 		}
 		else
-			return (write(fd, "export: invalid syntax\n", ft_strlen("export: invalid syntax\n")), 1);
+			value = NULL;
+		return (mysetenv(arg, value));
 	}
 	return (0);
 }

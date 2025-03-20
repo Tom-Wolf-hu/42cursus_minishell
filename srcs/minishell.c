@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/19 17:15:25 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/20 17:21:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,113 +198,6 @@ char *get_command_path(char *cmd)
     return NULL;
 }
 
-int handle_redirection(char *cmd) {
-    char *in_file = NULL, *out_file = NULL;
-    int append = 0, heredoc = 0;
-    char *token = strtok(cmd, " ");  // Разбираем строку на части
-    char *clean_cmd[100];  // Очищенная команда без редиректов
-    int clean_index = 0;
-    
-    while (token) {
-        if (strcmp(token, "<") == 0) {  // Входной редирект
-            token = strtok(NULL, " ");
-            if (!token) return -1;
-            in_file = token;
-        }
-        else if (strcmp(token, ">") == 0) {  // Выходной редирект (перезапись)
-            token = strtok(NULL, " ");
-            if (!token) return -1;
-            out_file = token;
-            append = 0;
-        }
-        else if (strcmp(token, ">>") == 0) {  // Выходной редирект (добавление)
-            token = strtok(NULL, " ");
-            if (!token) return -1;
-            out_file = token;
-            append = 1;
-        }
-        else if (strcmp(token, "<<") == 0) {  // Heredoc (<< delimiter)
-            token = strtok(NULL, " ");
-            if (!token) return -1;
-            heredoc = 1;
-            in_file = token;
-        }
-        else {
-            clean_cmd[clean_index++] = token;  // Обычная команда
-        }
-        token = strtok(NULL, " ");
-    }
-    clean_cmd[clean_index] = NULL;
-
-    // Обрабатываем входной редирект (< file)
-    if (in_file && !heredoc) {
-        int fd = open(in_file, O_RDONLY);
-        if (fd == -1) {
-            perror("open input file");
-            return -1;
-        }
-        dup2(fd, STDIN_FILENO);
-        close(fd);
-    }
-
-    // Обрабатываем выходной редирект (> file или >> file)
-    if (out_file) {
-        int fd = open(out_file, O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC), 0644);
-        if (fd == -1) {
-            perror("open output file");
-            return -1;
-        }
-        dup2(fd, STDOUT_FILENO);
-        close(fd);
-    }
-
-    // Обрабатываем heredoc (<< delimiter) через get_next_line()
-    if (heredoc) {
-        int pipefd[2];
-        if (pipe(pipefd) == -1) {
-            perror("pipe");
-            return -1;
-        }
-        pid_t pid = fork();
-        if (pid == -1) {
-            perror("fork");
-            return -1;
-        }
-        if (pid == 0) {  // Дочерний процесс записывает в pipe
-            close(pipefd[0]);
-            char *line;
-            while (1) {
-                write(1, "heredoc> ", 9);
-                line = get_next_line(0);
-                if (!line) break;
-                if (strncmp(line, in_file, strlen(in_file)) == 0 && line[strlen(in_file)] == '\n') {
-                    free(line);
-                    break;
-                }
-                write(pipefd[1], line, strlen(line));
-                free(line);
-            }
-            close(pipefd[1]);
-            exit(0);
-        } else {  // Родительский процесс читает из pipe
-            close(pipefd[1]);
-            dup2(pipefd[0], STDIN_FILENO);
-            close(pipefd[0]);
-            wait(NULL);
-        }
-    }
-
-    // Возвращаем новую команду без редиректов
-    strcpy(cmd, "");
-    for (int i = 0; i < clean_index; i++) {
-        strcat(cmd, clean_cmd[i]);
-        if (i < clean_index - 1)
-            strcat(cmd, " ");
-    }
-    
-    return 0;
-}
-
 void execute_pipe_commands(char *cmd, int fd, int *status)
 {
 	char **commands; // {"ls -l", "wc -l"}
@@ -329,10 +222,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 
 		pid = fork();
 		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
+			return (perror("fork"), exit(EXIT_FAILURE));
 		if (pid == 0)
 		{
 			if (i > 0)
@@ -341,21 +231,25 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				dup2(pipefd[1], STDOUT_FILENO);
 			if (is_builtin(commands[i]))
 			{
-				// if (i < num_commands - 1)
-					// dup2(pipefd[1], STDOUT_FILENO);
-				// printf("commands[i]: %s\n", commands[i]);
-				execute_builtin(commands[i], fd, status);
+				execute_builtin(commands[i], 1, status);
 				exit(*status);
 			}
 			close(pipefd[0]);
 			close(pipefd[1]);
-			////////////////////////////////////////////////////////////////////////
-			// handle_redirection(commands[i]);
-			if (handle_redirection(commands[i]) == -1) {
-				exit(EXIT_FAILURE);
-			}
-			////////////////////////////////////////////////////////////////////////
+			// printf("command before spliting by space: %s\n", commands[i]);
 			cmd_args = ft_split(commands[i], ' ');
+			int j = 0;
+			while (cmd_args[j])
+			{
+				// printf("hello\n");
+				// printf("command after spliting by space: %s\n", cmd_args[j]);
+				if (ft_strchr(cmd_args[j], '\'') != NULL)
+				{
+					// printf("got a quote\n");
+					remove_chars(&cmd_args[j], '\'');
+				}
+				j++;
+			}
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
 			{
@@ -391,18 +285,7 @@ void	execute_command_single(char *cmd, int *status)
 
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status));
-	//////////////////////////////////////////////
-	// wstatus = handle_redirection(cmd);
-	// if (wstatus)
-		// return ;
-	// if (wstatus == -1)
-		// exit(EXIT_FAILURE);
-	if (handle_redirection(cmd) == -1) {
-		*status = 1;
-		return;
-	}
-	//////////////////////////////////////////////
-		cmd_arr = ft_split(cmd, ' ');
+	cmd_arr = ft_split(cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
 	path = get_command_path(cmd_arr[0]);
@@ -432,7 +315,6 @@ void	execute_command_single(char *cmd, int *status)
 		{
 			*status = 128 + WTERMSIG(wstatus);
 		}
-		// printf("cmd has worked!\n");
 	}
 	else
 	{
@@ -452,8 +334,6 @@ void	run_ex(char **line, int *status)
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
-	// if (is_builtin(*line))
-		// execute_builtin(*line, 1, status);
 }
 
 int main(void)
@@ -489,9 +369,9 @@ int main(void)
 // status after ctrl + c
 
 // не рабатает:
-// cd
-// export
-// env | wc -l
+// cd			+
+// export		+
+// env | wc -l	+
 // полное отсутсвие redirections
 // ps aux | grep bash | awk '{print $2}'
 
@@ -506,4 +386,7 @@ int main(void)
 в ф-ях execute_pipe_commands() и execute_command_single() дабавляем в цикл вызов ф-ии проверки reedirectons и если он попадается, то мы его полностью обабатываем,
 вместе с командой (то есть ф-я должна будет сама обрабатывать cat > file) и затем просто либо сдвигать i из цикла, ли бо переписывать саму строку и возвращать уже чтото
 новое, либо лучше она это сделает через **
+
+# Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
+sleep 5
 */
