@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 19:52:56 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/20 19:46:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,9 @@ int	read_readline(t_store *st)
 	monitor_fds(st, FD_READL, OPEN_FD);
 	gnl_readline(st, &status);
 	status = wait_child(st, status);
+	write(1, "1passed1\n", 9);
 	reset_fds(st);
+	write(1, "1passed2\n", 9);
 	// printf("after reset: \n");
 	// fds_state();
 	if (unlink(".temp_readline") < 0)

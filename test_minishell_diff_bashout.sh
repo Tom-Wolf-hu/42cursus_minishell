@@ -54,4 +54,4 @@ run_test "whoami" "Whoami Test"
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
 
-rm -f $MINISH_OUTPUT $BASH_OUTPUT
+# rm -f $MINISH_OUTPUT $BASH_OUTPUT

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 13:53:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/18 19:42:19 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/20 19:46:27 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	reset_fds(t_store *st)
 	monitor_fds(st, SAVE_STDIN, CLOSE_FD);
 	close(st->save_stdout);
 	monitor_fds(st, SAVE_STDOUT, CLOSE_FD);
+	write(1, "2passed1\n", 9);
 	close(st->fd_readl);
 	monitor_fds(st, FD_READL, CLOSE_FD);
 	if (st->fd_exin > 2)
