@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/20 18:11:55 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 18:41:58 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,14 +326,27 @@ void	execute_command_single(char *cmd, int *status)
 
 void	run_ex(char **line, int *status)
 {
+	t_line sline;
+	
+	init_line(&sline);
 	if (is_empty(*line))
 		return ;
 	add_history(*line);
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status));
-	execute_pipe_commands(*line, 1, status);
+	store_lines(*line, &sline);
+	// if (!ft_strchr(*line, '|'))
+	// 	return (execute_command_single(*line, status));
+	// execute_pipe_commands(*line, 1, status);
+	
+	// printf("The content of cmd_l: %s\n", sline.cmd_l);
+	
+	if (!ft_strchr(sline.cmd_l, '|'))
+		return (execute_command_single(sline.cmd_l, status));
+	execute_pipe_commands(sline.cmd_l, 1, status);
+	
+	// printf("This is the content of redir_l: %s\n", sline.redir_l[0]);
+	free_line(&sline);
 }
 
 int main(void)

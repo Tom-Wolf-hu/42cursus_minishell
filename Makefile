@@ -26,6 +26,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/msh_pipe.c \
 		srcs/msh_redir_cmd_utils.c \
 		srcs/test_funcs.c \
+		srcs/msh_red_con.c \
 		lib/get_next_line/get_next_line.c \
 		lib/get_next_line/get_next_line_utils.c
 

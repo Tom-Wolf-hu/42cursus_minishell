@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/20 17:04:48 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 17:31:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ typedef	struct s_store
 	int		fd_exout;
 	int		pipefd[2];
 }	t_store;
+
+typedef struct s_line
+{
+	char	**redir_l;
+	char	*cmd_l;
+	int		tokarr[2];
+	int		pipecount;
+}	t_line;
 
 
 //minishell.c
@@ -156,6 +164,15 @@ void	reset_fds(t_store *st);
 int		cmd_fds_reset(char **cmd, t_store *st);
 void	save_chpid(pid_t pid, t_store *st);
 int		wait_child(t_store *st, int status);
+
+//msh_red_con.c
+void	init_line(t_line *sline);
+void	free_line(t_line *sline);
+char	*ft_crjoin(char	*s1, char *s2);
+void	store_redir(char *line, int *i, t_line *sline);
+void	store_cmd(char *line, int *i, t_line *sline);
+void	store_lines(char *line, t_line *sline);
+
 
 //check_line.c
 int		ft_isoperator(int c);
