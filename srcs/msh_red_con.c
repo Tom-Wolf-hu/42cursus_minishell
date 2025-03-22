@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:22:13 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/22 18:27:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:17:48 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,12 @@ void	store_redir(char *line, int *i, t_line *sline)
 	{
 		perror("Syntax error: to many redirections");
 		return ;
+		// exit(EXIT_FAILURE);
 	}
 	while (line[*i] && ft_isspace(line[*i]))
 		(*i)++;
-	while (line[*i] && (line[*i] != '>' || line[*i] != '<'
-		|| !ft_isspace(line[*i]) || line[*i] != '|'))
+	while (line[*i] && (line[*i] != '>' && line[*i] != '<'
+		&& !ft_isspace(line[*i]) && line[*i] != '|'))
 	{
 		(*i)++;
 	}
@@ -100,6 +101,7 @@ void	store_redir(char *line, int *i, t_line *sline)
 		perror("Failed to use ft_substr to save redirection part");
 		exit(EXIT_FAILURE);
 	}
+	// printf("The saved_redir: %s\n", save_redir);
 	sline->redir_l[0] = ft_crjoin(sline->redir_l[0], save_redir);
 	if (!sline->redir_l[0])
 	{
