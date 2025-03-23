@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:22:13 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/22 19:17:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/23 19:28:00 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	init_line(t_line *sline)
 	sline->tokarr[0] = -1;
 	sline->tokarr[1] = -1;
 	sline->pipecount = 0;
+	sline->cmd_num = 0;
 }
 
 void	free_line(t_line *sline)
@@ -72,6 +73,28 @@ char	*ft_crjoin(char	*s1, char *s2)
 	return (free(s1), free(s2), newstr);
 }
 
+void	beg_end_redir(char *save_redir, t_line *sline)
+{
+	if (sline->cmd_num == 0)
+	{
+		sline->redir_l[0] = ft_crjoin(sline->redir_l[0], save_redir);
+		if (!sline->redir_l[0])
+		{
+			perror("Failed to join save redirection part[0]");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else if (sline->cmd_num == sline->pipecount)
+	{
+		sline->redir_l[1] = ft_crjoin(sline->redir_l[1], save_redir);
+		if (!sline->redir_l[1])
+		{
+			perror("Failed to join save redirection part[1]");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
 void	store_redir(char *line, int *i, t_line *sline)
 {
 	int		len;
@@ -101,25 +124,28 @@ void	store_redir(char *line, int *i, t_line *sline)
 		perror("Failed to use ft_substr to save redirection part");
 		exit(EXIT_FAILURE);
 	}
+	beg_end_redir(save_redir, sline);
 	// printf("The saved_redir: %s\n", save_redir);
-	sline->redir_l[0] = ft_crjoin(sline->redir_l[0], save_redir);
-	if (!sline->redir_l[0])
-	{
-		perror("Failed to join save redirection part");
-		exit(EXIT_FAILURE);
-	}
+// 	sline->redir_l[0] = ft_crjoin(sline->redir_l[0], save_redir);
+// 	if (!sline->redir_l[0])
+// 	{
+// 		perror("Failed to join save redirection part");
+// 		exit(EXIT_FAILURE);
+// 	}
 }
 
 void	store_cmd(char *line, int *i, t_line *sline)
 {
-	int	len;
-	int start;
-	char *save_cmdp;
-	
+	int		len;
+	int		start;
+	char 	*save_cmdp;
+
 	len = 0;
 	start = *i;
 	while (line[*i] && (line[*i] != '>' && line[*i] != '<'))
 	{
+		if (line[*i] == '|')
+			sline->cmd_num++;
 		(*i)++;
 		len++;
 	}
@@ -149,11 +175,23 @@ void	store_lines(char *line, t_line *sline)
 		return ;
 	while (line[i])
 	{
+		if (line[i] == '|')
+			sline->pipecount++;
+		i++;
+	}
+	i = 0;
+	while (line[i])
+	{
 		if (skip_whites(line, &i))
 		{
 			// printf("This is line[%d]: %c\n", i, line[i]);
 			if (line[i] == '<' || line[i] == '>')
 			{
+				if (sline->cmd_num > 0 && sline->cmd_num < sline->pipecount )
+				{
+					perror("Syntax error: redirection between pipes");
+					exit(EXIT_FAILURE);
+				}
 				// write(1, "passed\n", 7);
 				store_redir(line, &i, sline);
 			}

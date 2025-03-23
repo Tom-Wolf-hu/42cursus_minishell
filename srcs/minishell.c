@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/22 18:59:58 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/23 19:40:34 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,7 +327,7 @@ void	execute_command_single(char *cmd, int *status)
 void	run_ex(char **line, int *status)
 {
 	t_line sline;
-	
+
 	init_line(&sline);
 	if (is_empty(*line))
 		return ;
@@ -345,7 +345,9 @@ void	run_ex(char **line, int *status)
 		return (execute_command_single(sline.cmd_l, status));
 	execute_pipe_commands(sline.cmd_l, 1, status);
 	
-	printf("This is the content of redir_l: %s\n", sline.redir_l[0]);
+	// printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
+	// printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
+	
 	free_line(&sline);
 }
 

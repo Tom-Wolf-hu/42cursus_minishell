@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/22 17:31:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:28:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_line
 	char	*cmd_l;
 	int		tokarr[2];
 	int		pipecount;
+	int		cmd_num;
 }	t_line;
 
 
