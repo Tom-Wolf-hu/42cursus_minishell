@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/23 18:28:44 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/24 00:19:18 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
 void	run_ex(char **line, int *status);
+void	dis_echo_insc(struct termios *old_term);
+void	restore_echo(struct termios *old_term);
 int 	main(void);
 
 //msh_redirect.c
@@ -208,8 +210,36 @@ int		handle_unset(char *line, int fd);
 The following file includes functions for checking 
 state of different aspect of minishell
 */
+typedef enum e_fds
+{
+	SAVE_STDIN,
+	SAVE_STDOUT,
+	FD_READL,
+	FD_EXIN,
+	FD_EXOUT,
+	PIPEFD_W,
+	PIPEFD_R
+}	t_fds;
+
+typedef enum e_wopt
+{
+	START_FD,
+	END_FD,
+	OPEN_FD,
+	CLOSE_FD,
+	DUPLICATE_FD,
+}	t_wopt;
+
 //test_funcs.c
 void	fds_state(void);
 void	check_tty();
+void	fds_state_f(FILE *fd_monit);
+void	init_fds_struct(int fd_struct[9], t_store *st);
+void	struct_fds_state(FILE *fd_monit, t_store *st);
+void 	check_tty_f(FILE *fd_monit);
+void	delete_file(char *monitor_file);
+void	wr_openfd(int fd, char *name, FILE *fd_monit, t_wopt wopt);
+void	fds_type(t_fds fds, t_store *st, int *fd, char **name);
+void	monitor_fds(t_store *st, t_fds fds, t_wopt wopt);
 
 #endif
