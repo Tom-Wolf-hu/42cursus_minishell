@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:22:13 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/24 18:27:18 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 15:49:35 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*ft_crjoin(char	*s1, char *s2)
 	j = 0;
 	if (lens1 + lens2 == 0)
 		return (free(s1), free(s2), NULL);
-	newstr = (char *)ft_calloc(lens1 + lens2 +1, sizeof(char));
+	newstr = (char *)ft_calloc(lens1 + lens2 + 1, sizeof(char));
 	if (!newstr)
 		return (free(s1), free(s2), NULL);
 	while (i < lens1 + lens2)

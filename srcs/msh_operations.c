@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/24 19:01:02 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 16:07:24 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,17 @@ int		count_rps(char *redir)
 	count = 0;
 	if (!redir)
 		return (count);
-	write(1, "passed1\n", 8);
-	while (redir[i])
+	while (redir[i] != '\0')
 	{
-		while (redir[i] && ft_isspace(redir[i]))
+		while (redir[i] != '\0' && ft_isspace(redir[i]))
 			i++;
 		if (redir[i] == '<' || redir[i] == '>')
 			count++;
-		while (redir[i] && (redir[i] == '<' || redir[i] == '>'))
+		while (redir[i] != '\0' && (redir[i] == '<' || redir[i] == '>'))
 			i++;
-		while (redir[i] && redir[i] != '<' && redir[i] == '>')
+		while (redir[i] != '\0' && redir[i] != '<' && redir[i] != '>')
 			i++;
 	}
-	write(1, "passed2\n", 8);
 	return (count);
 }
 
