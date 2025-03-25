@@ -6,13 +6,13 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/24 00:52:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 12:31:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	g_status = 0;
+volatile int	g_status = 0;
 
 void	ft_error(char *error, int exit_status)
 {
@@ -328,6 +328,7 @@ void	run_ex(char **line, int *status)
 {
 	t_line sline;
 
+
 	init_line(&sline);
 	if (is_empty(*line))
 		return ;
@@ -335,20 +336,30 @@ void	run_ex(char **line, int *status)
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
 	store_lines(*line, &sline);
+
+	// if (!ft_strchr(*line, '|'))
+	// 	return (execute_command_single(*line, status));
+	// execute_pipe_commands(*line, 1, status);
 	
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status));
-	execute_pipe_commands(*line, 1, status);
+	// write(1, "passed1\n", 8);
+	printf("The content of cmd_l: %s\n", sline.cmd_l);
 	
-	// printf("The content of cmd_l: %s\n", sline.cmd_l);
-	
-	// if (!ft_strchr(sline.cmd_l, '|'))
-	// 	return (execute_command_single(sline.cmd_l, status));
-	// execute_pipe_commands(sline.cmd_l, 1, status);
-	
-	// printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
-	// printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
-	
+	// write(1, "passed2\n", 8);
+	if (!ft_strchr(sline.cmd_l, '|'))
+		return (execute_command_single(sline.cmd_l, status));
+	execute_pipe_commands(sline.cmd_l, 1, status);
+
+	// write(1, "passed3\n", 8);
+	printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
+	printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
+
+	int count = 0;
+
+	count = count_rps(sline.redir_l[0]);
+	printf("This is the number parts of redir_l[0]: %d\n", count);
+	count = count_rps(sline.redir_l[1]);
+	printf("This is the number parts of redir_l[1]: %d\n", count);
+
 	free_line(&sline);
 }
 
@@ -356,19 +367,26 @@ void	dis_echo_insc(struct termios *old_term)
 {
 	struct termios	new_term;
 
-	if (isatty(STDIN_FILENO))
-		return ;
-	tcgetattr(STDIN_FILENO, old_term);
+	// write(1, "passed1\n", 8);
+	if (!isatty(STDIN_FILENO))
+	{
+		tcgetattr(STDIN_FILENO, old_term);
+		// write(1, "passed2\n", 8);
+		new_term = *old_term;
+		new_term.c_lflag &= ~ECHO;
+		tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+		// write(1, "passed3\n", 8);
+	}
 
-	new_term = *old_term;
-	new_term.c_lflag &= ~ECHO;
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 }
 
 void	restore_echo(struct termios *old_term)
 {
 	if (isatty(STDIN_FILENO))
-		tcsetattr(STDIN_FILENO, TCSANOW, old_term);
+		return ;
+	// tcsetattr(STDIN_FILENO, TCSANOW, old_term);
+	old_term->c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, old_term);
 }
 
 int main(void)
@@ -377,16 +395,17 @@ int main(void)
 	static int		status = 0;
 	struct termios	old_term;
 
-	// check_tty();
 	dis_echo_insc(&old_term);
-	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
+	disable_ctrl_c_output(&status);
 	while (1)
 	{
+		// check_tty();
 		if (isatty(STDIN_FILENO))
 			line = readline("> ");
 		else
 			line = readline("");
+		// printf("This is the line: %s\n", line);
 		if (g_status == 130)
 		{
 			status = g_status;
@@ -395,6 +414,7 @@ int main(void)
 		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
 		{
 			handle_exit(line, &status);
+			restore_echo(&old_term);
 			break ;
 		}
 		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
@@ -405,7 +425,7 @@ int main(void)
 	}
 	restore_echo(&old_term);
 	rl_clear_history();
-	free(line);
+	// free(line);
 }
 // status after ctrl + c
 

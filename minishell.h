@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/24 00:19:18 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/24 17:53:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ typedef struct s_line
 {
 	char	**redir_l;
 	char	*cmd_l;
-	int		tokarr[2];
+	char	**redir_parts;
+	int		*tokarr;
 	int		pipecount;
 	int		cmd_num;
 }	t_line;
@@ -116,6 +117,12 @@ int		redir_cmd_s(char *line, t_store *st);
 
 //msh_operations.c
 void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
+int		count_rps(char *redir);
+// void	set_red(char *redir, t_tokentype e_red, int *i);
+// void	redir_ch(char *redir, t_tokentype e_red);
+// void	redir_line(t_line *sline);
+
+
 // int		count_deilemeter(char *line, char delimeter);
 // char	*allocate_word(char *line, int len);
 // char	*save_w(char *line, char delimeter);

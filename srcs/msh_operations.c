@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/14 18:26:52 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/24 19:01:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,105 @@ void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
 	else if (e_red == REDDELIMETER)
 		red_del(name_d);
 }
+
+void	set_red(char *redir, t_tokentype e_red, int *i)
+{
+	if (redir[*i] == '<' && redir[*i + 1] != '<')
+	{
+		e_red = REDINPUT;
+		(*i) += 1;
+	}
+	else if (redir[*i] == '<' && redir[*i + 1] == '<')
+	{
+		e_red = REDDELIMETER;
+		(*i) += 2;
+	}
+	else if (redir[*i] == '>' && redir[*i + 1] != '>')
+	{
+		e_red = REDOUTPUT;
+		(*i) += 1;
+	}
+	else if (redir[*i] == '>' && redir[*i + 1] == '>')
+	{
+		e_red = APPENDREDOUTPUT;
+		(*i) += 2;
+	}
+	else
+	{
+		perror("Problem with redirection characters");
+		exit(EXIT_FAILURE);
+	}
+}
+
+int		count_rps(char *redir)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	if (!redir)
+		return (count);
+	write(1, "passed1\n", 8);
+	while (redir[i])
+	{
+		while (redir[i] && ft_isspace(redir[i]))
+			i++;
+		if (redir[i] == '<' || redir[i] == '>')
+			count++;
+		while (redir[i] && (redir[i] == '<' || redir[i] == '>'))
+			i++;
+		while (redir[i] && redir[i] != '<' && redir[i] == '>')
+			i++;
+	}
+	write(1, "passed2\n", 8);
+	return (count);
+}
+
+void	redir_ch(char *redir, t_tokentype e_red)
+{
+	int		i;
+	int		start;
+	char	*name_d;
+
+	i = 0;
+	skip_whites(redir, &i);
+	set_red(redir, e_red, &i);
+	skip_whites(redir, &i);
+	start = i;
+	while (redir[i] && redir[i] != '<'
+		&& redir[i] != '>' && !ft_isspace(redir[i]))
+	{
+		i++;
+	}
+	if (i == start)
+		return ;
+	name_d = ft_substr(redir, start, i - start + 1);
+	if (!name_d)
+	{
+		perror("Failed to allocate memory name_d");
+		exit(EXIT_FAILURE);
+	}
+	free(name_d);
+}
+
+// void	redir_line(t_line *sline)
+// {
+// 	t_tokentype	e_red;
+
+// 	if (sline->cmd_l == 0 && sline->redir_l[0])
+// 	{
+// 		while (sline->redir_l[0][i])
+// 		{
+			
+// 		}
+// 	}
+// 	if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount
+// 		&& sline->redir_l[1])
+// 	{
+		
+// 	}
+// }
 
 // int	count_deilemeter(char *line, char delimeter)
 // {

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:22:13 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/23 19:28:00 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/24 18:27:18 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@ void	init_line(t_line *sline)
 {
 	sline->cmd_l = NULL;
 	sline->redir_l = (char **)ft_calloc(3, sizeof(char *));
+	sline->redir_parts = NULL;
+	sline->tokarr = NULL;
 	if (!sline->redir_l)
 	{
 		perror("Failed to allocate memory for redir_l");
 		free(sline->cmd_l);
 		exit(EXIT_FAILURE);
 	}
-	sline->tokarr[0] = -1;
-	sline->tokarr[1] = -1;
+	// sline->tokarr[0] = -1;
+	// sline->tokarr[1] = -1;
 	sline->pipecount = 0;
 	sline->cmd_num = 0;
 }
