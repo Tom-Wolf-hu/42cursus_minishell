@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/25 16:07:24 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 17:14:55 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
 
 void	set_red(char *redir, t_tokentype e_red, int *i)
 {
+	printf("This is the redirection characters in set_red: %c\n", redir[*i]);
 	if (redir[*i] == '<' && redir[*i + 1] != '<')
 	{
 		e_red = REDINPUT;
@@ -82,7 +83,7 @@ int		count_rps(char *redir)
 	return (count);
 }
 
-void	redir_ch(char *redir, t_tokentype e_red)
+char	*save_name_d(char *redir, t_tokentype e_red)
 {
 	int		i;
 	int		start;
@@ -99,14 +100,46 @@ void	redir_ch(char *redir, t_tokentype e_red)
 		i++;
 	}
 	if (i == start)
-		return ;
+		return (NULL);
 	name_d = ft_substr(redir, start, i - start + 1);
 	if (!name_d)
 	{
 		perror("Failed to allocate memory name_d");
 		exit(EXIT_FAILURE);
 	}
-	free(name_d);
+	return (name_d);
+}
+
+void	redir_ch(t_line *sline, char *redir)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = count_rps(redir);
+	if (count == 0)
+		return ;
+	sline->redir_parts = (char **)ft_calloc(count + 1, sizeof(char *));
+	if (!sline->redir_parts)
+	{
+		perror("Failed to allocate memory for redirection parts");
+		exit(EXIT_FAILURE);
+	}
+	sline->tokarr = (t_tokentype *)ft_calloc(count, sizeof(t_tokentype));
+	if (!sline->tokarr)
+	{
+		perror("Failed to allocate memory for tokarr");
+		exit(EXIT_FAILURE);
+	}
+	while (i < count)
+	{
+		if (i > 0 && sline->redir_parts[i - 1] != NULL)
+			redir = redir + ft_strlen(sline->redir_parts[i - 1]) + 1;
+		write(1, "passed1\n", 8);
+		sline->redir_parts[i] = save_name_d(redir, sline->tokarr[i]);
+		i++;
+	}
+	sline->redir_parts[i] = NULL;
 }
 
 // void	redir_line(t_line *sline)

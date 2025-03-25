@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/25 13:00:58 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 17:16:21 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,6 +359,9 @@ void	run_ex(char **line, int *status)
 	printf("This is the number parts of redir_l[0]: %d\n", count);
 	count = count_rps(sline.redir_l[1]);
 	printf("This is the number parts of redir_l[1]: %d\n", count);
+	
+	redir_ch(&sline, sline.redir_l[0]);
+	print_arr(sline.redir_parts);
 
 	free_line(&sline);
 }
