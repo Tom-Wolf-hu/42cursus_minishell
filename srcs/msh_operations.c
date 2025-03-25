@@ -6,13 +6,31 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/25 17:14:55 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:57:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
+// void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
+// {
+// 	if (!name_d)
+// 	{
+// 		ft_putendl_fd("Filename or delimiter does \
+// 			not exist in choose_op.", STDERR_FILENO);
+// 		return ;
+// 	}
+// 	if (e_red == REDINPUT)
+// 		red_in(name_d);
+// 	else if (e_red == REDOUTPUT)
+// 		st->fd_exout = red_out(name_d);
+// 	else if (e_red == APPENDREDOUTPUT)
+// 		st->fd_exout = red_out_append(name_d);
+// 	else if (e_red == REDDELIMETER)
+// 		red_del(name_d);
+// }
+
+void	ch_red(t_tokentype e_red, char *name_d, t_line *sline)
 {
 	if (!name_d)
 	{
@@ -21,13 +39,48 @@ void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st)
 		return ;
 	}
 	if (e_red == REDINPUT)
-		red_in(name_d);
+		sline->fd_redin = red_in(name_d);
 	else if (e_red == REDOUTPUT)
-		st->fd_exout = red_out(name_d);
+		sline->fd_redout = red_out(name_d);
 	else if (e_red == APPENDREDOUTPUT)
-		st->fd_exout = red_out_append(name_d);
+		sline->fd_redout = red_out_append(name_d);
 	else if (e_red == REDDELIMETER)
-		red_del(name_d);
+		sline->fd_redin = red_del(name_d);
+}
+
+void	run_red_choose(t_line *sline)
+{
+	int	i;
+
+	i = 0;
+	while (sline->redir_parts[i] != NULL)
+	{
+		if (sline->pipecount > 0 && sline->cmd_l == 0)
+		{
+			if (sline->tokarr == REDOUTPUT || sline->tokarr == APPENDREDOUTPUT)
+			{
+				perror("Output redirection before pipe.");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount)
+		{
+			if (sline->tokarr == REDINPUT || sline->tokarr == REDDELIMETER)
+			{
+				perror("Input redirection after pipe.");
+				exit(EXIT_FAILURE);
+			}
+		}
+		ch_red(sline->tokarr[i], sline->redir_parts[i], sline);
+		if (sline->redir_parts[i + 1] != NULL)
+		{
+			if (sline->fd_redin > -1)
+				close(sline->fd_redin);
+			if (sline->fd_redout > -1)
+				close(sline->fd_redout);
+		}
+		i++;
+	}
 }
 
 void	set_red(char *redir, t_tokentype e_red, int *i)
@@ -119,12 +172,16 @@ void	redir_ch(t_line *sline, char *redir)
 	count = count_rps(redir);
 	if (count == 0)
 		return ;
+	if (sline->redir_parts)
+		free_arr(sline->redir_parts);
 	sline->redir_parts = (char **)ft_calloc(count + 1, sizeof(char *));
 	if (!sline->redir_parts)
 	{
 		perror("Failed to allocate memory for redirection parts");
 		exit(EXIT_FAILURE);
 	}
+	if (sline->tokarr)
+		free(sline->tokarr);
 	sline->tokarr = (t_tokentype *)ft_calloc(count, sizeof(t_tokentype));
 	if (!sline->tokarr)
 	{
@@ -142,23 +199,22 @@ void	redir_ch(t_line *sline, char *redir)
 	sline->redir_parts[i] = NULL;
 }
 
-// void	redir_line(t_line *sline)
-// {
-// 	t_tokentype	e_red;
-
-// 	if (sline->cmd_l == 0 && sline->redir_l[0])
-// 	{
-// 		while (sline->redir_l[0][i])
-// 		{
-			
-// 		}
-// 	}
-// 	if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount
-// 		&& sline->redir_l[1])
-// 	{
-		
-// 	}
-// }
+void	redir_line(t_line *sline)
+{
+	if (sline->cmd_l == 0 && sline->redir_l[0])
+	{
+		redir_ch(sline, sline->redir_l[0]);
+		print_arr(sline->redir_parts);
+		// run_red_choose(sline);
+	}
+	if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount
+		&& sline->redir_l[1])
+	{
+		redir_ch(sline, sline->redir_l[1]);
+		print_arr(sline->redir_parts);
+		// run_red_choose(sline);
+	}
+}
 
 // int	count_deilemeter(char *line, char delimeter)
 // {

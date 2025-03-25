@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:22:13 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/25 15:49:35 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:29:59 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	init_line(t_line *sline)
 		free(sline->cmd_l);
 		exit(EXIT_FAILURE);
 	}
-	// sline->tokarr[0] = -1;
-	// sline->tokarr[1] = -1;
+	sline->fd_redin = -1;
+	sline->fd_redout = -1;
 	sline->pipecount = 0;
 	sline->cmd_num = 0;
 }
@@ -35,6 +35,10 @@ void	free_line(t_line *sline)
 	free(sline->cmd_l);
 	if (sline->redir_l)
 		free_arr(sline->redir_l);
+	free(sline->tokarr);
+	sline->tokarr = NULL;
+	free_arr(sline->redir_parts);
+	sline->redir_parts = NULL;
 }
 
 char	*ft_crjoin(char	*s1, char *s2)

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/25 17:04:43 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:45:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_line
 	t_tokentype	*tokarr;
 	int			pipecount;
 	int			cmd_num;
+	int			fd_redin;
+	int			fd_redout;
 }	t_line;
 
 
@@ -102,11 +104,11 @@ void	restore_echo(struct termios *old_term);
 int 	main(void);
 
 //msh_redirect.c
-void	red_in(char *fd_name);
+int		red_in(char *fd_name);
 int		red_out(char *fd_name);
 int		red_out_append(char *fd_name);
 void	read_in_temp(char *delimeter, int fd_delimeter);
-void	red_del(char *delimeter);
+int		red_del(char *delimeter);
 
 //msh_redir_cmd_call.c
 int		count_delimeter(char *line, char delimeter);
@@ -116,10 +118,14 @@ void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
 int		redir_cmd_s(char *line, t_store *st);
 
 //msh_operations.c
-void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
+// void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
+void	ch_red(t_tokentype e_red, char *name_d, t_line *sline);
+void	run_red_choose(t_line *sline);
 int		count_rps(char *redir);
+void	set_red(char *redir, t_tokentype e_red, int *i);
 char	*save_name_d(char *redir, t_tokentype e_red);
 void	redir_ch(t_line *sline, char *redir);
+void	redir_line(t_line *sline);
 
 // void	set_red(char *redir, t_tokentype e_red, int *i);
 // void	redir_ch(char *redir, t_tokentype e_red);
