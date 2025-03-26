@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/20 14:27:22 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/26 15:38:05 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,132 @@ int	is_builtin(char *cmd)
 		return (0);
 }
 
+void	handle_heredoc(const char *delimiter)
+{
+	int pipe_fd[2];
+	char *line = NULL;
+	size_t len = 0;
+
+	pipe(pipe_fd); // Создаём пайп
+
+	// Читаем строки, пока не встретится delimiter
+	while (1)
+	{
+		write(STDOUT_FILENO, "> ", 2);
+		if (getline(&line, &len, stdin) == -1)
+			break;
+		// Если строка совпадает с delimiter — выходим
+		if (strncmp(line, delimiter, strlen(delimiter)) == 0 && line[strlen(delimiter)] == '\n')
+			break;
+		write(pipe_fd[1], line, strlen(line)); // Пишем в пайп
+	}
+	free(line);
+	close(pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO); // Перенаправляем stdin на пайп
+	close(pipe_fd[0]);
+}
+
+char *get_filename(char *cmd)
+{
+	char *filename;
+	int j;
+	int i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '>' || cmd[i] == '<')
+			break ;
+		i++;
+	}
+	if (cmd[i] == '>' || cmd[i] == '<')
+		i++;
+	while (cmd[i] && (cmd[i] == 32 || cmd[i] == '\t' || cmd[i] == '\n'))
+		i++;
+	j = 0;
+	filename = malloc(ft_strlen(cmd) - i + 1);
+	if (!filename)
+		return (NULL);
+	while (cmd[i])
+	{
+		filename[j] = cmd[i];
+		i++;
+		j++;
+	}
+	filename[j] = '\0';
+	return (filename);
+}
+
 void	execute_builtin(char *cmd, int fd, int *status)
 {
+	int saved_stdin;
+	int saved_stdout;
+	char *filename;
+	int file_fd;
+	char *redir;
+
 	if (!cmd)
 		return ;
+	filename = get_filename(cmd);
+	printf("filename: %s, len: %d\n", filename, ft_strlen(filename));
 	*status = 1;
-	// if (fd != 0)
-		// dup2(fd, STDOUT_FILENO);
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	// file_fd = -1;
+	
+	// обработка here-document (<<)
+	// if ((redir = strstr(cmd, "<<")))
+	// {
+	// 	*redir = '\0';
+	// 	redir += 2;
+	// 	while (*redir == ' ')
+	// 		redir++;
+	// 	handle_heredoc(redir);
+	// }
+	// // Добавление в файл (>>)
+	// else if ((redir == strstr(cmd, ">>")))
+	// {
+	// 	*redir = '\0';
+	// 	redir += 2;
+	// 	while (*redir == ' ')
+	// 		redir++;
+	// 	file_fd = open(redir, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	// 	if (file_fd == -1)
+	// 		return (perror("open"), *status = 1, (void)0);
+	// 	dup2(file_fd, STDOUT_FILENO);
+	// 	close(file_fd);
+	// }
+	// Запись в файл (>)
+	if ((redir = strchr(cmd, '>')))
+	{
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file_fd == -1)
+		{
+			perror("open");
+			*status = 1;
+			return;
+		}
+		dup2(file_fd, STDOUT_FILENO);
+		close(file_fd);
+	}
+	// // Обрабатываем '<' (чтение из файла)
+	// else if ((redir = strchr(cmd, '<')))
+	// {
+	// 	*redir = '\0';
+	// 	redir++;
+	// 	while (*redir == ' ') redir++;
+
+	// 	file_fd = open(redir, O_RDONLY);
+	// 	if (file_fd == -1)
+	// 	{
+	// 		perror("open");
+	// 		*status = 1;
+	// 		return;
+	// 	}
+	// 	dup2(file_fd, STDIN_FILENO);
+	// 	close(file_fd);
+	// }
+
 	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(cmd, fd);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
@@ -140,6 +259,11 @@ void	execute_builtin(char *cmd, int fd, int *status)
 		*status = handle_export(cmd, fd);
 	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
 		*status = handle_unset(cmd, fd);
+	
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
 }
 
 int builtin_check(char *cmd, t_store *st, int *status)
