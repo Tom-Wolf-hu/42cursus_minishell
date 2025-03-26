@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/25 18:45:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:10:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef struct s_line
 //minishell.c
 void	remove_chars(char **str, char ch);
 void	execute_pipe_commands(char *cmd, int fd, int *status);
+void	execute_command_single(char *cmd, int *status, t_line *sline);
 int		is_nummeric(char *line);
 void	handle_exit(char *line, int *status);
 void	ft_error(char *error, int exit_status);
@@ -120,6 +121,7 @@ int		redir_cmd_s(char *line, t_store *st);
 //msh_operations.c
 // void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
 void	ch_red(t_tokentype e_red, char *name_d, t_line *sline);
+void	red_in_sincmd(t_line *sline);
 void	run_red_choose(t_line *sline);
 int		count_rps(char *redir);
 void	set_red(char *redir, t_tokentype e_red, int *i);
@@ -192,6 +194,8 @@ void	store_redir(char *line, int *i, t_line *sline);
 void	store_cmd(char *line, int *i, t_line *sline);
 void	store_lines(char *line, t_line *sline);
 
+//msh_reset_state.c
+void	set_back_stds(void);
 
 //check_line.c
 int		ft_isoperator(int c);

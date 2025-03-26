@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/25 18:57:39 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:50:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,26 @@ void	ch_red(t_tokentype e_red, char *name_d, t_line *sline)
 		sline->fd_redin = red_del(name_d);
 }
 
+void	red_in_sincmd(t_line *sline)
+{
+	if (sline->pipecount == 0)
+	{
+		write(1, "passed1\n", 8);
+		if (dup2(sline->fd_redin, STDIN_FILENO) < 0)
+		{
+			perror("Failed to redirect fd_redin in single command.");
+			exit(EXIT_FAILURE);
+		}
+		close(sline->fd_redin);
+		if (dup2(sline->fd_redout, STDOUT_FILENO) < 0)
+		{
+			perror("Failed to redirect fd_redout in single command.");
+			exit(EXIT_FAILURE);
+		}
+		close(sline->fd_redout);
+	}
+}
+
 void	run_red_choose(t_line *sline)
 {
 	int	i;
@@ -57,15 +77,15 @@ void	run_red_choose(t_line *sline)
 	{
 		if (sline->pipecount > 0 && sline->cmd_l == 0)
 		{
-			if (sline->tokarr == REDOUTPUT || sline->tokarr == APPENDREDOUTPUT)
+			if (sline->tokarr[i] == REDOUTPUT || sline->tokarr[i] == APPENDREDOUTPUT)
 			{
 				perror("Output redirection before pipe.");
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount)
+		else if (sline->pipecount > 0 && sline->cmd_num == sline->pipecount)
 		{
-			if (sline->tokarr == REDINPUT || sline->tokarr == REDDELIMETER)
+			if (sline->tokarr[i] == REDINPUT || sline->tokarr[i] == REDDELIMETER)
 			{
 				perror("Input redirection after pipe.");
 				exit(EXIT_FAILURE);
@@ -81,6 +101,7 @@ void	run_red_choose(t_line *sline)
 		}
 		i++;
 	}
+	red_in_sincmd(sline);
 }
 
 void	set_red(char *redir, t_tokentype e_red, int *i)
@@ -201,13 +222,13 @@ void	redir_ch(t_line *sline, char *redir)
 
 void	redir_line(t_line *sline)
 {
-	if (sline->cmd_l == 0 && sline->redir_l[0])
+	if (sline->cmd_num == 0 && sline->redir_l[0])
 	{
 		redir_ch(sline, sline->redir_l[0]);
-		print_arr(sline->redir_parts);
-		// run_red_choose(sline);
+		// print_arr(sline->redir_parts);
+		run_red_choose(sline);
 	}
-	if (sline->pipecount > 0 && sline->cmd_l == sline->pipecount
+	if (sline->pipecount > 0 && sline->cmd_num == sline->pipecount
 		&& sline->redir_l[1])
 	{
 		redir_ch(sline, sline->redir_l[1]);

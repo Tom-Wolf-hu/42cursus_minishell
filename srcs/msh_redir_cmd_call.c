@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/08 18:28:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:28:48 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	redir_prep(char *filename, char delimeter, int count, t_store *st)
 		printf("Wrong delimeter: %c\n", delimeter);
 		return ;
 	}
-	choose_redirection(e_red, filename, st);
+	// choose_redirection(e_red, filename, st);
 }
 
 void	redir_case(char *line, int *i, t_store *st)

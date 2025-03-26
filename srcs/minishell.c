@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/25 18:50:25 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:41:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,13 +276,14 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	free(commands);
 }
 
-void	execute_command_single(char *cmd, int *status)
+void	execute_command_single(char *cmd, int *status, t_line *sline)
 {
 	char **cmd_arr;
 	char *path;
 	int pid;
 	int wstatus;
 
+	redir_line(sline);
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status));
 	cmd_arr = ft_split(cmd, ' ');
@@ -345,13 +346,14 @@ void	run_ex(char **line, int *status)
 	printf("The content of cmd_l: %s\n", sline.cmd_l);
 	
 	// write(1, "passed2\n", 8);
+	printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
+	printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
 	if (!ft_strchr(sline.cmd_l, '|'))
-		return (execute_command_single(sline.cmd_l, status));
+		return (execute_command_single(sline.cmd_l, status, &sline));
 	execute_pipe_commands(sline.cmd_l, 1, status);
 
 	// write(1, "passed3\n", 8);
-	printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
-	printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
+
 
 	int count = 0;
 
@@ -365,7 +367,7 @@ void	run_ex(char **line, int *status)
 
 	// redir_ch(&sline, sline.redir_l[1]);
 	// print_arr(sline.redir_parts);
-
+	set_back_stds();
 	free_line(&sline);
 }
 
