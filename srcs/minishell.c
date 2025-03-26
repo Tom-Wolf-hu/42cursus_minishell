@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 19:17:22 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 19:51:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,13 +343,13 @@ void	run_ex(char **line, int *status)
 	// if (!ft_strchr(*line, '|'))
 	// 	return (execute_command_single(*line, status));
 	// execute_pipe_commands(*line, 1, status);
-	
+
 	// write(1, "passed1\n", 8);
 	printf("The content of cmd_l: %s\n", sline.cmd_l);
 	
 	// write(1, "passed2\n", 8);
-	printf("This is the content of redir_l[0]: %s\n", sline.redir_l[0]);
-	printf("This is the content of redir_l[1]: %s\n", sline.redir_l[1]);
+	printf("This is the content of redir_l[0]: '%s'\n", sline.redir_l[0]);
+	printf("This is the content of redir_l[1]: '%s'\n", sline.redir_l[1]);
 	if (!ft_strchr(sline.cmd_l, '|'))
 		return (execute_command_single(sline.cmd_l, status, &sline));
 	execute_pipe_commands(sline.cmd_l, 1, status);

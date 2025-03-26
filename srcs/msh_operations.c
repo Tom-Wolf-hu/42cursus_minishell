@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 18:22:49 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 20:09:45 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ void	red_in_sincmd(t_line *sline)
 		write(1, "passed1\n", 8);
 		if (sline->fd_redin > 0 && dup2(sline->fd_redin, STDIN_FILENO) < 0)
 		{
-			perror("Failed to redirect fd_redin in single command.");
+			perror("Failed to redirect fd_redin in single command");
 			exit(EXIT_FAILURE);
 		}
 		close(sline->fd_redin);
 		if (sline->fd_redout > 0 && dup2(sline->fd_redout, STDOUT_FILENO) < 0)
 		{
-			perror("Failed to redirect fd_redout in single command.");
+			perror("Failed to redirect fd_redout in single command");
 			exit(EXIT_FAILURE);
 		}
 		close(sline->fd_redout);
@@ -176,7 +176,7 @@ char	*save_name_d(char *redir, t_tokentype *e_red)
 	}
 	if (i == start)
 		return (NULL);
-	name_d = ft_substr(redir, start, i - start + 1);
+	name_d = ft_substr(redir, start, i - start);
 	if (!name_d)
 	{
 		perror("Failed to allocate memory name_d");
