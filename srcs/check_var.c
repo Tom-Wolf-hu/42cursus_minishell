@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/03/20 17:21:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/26 18:23:54 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void get_var_name(char *dest, char *str)
 	int start = 0;
 	int end = 0;
 	int i = 0;
-	int flag = 0;
+	// int flag = 0;
 
 	while (str[start] != '\0' && str[start] != '$')
 	{

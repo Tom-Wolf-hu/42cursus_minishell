@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 13:15:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 13:50:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:22:49 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 // 		red_del(name_d);
 // }
 
-void	ch_red(t_tokentype e_red, char *name_d, t_line *sline)
+void	ch_red(t_tokentype *e_red, char *name_d, t_line *sline)
 {
 	if (!name_d)
 	{
@@ -38,13 +38,13 @@ void	ch_red(t_tokentype e_red, char *name_d, t_line *sline)
 			not exist in choose_op.", STDERR_FILENO);
 		return ;
 	}
-	if (e_red == REDINPUT)
+	if (*e_red == REDINPUT)
 		sline->fd_redin = red_in(name_d);
-	else if (e_red == REDOUTPUT)
+	else if (*e_red == REDOUTPUT)
 		sline->fd_redout = red_out(name_d);
-	else if (e_red == APPENDREDOUTPUT)
+	else if (*e_red == APPENDREDOUTPUT)
 		sline->fd_redout = red_out_append(name_d);
-	else if (e_red == REDDELIMETER)
+	else if (*e_red == REDDELIMETER)
 		sline->fd_redin = red_del(name_d);
 }
 
@@ -53,13 +53,13 @@ void	red_in_sincmd(t_line *sline)
 	if (sline->pipecount == 0)
 	{
 		write(1, "passed1\n", 8);
-		if (dup2(sline->fd_redin, STDIN_FILENO) < 0)
+		if (sline->fd_redin > 0 && dup2(sline->fd_redin, STDIN_FILENO) < 0)
 		{
 			perror("Failed to redirect fd_redin in single command.");
 			exit(EXIT_FAILURE);
 		}
 		close(sline->fd_redin);
-		if (dup2(sline->fd_redout, STDOUT_FILENO) < 0)
+		if (sline->fd_redout > 0 && dup2(sline->fd_redout, STDOUT_FILENO) < 0)
 		{
 			perror("Failed to redirect fd_redout in single command.");
 			exit(EXIT_FAILURE);
@@ -91,7 +91,8 @@ void	run_red_choose(t_line *sline)
 				exit(EXIT_FAILURE);
 			}
 		}
-		ch_red(sline->tokarr[i], sline->redir_parts[i], sline);
+		printf("sline->tokarr[%i]: %d\n", i, sline->tokarr[i]);
+		ch_red(&sline->tokarr[i], sline->redir_parts[i], sline);
 		if (sline->redir_parts[i + 1] != NULL)
 		{
 			if (sline->fd_redin > -1)
@@ -104,27 +105,27 @@ void	run_red_choose(t_line *sline)
 	red_in_sincmd(sline);
 }
 
-void	set_red(char *redir, t_tokentype e_red, int *i)
+void	set_red(char *redir, t_tokentype *e_red, int *i)
 {
 	printf("This is the redirection characters in set_red: %c\n", redir[*i]);
 	if (redir[*i] == '<' && redir[*i + 1] != '<')
 	{
-		e_red = REDINPUT;
+		*e_red = REDINPUT;
 		(*i) += 1;
 	}
 	else if (redir[*i] == '<' && redir[*i + 1] == '<')
 	{
-		e_red = REDDELIMETER;
+		*e_red = REDDELIMETER;
 		(*i) += 2;
 	}
 	else if (redir[*i] == '>' && redir[*i + 1] != '>')
 	{
-		e_red = REDOUTPUT;
+		*e_red = REDOUTPUT;
 		(*i) += 1;
 	}
 	else if (redir[*i] == '>' && redir[*i + 1] == '>')
 	{
-		e_red = APPENDREDOUTPUT;
+		*e_red = APPENDREDOUTPUT;
 		(*i) += 2;
 	}
 	else
@@ -157,7 +158,7 @@ int		count_rps(char *redir)
 	return (count);
 }
 
-char	*save_name_d(char *redir, t_tokentype e_red)
+char	*save_name_d(char *redir, t_tokentype *e_red)
 {
 	int		i;
 	int		start;
@@ -213,8 +214,9 @@ void	redir_ch(t_line *sline, char *redir)
 	{
 		if (i > 0 && sline->redir_parts[i - 1] != NULL)
 			redir = redir + ft_strlen(sline->redir_parts[i - 1]) + 1;
-		write(1, "passed1\n", 8);
-		sline->redir_parts[i] = save_name_d(redir, sline->tokarr[i]);
+		// write(1, "passed1\n", 8);
+		sline->redir_parts[i] = save_name_d(redir, &sline->tokarr[i]);
+		printf("redir_ch sline->tokarr[%i]: %d\n", i, sline->tokarr[i]);
 		i++;
 	}
 	sline->redir_parts[i] = NULL;

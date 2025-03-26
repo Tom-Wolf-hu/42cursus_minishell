@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_pipe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 18:19:10 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/17 16:00:55 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/26 18:28:51 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,6 @@ void	temp_readline(char *line, t_store *st)
 
 int	read_readline(t_store *st)
 {
-	char	*line;
 	int		status;
 
 	st->fd_readl = open(".temp_readline", O_RDONLY);

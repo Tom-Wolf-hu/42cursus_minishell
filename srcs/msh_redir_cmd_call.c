@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 18:43:59 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 13:28:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:27:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ void	redir_prep(char *filename, char delimeter, int count, t_store *st)
 {
 	t_tokentype e_red;
 
+	/*
+	The following two skip varable part need set back, if we want to use again this function
+	*/
+	(void)filename;
+	(void)st;
+	
 	if (delimeter == '<' && count == 1)
 		e_red = REDINPUT;
 	else if (delimeter == '<' && count == 2)

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 13:41:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 19:17:22 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,8 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	int pipefd[2];
 	pid_t pid;
 	int prev_fd;
-
+	
+	(void)fd;
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
@@ -323,6 +324,7 @@ void	execute_command_single(char *cmd, int *status, t_line *sline)
 		*status = 1;
 	}
 	free_arr(cmd_arr);
+	// set_back_stds();
 }
 
 void	run_ex(char **line, int *status)
@@ -367,7 +369,7 @@ void	run_ex(char **line, int *status)
 
 	// redir_ch(&sline, sline.redir_l[1]);
 	// print_arr(sline.redir_parts);
-	set_back_stds();
+	// set_back_stds();
 	free_line(&sline);
 }
 
@@ -430,6 +432,7 @@ int main(void)
 		else
 			run_ex(&line, &status);
 		free(line);
+		set_back_stds();
 	}
 	restore_echo(&old_term);
 	rl_clear_history();

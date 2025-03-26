@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 13:10:39 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:16:03 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,12 @@ int		redir_cmd_s(char *line, t_store *st);
 
 //msh_operations.c
 // void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
-void	ch_red(t_tokentype e_red, char *name_d, t_line *sline);
+void	ch_red(t_tokentype *e_red, char *name_d, t_line *sline);
 void	red_in_sincmd(t_line *sline);
 void	run_red_choose(t_line *sline);
 int		count_rps(char *redir);
-void	set_red(char *redir, t_tokentype e_red, int *i);
-char	*save_name_d(char *redir, t_tokentype e_red);
+void	set_red(char *redir, t_tokentype *e_red, int *i);
+char	*save_name_d(char *redir, t_tokentype *e_red);
 void	redir_ch(t_line *sline, char *redir);
 void	redir_line(t_line *sline);
 

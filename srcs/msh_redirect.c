@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 15:08:11 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/25 18:37:38 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/26 19:26:23 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	red_in(char *fd_name)
 {
 	int	fd_redin;
 
+	printf("filename in red_in: '%s'\n", fd_name);
 	fd_redin = open(fd_name, O_RDONLY);
 	if (fd_redin < 0)
 	{
