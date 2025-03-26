@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 14:39:03 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:06:57 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,7 @@ void	execute_command_single(char *cmd, int *status)
 
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status));
+	printf("NOT in execute_builtin\n");
 	cmd_arr = ft_split(cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);

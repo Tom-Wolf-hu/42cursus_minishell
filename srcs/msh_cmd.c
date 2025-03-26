@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 15:38:05 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:16:51 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	is_builtin(char *cmd)
 		return (1);
 	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
 		return (1);
-	else if (ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "env ") == 0)
+	else if (ft_strcmp(cmd, "env") == 0 || ft_strncmp(cmd, "env ", 4) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "export ", 7) == 0 ||
 		ft_strcmp(cmd, "export") == 0)
@@ -146,6 +146,27 @@ void	handle_heredoc(const char *delimiter)
 	close(pipe_fd[0]);
 }
 
+char *remove_redirects(char *cmd)
+{
+    char *clean_cmd;
+    int i = 0, j = 0;
+
+    while (cmd[i] && cmd[i] != '>' && cmd[i] != '<')
+        i++;  // Находим начало редиректа
+    if (cmd[i] == '\0')  // Если редиректа нет, возвращаем копию команды
+        return (strdup(cmd));
+    clean_cmd = malloc(i + 1);
+    if (!clean_cmd)
+        return (NULL);
+    while (j < i)  // Копируем только часть до редиректа
+    {
+        clean_cmd[j] = cmd[j];
+        j++;
+    }
+    clean_cmd[j] = '\0';
+    return (clean_cmd);
+}
+
 char *get_filename(char *cmd)
 {
 	char *filename;
@@ -159,7 +180,7 @@ char *get_filename(char *cmd)
 			break ;
 		i++;
 	}
-	if (cmd[i] == '>' || cmd[i] == '<')
+	while (cmd[i] && (cmd[i] == '>' || cmd[i] == '<'))
 		i++;
 	while (cmd[i] && (cmd[i] == 32 || cmd[i] == '\t' || cmd[i] == '\n'))
 		i++;
@@ -181,18 +202,19 @@ void	execute_builtin(char *cmd, int fd, int *status)
 {
 	int saved_stdin;
 	int saved_stdout;
-	char *filename;
 	int file_fd;
-	char *redir;
+	char *filename;
 
 	if (!cmd)
 		return ;
 	filename = get_filename(cmd);
+	char *clean_cmd = remove_redirects(cmd);
+	printf("clean_cmd: %s; len: %d\n", clean_cmd, ft_strlen(clean_cmd));
 	printf("filename: %s, len: %d\n", filename, ft_strlen(filename));
 	*status = 1;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	// file_fd = -1;
+	file_fd = -1;
 	
 	// обработка here-document (<<)
 	// if ((redir = strstr(cmd, "<<")))
@@ -203,21 +225,17 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	// 		redir++;
 	// 	handle_heredoc(redir);
 	// }
-	// // Добавление в файл (>>)
-	// else if ((redir == strstr(cmd, ">>")))
-	// {
-	// 	*redir = '\0';
-	// 	redir += 2;
-	// 	while (*redir == ' ')
-	// 		redir++;
-	// 	file_fd = open(redir, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	// 	if (file_fd == -1)
-	// 		return (perror("open"), *status = 1, (void)0);
-	// 	dup2(file_fd, STDOUT_FILENO);
-	// 	close(file_fd);
-	// }
+	// Добавление в файл (>>)
+	if ((strstr(cmd, ">>")))
+	{
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (file_fd == -1)
+			return (perror("open"), *status = 1, (void)0);
+		dup2(file_fd, STDOUT_FILENO);
+		close(file_fd);
+	}
 	// Запись в файл (>)
-	if ((redir = strchr(cmd, '>')))
+	else if ((strchr(cmd, '>')))
 	{
 		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file_fd == -1)
@@ -247,19 +265,19 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	// 	close(file_fd);
 	// }
 
-	if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
-		*status = ft_getcwd(cmd, fd);
-	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
-		*status = handle_cd(cmd);
-	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
-		*status = handle_echo(cmd, fd);
-	else if (ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "env ") == 0)
+	if (ft_strcmp(clean_cmd, "pwd") == 0 || ft_strncmp(clean_cmd, "pwd ", 4) == 0)
+		*status = ft_getcwd(clean_cmd, fd);
+	else if (ft_strncmp(clean_cmd, "cd ", 3) == 0 || ft_strcmp(clean_cmd, "cd") == 0)
+		*status = handle_cd(clean_cmd);
+	else if (ft_strncmp(clean_cmd, "echo ", 5) == 0 || ft_strcmp(clean_cmd, "echo") == 0)
+		*status = handle_echo(clean_cmd, fd);
+	else if (ft_strcmp(clean_cmd, "env") == 0 || ft_strcmp(clean_cmd, "env ") == 0)
 		*status = print_env(fd);
-	else if (ft_strncmp(cmd, "export ", 7) == 0 || ft_strcmp(cmd, "export") == 0)
-		*status = handle_export(cmd, fd);
-	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
-		*status = handle_unset(cmd, fd);
-	
+	else if (ft_strncmp(clean_cmd, "export ", 7) == 0 || ft_strcmp(clean_cmd, "export") == 0)
+		*status = handle_export(clean_cmd, fd);
+	else if (ft_strncmp(clean_cmd, "unset ", 6) == 0 || ft_strcmp(clean_cmd, "unset") == 0)
+		*status = handle_unset(clean_cmd, fd);
+	free(clean_cmd);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
