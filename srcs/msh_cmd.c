@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 16:21:09 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:40:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,22 +244,22 @@ void	execute_builtin(char *cmd, int fd, int *status)
 		close(file_fd);
 	}
 	// // Обрабатываем '<' (чтение из файла)
-	// else if ((redir = strchr(cmd, '<')))
-	// {
-	// 	*redir = '\0';
-	// 	redir++;
-	// 	while (*redir == ' ') redir++;
+	else if ((strchr(cmd, '<')))
+	{
+		// *redir = '\0';
+		// redir++;
+		// while (*redir == ' ') redir++;
 
-	// 	file_fd = open(redir, O_RDONLY);
-	// 	if (file_fd == -1)
-	// 	{
-	// 		perror("open");
-	// 		*status = 1;
-	// 		return;
-	// 	}
-	// 	dup2(file_fd, STDIN_FILENO);
-	// 	close(file_fd);
-	// }
+		file_fd = open(filename, O_RDONLY);
+		if (file_fd == -1)
+		{
+			perror("open");
+			*status = 1;
+			return;
+		}
+		dup2(file_fd, STDIN_FILENO);
+		close(file_fd);
+	}
 
 	if (ft_strcmp(clean_cmd, "pwd") == 0 || ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(clean_cmd, fd);
