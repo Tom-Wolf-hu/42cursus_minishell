@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 16:16:51 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:21:09 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	{
 		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (file_fd == -1)
-			return (perror("open"), *status = 1, (void)0);
+			return (perror("open"), exit(1));
 		dup2(file_fd, STDOUT_FILENO);
 		close(file_fd);
 	}
@@ -239,11 +239,7 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	{
 		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file_fd == -1)
-		{
-			perror("open");
-			*status = 1;
-			return;
-		}
+			return (perror("open"), exit(1));
 		dup2(file_fd, STDOUT_FILENO);
 		close(file_fd);
 	}
