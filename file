@@ -1,18 +1,1 @@
-if (!cmd)
-return ;
-*status = 1;
-if (fd != 0)
-dup2(fd, STDOUT_FILENO);
-if (ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
-*status = ft_getcwd(cmd, fd);
-else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
-*status = handle_cd(cmd);
-else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
-*status = handle_echo(cmd, fd);
-else if (ft_strcmp(cmd, "env") == 0)
-*status = print_env(fd);
-else if (ft_strncmp(cmd, "export ", 7) == 0 || ft_strcmp(cmd, "export") == 0)
-*status = handle_export(cmd, fd);
-else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
-*status = handle_unset(cmd, fd);
-
+hello1
