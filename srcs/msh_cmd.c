@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/26 22:36:54 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/27 11:46:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,17 +250,63 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	int saved_stdout;
 	int file_fd;
 	char *filename;
-	char *clean_cmd;
 
 	if (!cmd)
 		return ;
-	clean_cmd = remove_redirects(cmd);
+	filename = get_filename(cmd);
+	char *clean_cmd = remove_redirects(cmd);
+	printf("clean_cmd: %s; len: %d\n", clean_cmd, ft_strlen(clean_cmd));
+	printf("filename: %s, len: %d\n", filename, ft_strlen(filename));
 	*status = 1;
-	// printf("clean_cmd: %s; len: %d\n", clean_cmd, ft_strlen(clean_cmd));
-	// printf("filename: %s, len: %d\n", filename, ft_strlen(filename));
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	handle_redirection(cmd);
+	file_fd = -1;
+	
+	// обработка here-document (<<)
+	// if ((redir = strstr(cmd, "<<")))
+	// {
+	// 	*redir = '\0';
+	// 	redir += 2;
+	// 	while (*redir == ' ')
+	// 		redir++;
+	// 	handle_heredoc(redir);
+	// }
+	// Добавление в файл (>>)
+	if ((strstr(cmd, ">>")))
+	{
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (file_fd == -1)
+			return (perror("open"), exit(1));
+		dup2(file_fd, STDOUT_FILENO);
+		close(file_fd);
+	}
+	// Запись в файл (>)
+	else if ((strchr(cmd, '>')))
+	{
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file_fd == -1)
+			return (perror("open"), exit(1));
+		dup2(file_fd, STDOUT_FILENO);
+		close(file_fd);
+	}
+	// // Обрабатываем '<' (чтение из файла)
+	else if ((strchr(cmd, '<')))
+	{
+		// *redir = '\0';
+		// redir++;
+		// while (*redir == ' ') redir++;
+
+		file_fd = open(filename, O_RDONLY);
+		if (file_fd == -1)
+		{
+			perror("open");
+			*status = 1;
+			return;
+		}
+		dup2(file_fd, STDIN_FILENO);
+		close(file_fd);
+	}
+
 	if (ft_strcmp(clean_cmd, "pwd") == 0 || ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(clean_cmd, fd);
 	else if (ft_strncmp(clean_cmd, "cd ", 3) == 0 || ft_strcmp(clean_cmd, "cd") == 0)

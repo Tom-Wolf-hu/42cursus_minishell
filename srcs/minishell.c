@@ -6,9 +6,10 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 22:38:04 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/27 11:45:03 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../minishell.h"
 
@@ -236,16 +237,12 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			}
 			close(pipefd[0]);
 			close(pipefd[1]);
-			// printf("command before spliting by space: %s\n", commands[i]);
 			cmd_args = ft_split(commands[i], ' ');
 			int j = 0;
 			while (cmd_args[j])
 			{
-				// printf("hello\n");
-				// printf("command after spliting by space: %s\n", cmd_args[j]);
 				if (ft_strchr(cmd_args[j], '\'') != NULL)
 				{
-					// printf("got a quote\n");
 					remove_chars(&cmd_args[j], '\'');
 				}
 				j++;
@@ -271,9 +268,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		if (WIFEXITED(*status))
 			*status = WEXITSTATUS(*status);
 	}
-	for (i = 0; i < num_commands; i++)
-		free(commands[i]);
-	free(commands);
+	free_arr(commands);
 }
 
 void	execute_command_single(char *cmd, int *status)
@@ -285,6 +280,7 @@ void	execute_command_single(char *cmd, int *status)
 
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status));
+	printf("NOT in execute_builtin\n");
 	cmd_arr = ft_split(cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
@@ -374,19 +370,11 @@ int main(void)
 // env | wc -l	+
 // полное отсутсвие redirections
 // ps aux | grep bash | awk '{print $2}'
+// Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
+// sleep 5
 
 
 /* 
-план redirections:
-нужно иметь еще одну с самого начала, которая будет чисто убирать пробелы между командой, знаком и файло (cat > file ==> cat>file)
-также должна быть ф-я, которая будет перехватывать эти "команды" и обабатывать их, потому что, если эта херня попадется в execve, то 
-обработка будет происходить неправильно
-
-как это сделать:
-в ф-ях execute_pipe_commands() и execute_command_single() дабавляем в цикл вызов ф-ии проверки reedirectons и если он попадается, то мы его полностью обабатываем,
-вместе с командой (то есть ф-я должна будет сама обрабатывать cat > file) и затем просто либо сдвигать i из цикла, ли бо переписывать саму строку и возвращать уже чтото
-новое, либо лучше она это сделает через **
-
 # Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
 sleep 5
 
