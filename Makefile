@@ -14,21 +14,21 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/check_redir.c \
 		srcs/minishell.c \
 		srcs/check_line.c \
-		srcs/msh_redirect.c \
-		srcs/msh_operations.c \
-		srcs/msh_parse.c \
 		srcs/msh_cmd.c \
-		srcs/msh_env.c \
 		srcs/check_var.c \
-		srcs/msh_utils.c \
-		srcs/msh_line_analizer.c \
 		srcs/check_quastion_sign.c \
-		srcs/msh_redir_cmd_call.c \
-		srcs/msh_pipe.c \
-		srcs/msh_redir_cmd_utils.c \
-		srcs/test_funcs.c \
 		lib/get_next_line/get_next_line.c \
-		lib/get_next_line/get_next_line_utils.c
+		lib/get_next_line/get_next_line_utils.c \
+		# srcs/msh_redirect.c \
+		# srcs/msh_operations.c \
+		# srcs/msh_parse.c \
+		# srcs/msh_env.c \
+		# srcs/msh_utils.c \
+		# srcs/msh_line_analizer.c \
+		# srcs/msh_redir_cmd_call.c \
+		# srcs/msh_pipe.c \
+		# srcs/msh_redir_cmd_utils.c \
+		# srcs/test_funcs.c \
 
 LIBFT_DIR = lib/libft
 LIBFT = libft.a

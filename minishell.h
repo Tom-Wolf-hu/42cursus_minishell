@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/27 14:32:39 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:07:06 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,73 +100,9 @@ int		print_env(int fd);
 void	run_ex(char **line, int *status);
 int 	main(void);
 
-//msh_redirect.c
-void	red_in(char *fd_name);
-int		red_out(char *fd_name);
-int		red_out_append(char *fd_name);
-void	read_in_temp(char *delimeter, int fd_delimeter);
-void	red_del(char *delimeter);
-
-//msh_redir_cmd_call.c
-int		count_delimeter(char *line, char delimeter);
-void	redir_prep(char *filename, char delimeter, int count, t_store *st);
-void	redir_case(char *line, int *i, t_store *st);
-void	cmd_case(char *line, char *cmd, int *i, int *cmdlen);
-int		redir_cmd_s(char *line, t_store *st);
-
-//msh_operations.c
-void	choose_redirection(t_tokentype e_red, char *name_d, t_store *st);
-// int		count_deilemeter(char *line, char delimeter);
-// char	*allocate_word(char *line, int len);
-// char	*save_w(char *line, char delimeter);
-// void	check_redirect(char *line);
-
-//msh_parse.c
-void	add_node(t_pnode **node);
-void	nl_clear(t_pnode **node);
-void	back_to_firstnode(t_pnode **node);
-
 //msh_cmd.c
-char	*shearch_cmd(char *cmd);
-char	*cmd_path(char *cmd);
-int		execute_cmd(char *cmd, t_store *st);
 int		is_builtin(char *cmd);
 void	execute_builtin(char *cmd, int fd, int *status);
-int 	builtin_check(char *cmd, t_store *st, int *status);
-int		choose_cmd(char *line, t_store *st);
-
-//msh_env.c
-char	*cmd_acces(char *path, char *cmd);
-char	**dev_strarr(char *str, char delimeter);
-char	*env_variable_val(char *variable_name);
-
-//msh_utils.c
-void	print_arr(char **strarr);
-void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
-char	*str_realloc(char *oldstr, size_t newsize);
-
-//msh_line_analizer.c
-char	save_word(char *line, char *word, int *j);
-void	analyze_line(char *line, int *j);
-void	loop_analyzel(char *line);
-
-//msh_pipe.c
-// void	pipe_dup(int pipefd[2], int which, char *beforep, char *afterp);
-// void	ft_pipe(char *beforep, char *afterp);
-// void	ft_pipe(t_store *st);
-void	pipe_read(t_store *st);
-void	pipe_write(t_store *st);
-void	chproc_fd(t_store *st);
-void	gnl_readline(t_store *st, int *status);
-void 	temp_readline(char *line, t_store *st);
-int		read_readline(t_store *st);
-
-//msh_redir_cmd_utils.c
-void	init_store(t_store	*st);
-void	reset_fds(t_store *st);
-int		cmd_fds_reset(char **cmd, t_store *st);
-void	save_chpid(pid_t pid, t_store *st);
-int		wait_child(t_store *st, int status);
 
 //check_line.c
 int		ft_isoperator(int c);
@@ -202,7 +138,7 @@ The following file includes functions for checking
 state of different aspect of minishell
 */
 //test_funcs.c
-void	fds_state(void);
-void	check_tty();
+// void	fds_state(void);
+// void	check_tty();
 
 #endif
