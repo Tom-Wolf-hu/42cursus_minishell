@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-hello1
-=======
-1 5 81 -10
-20
-30
->>>>>>> 9bb1637b96d8ab98c6c496d5ced124d0e45c2bd9
+54652 ttys001    0:00.86 /bin/zsh -il
+94935 ttys001    0:00.02 ./minishell
+63898 ttys003    0:00.20 /bin/zsh -il
+86929 ttys004    0:00.25 -zsh
+86978 ttys004    0:00.01 bash

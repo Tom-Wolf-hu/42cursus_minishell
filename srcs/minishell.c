@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/27 11:45:03 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/27 15:37:23 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,25 +208,25 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	int pipefd[2];
 	pid_t pid;
 	int prev_fd;
+	struct s_saved_std std;
+	char *clean_cmd;
 
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
-
 	while (commands[num_commands])
 		num_commands++;
-
 	prev_fd = 0;
-	for (i = 0; i < num_commands; i++)
+	i = 0;
+	while (i < num_commands)
 	{
 		pipe(pipefd);
-
 		pid = fork();
 		if (pid == -1)
 			return (perror("fork"), exit(EXIT_FAILURE));
 		if (pid == 0)
 		{
-			if (i > 0)
+			if (prev_fd != 0)
 				dup2(prev_fd, STDIN_FILENO);
 			if (i < num_commands - 1)
 				dup2(pipefd[1], STDOUT_FILENO);
@@ -237,7 +237,11 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			}
 			close(pipefd[0]);
 			close(pipefd[1]);
-			cmd_args = ft_split(commands[i], ' ');
+			clean_cmd = remove_redirects(commands[i]);
+			cmd_args = ft_split(clean_cmd, ' ');
+			std.saved_stdin = dup(STDIN_FILENO);
+			std.saved_stdout = dup(STDOUT_FILENO);
+			handle_redirection(commands[i], status);
 			int j = 0;
 			while (cmd_args[j])
 			{
@@ -257,16 +261,21 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			perror("execve");
 			exit(EXIT_FAILURE);
 		}
-		close(pipefd[1]);
-		if (prev_fd != 0)
-			close(prev_fd);
-		prev_fd = pipefd[0];
-		if (i == num_commands - 1)
-			waitpid(pid, status, 0);
 		else
-			waitpid(pid, NULL, 0);
-		if (WIFEXITED(*status))
-			*status = WEXITSTATUS(*status);
+		{
+			close(pipefd[1]);
+			if (prev_fd != 0)
+				close(prev_fd);
+			prev_fd = pipefd[0];
+			if (i == num_commands - 1)
+				waitpid(pid, status, 0);
+			else
+				waitpid(pid, NULL, 0);
+			if (WIFEXITED(*status))
+				*status = WEXITSTATUS(*status);
+		}
+		free_arr(cmd_args);
+		i++;
 	}
 	free_arr(commands);
 }
@@ -277,20 +286,26 @@ void	execute_command_single(char *cmd, int *status)
 	char *path;
 	int pid;
 	int wstatus;
+	struct s_saved_std std;
+	char *clean_cmd;
 
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status));
-	printf("NOT in execute_builtin\n");
-	cmd_arr = ft_split(cmd, ' ');
+	clean_cmd = remove_redirects(cmd);
+	cmd_arr = ft_split(clean_cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
+
 	path = get_command_path(cmd_arr[0]);
 	if (!path)
 	{
 		*status = 127;
-		printf("%s: Command not found\n", cmd);// ---------------------------------------------------
+		printf("%s: Command not found\n", clean_cmd);// ---------------------------------------------------
 		return ;
 	}
+	std.saved_stdin = dup(STDIN_FILENO);
+	std.saved_stdout = dup(STDOUT_FILENO);
+	handle_redirection(cmd, status);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -317,6 +332,10 @@ void	execute_command_single(char *cmd, int *status)
 		perror("fork");
 		*status = 1;
 	}
+	dup2(std.saved_stdin, STDIN_FILENO);
+	dup2(std.saved_stdout, STDOUT_FILENO);
+	close(std.saved_stdin);
+	close(std.saved_stdout);
 	free_arr(cmd_arr);
 }
 
