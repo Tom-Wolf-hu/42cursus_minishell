@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/03/20 17:21:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/28 12:01:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,6 +288,7 @@ void	bridge_var(char **str)
 	int size;
 	char *var_value;
 
+	// printf("str: %s\n", *str);
 	// remove_double_quotes(str);
 	size = get_var_name_size(*str);
 	// printf("size: %d\n", size);

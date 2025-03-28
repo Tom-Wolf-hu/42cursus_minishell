@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/27 15:22:01 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/03/28 12:37:04 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,38 @@
 char *remove_redirects(char *cmd)
 {
     char *clean_cmd;
-    int i = 0, j = 0;
+    int start;
+    int end;
+    int i;
+    int j = 0;
 
-    while (cmd[i] && cmd[i] != '>' && cmd[i] != '<')
-        i++;  // Находим начало редиректа
-    if (cmd[i] == '\0')  // Если редиректа нет, возвращаем копию команды
-        return (strdup(cmd));
-    clean_cmd = malloc(i + 1);
+    start = 0;
+    while (cmd[start] && cmd[start] != '>' && cmd[start] != '<')
+        start++;  // Находим первый символ редиректа
+    if (!cmd[start])  // Если редиректов нет, просто копируем строку
+        return strdup(cmd);
+    end = start;
+    while (cmd[end] && (cmd[end] == '>' || cmd[end] == '<' || isspace(cmd[end])))
+        end++;  // Пропускаем пробелы и сам редирект
+    while (cmd[end] && !isspace(cmd[end]))  // Пропускаем имя файла
+        end++;
+    i = 0;
+    while (cmd[i] && i < start)  // Копируем всё до редиректа
+        i++;
+    while (cmd[end] && isspace(cmd[end]))  // Пропускаем лишние пробелы после имени файла
+        end++;
+    clean_cmd = malloc(strlen(cmd) - (end - start) + 1);
     if (!clean_cmd)
-        return (NULL);
-    while (j < i)  // Копируем только часть до редиректа
-    {
-        clean_cmd[j] = cmd[j];
-        j++;
-    }
+        return NULL;
+    j = 0;
+    i = 0;
+    while (cmd[i] && i < start)  // Копируем всё до редиректа
+        clean_cmd[j++] = cmd[i++];
+
+    while (cmd[end])  // Копируем остаток команды после редиректа
+        clean_cmd[j++] = cmd[end++];
     clean_cmd[j] = '\0';
-    return (clean_cmd);
+    return clean_cmd;
 }
 
 char *get_filename(char *cmd)
