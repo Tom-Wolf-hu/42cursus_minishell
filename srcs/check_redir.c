@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/29 20:35:16 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/30 18:35:14 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,39 +21,42 @@ void	join_part(char **s1, char *s2)
 
 	lens1 = 0;
 	i = 0;
-	fprintf(stderr, "s1: %s\ts2; %s\n", *s1, s2);
+	// fprintf(stderr, "s1: '%s'\ts2: '%s'\n", *s1, s2);
 	if (*s1 != NULL)
 		lens1 = ft_strlen(*s1);
 	if (s2 == NULL)
 		return ;
 	lens2 = ft_strlen(s2);
-	write(1, "1passed1\n", 9);
+	// fprintf(stderr, "lens1: %d\tlens2: %d\n", lens1, lens2);
 	temp = (char *)malloc((lens1 + lens2 + 1) * sizeof(char));
 	if (!temp)
 	{
 		perror("Failed to allocate memory for temp in join part");
 		exit(EXIT_FAILURE);
 	}
-	write(1, "1passed2\n", 9);
 	while (*s1 && i < lens1)
 	{
-		temp[i] = *s1[i];
+		temp[i] = (*s1)[i];
+		// fprintf(stderr, "temp[%i] in while cycle: '%c'\n", i, temp[i]);
 		i++;
 	}
-	fprintf(stderr, "temp after s1 copy: %s\n", temp);
+	// write(1, "1passed1\n", 9);
+	// fprintf(stderr, "temp after s1 copy: %s\n", temp);
 	i = 0;
 	while (s2 && i < lens2)
 	{
 		temp[lens1 + i] = s2[i];
 		i++;
 	}
-	fprintf(stderr, "temp after s2 copy: %s\n", temp);
-	fprintf(stderr, "lens1 + i: %d\t lens1 + lens2 + 1: %d\n", lens1 + i, lens1 + lens2 + 1);
+	// write(1, "1passed2\n", 9);
+	// fprintf(stderr, "temp after s2 copy: %s\n", temp);
+	// fprintf(stderr, "lens1 + i: %d\t lens1 + lens2 + 1: %d\n", lens1 + i, lens1 + lens2 + 1);
 	temp[lens1 + i] = '\0';
 	free(*s1);
 	free(s2);
 	s2 = NULL;
 	*s1 = temp;
+	fprintf(stderr, "s1 in join_part: %s\n", *s1);
 }
 
 void	redir_part(char *cmd, int *i)
@@ -100,14 +103,14 @@ char	*remove_redirects(char *cmd)
 
 	i = 0;
 	clean_cmd = NULL;
-	write(1, "passed1\n", 8);
+	// write(1, "passed1\n", 8);
 	while (cmd[i])
 	{
-		write(1, "passed2\n", 8);
+		// write(1, "passed2\n", 8);
 		temp = before_red(cmd, &i);
-		write(1, "passed3\n", 8);
+		// write(1, "passed3\n", 8);
 		join_part(&clean_cmd, temp);
-		write(1, "passed4\n", 8);
+		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
 	printf("clean_cmd in remove redirects: %s\n", clean_cmd);
@@ -185,6 +188,7 @@ char	*get_filename(char *cmd)
 		j++;
 	}
 	filename[j] = '\0';
+	fprintf(stderr, "filename in get_filaname function: %s\n", filename);
 	return (filename);
 }
 
