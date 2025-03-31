@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/31 17:48:03 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/31 18:00:11 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,54 +72,69 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 
 void	handle_redirection(char *line, int *status)
 {
-	int		i;
+	int		i = 0;
 	int		file_fd;
 	char	*filename;
 
-	i = 0;
-	file_fd = -1;
 	while (line[i])
 	{
-		if (line[i] == '>' || line[i] == '<')
+		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
-			// if (!filename)
-				// return (printf("[handle_redirection] no name for file\n"));
-			if (line[i] == '<' && line[i + 1] == '<')
+			if (!filename)
 			{
-				if (filename)
-					handle_heredoc(filename);
+				printf("no name for file\n");
+				// fprintf(stderr, "Ошибка: отсутствует имя файла после редиректа\n");
+				*status = 1;
+				return ;
 			}
-			else if (line[i] == '>' && line[i + 1] == '>')
+			if (line[i] == '<' && line[i + 1] == '<') // heredoc
 			{
-				if (filename)
+				handle_heredoc(filename);
+				i++;
+			}
+			else if (line[i] == '>' && line[i + 1] == '>') // append >>
+			{
+				file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (file_fd == -1)
 				{
-					file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-					if (file_fd == -1)
-						return (perror("open"), exit(1));
+					perror("open");
+					*status = 1;
+				}
+				else
+				{
+					dup2(file_fd, STDOUT_FILENO);
+					close(file_fd);
+				}
+				i++;
+			}
+			else if (line[i] == '>') // truncate >
+			{
+				file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (file_fd == -1)
+				{
+					perror("open");
+					*status = 1;
+				}
+				else
+				{
 					dup2(file_fd, STDOUT_FILENO);
 					close(file_fd);
 				}
 			}
-			else if (line[i] == '>')
-			{
-				file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (file_fd == -1)
-					return (perror("open"), exit(1));
-				dup2(file_fd, STDOUT_FILENO);
-				close(file_fd);
-			}
-			else if (line[i] == '<')
+			else if (line[i] == '<') // input <
 			{
 				file_fd = open(filename, O_RDONLY);
 				if (file_fd == -1)
 				{
 					perror("open");
 					*status = 1;
-					return ;
 				}
-				dup2(file_fd, STDIN_FILENO);
-				close(file_fd);
+				else
+				{
+					dup2(file_fd, STDIN_FILENO);
+					close(file_fd);
+				}
 			}
 			free(filename);
 		}
@@ -171,7 +186,7 @@ void	join_part(char **s1, char *s2)
 	free(s2);
 	s2 = NULL;
 	*s1 = temp;
-	fprintf(stderr, "s1 in join_part: %s\n", *s1);
+	// fprintf(stderr, "s1 in join_part: %s\n", *s1);
 }
 
 void	redir_part(char *cmd, int *i)
@@ -228,7 +243,7 @@ char	*remove_redirects(char *cmd)
 		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
-	printf("clean_cmd in remove redirects: %s\n", clean_cmd);
+	// printf("clean_cmd in remove redirects: %s\n", clean_cmd);
 	return (clean_cmd);
 }
 
