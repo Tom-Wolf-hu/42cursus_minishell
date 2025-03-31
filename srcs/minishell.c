@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/28 18:35:38 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/03/31 17:32:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	struct s_saved_std std;
 	char *clean_cmd;
 
+	// printf("[execute_pipe_commands] starting\n");
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
@@ -227,18 +228,23 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		if (pid == 0)
 		{
 			if (prev_fd != 0)
+			{
 				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);//
+			}
 			if (i < num_commands - 1)
 				dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[0]);
+			close(pipefd[1]);
 			if (is_builtin(commands[i]))
 			{
+				printf("execute builtin wa here\n");
 				execute_builtin(commands[i], 1, status);
 				exit(*status);
 			}
-			close(pipefd[0]);
-			close(pipefd[1]);
 			clean_cmd = remove_redirects(commands[i]);
 			cmd_args = ft_split(clean_cmd, ' ');
+			// printf("clean_cmd: %s\n", clean_cmd);
 			std.saved_stdin = dup(STDIN_FILENO);
 			std.saved_stdout = dup(STDOUT_FILENO);
 			handle_redirection(commands[i], status);
@@ -257,6 +263,8 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				printf("%s: Command not found\n", cmd);
 				exit(127);
 			}
+			close(std.saved_stdin);
+			close(std.saved_stdout);
 			execve(path, cmd_args, NULL);
 			perror("execve");
 			exit(EXIT_FAILURE);
@@ -274,9 +282,11 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			if (WIFEXITED(*status))
 				*status = WEXITSTATUS(*status);
 		}
-		free_arr(cmd_args);
+		// free_arr(cmd_args);
 		i++;
 	}
+	if (prev_fd != -1)
+		close(prev_fd);
 	free_arr(commands);
 }
 
@@ -289,9 +299,14 @@ void	execute_command_single(char *cmd, int *status)
 	struct s_saved_std std;
 	char *clean_cmd;
 
+	// printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
+	{
 		return (execute_builtin(cmd, 1, status));
+	}
 	clean_cmd = remove_redirects(cmd);
+	if (!clean_cmd)
+		return ;
 	cmd_arr = ft_split(clean_cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
