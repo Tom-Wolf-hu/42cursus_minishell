@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/31 18:00:11 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/31 19:47:40 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*get_filename(char *cmd)
 	while (start < i)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
+	printf("filename: %s\n", filename);
 	return filename;
 }
 
@@ -76,8 +77,10 @@ void	handle_redirection(char *line, int *status)
 	int		file_fd;
 	char	*filename;
 
+	// printf("[handle_redirection] start\n");
 	while (line[i])
 	{
+		// printf("[handle_redirection] in cycle...\n");
 		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
@@ -90,11 +93,13 @@ void	handle_redirection(char *line, int *status)
 			}
 			if (line[i] == '<' && line[i + 1] == '<') // heredoc
 			{
+				// printf("sign: <<\n");
 				handle_heredoc(filename);
 				i++;
 			}
 			else if (line[i] == '>' && line[i + 1] == '>') // append >>
 			{
+				// printf("sign: >>\n");
 				file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 				if (file_fd == -1)
 				{
@@ -110,6 +115,7 @@ void	handle_redirection(char *line, int *status)
 			}
 			else if (line[i] == '>') // truncate >
 			{
+				// printf("sign: >\n");
 				file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 				if (file_fd == -1)
 				{
@@ -124,6 +130,7 @@ void	handle_redirection(char *line, int *status)
 			}
 			else if (line[i] == '<') // input <
 			{
+				// printf("sign: <\n");
 				file_fd = open(filename, O_RDONLY);
 				if (file_fd == -1)
 				{
@@ -238,6 +245,11 @@ char	*remove_redirects(char *cmd)
 	{
 		// write(1, "passed2\n", 8);
 		temp = before_red(cmd, &i);
+		if (!temp)
+		{
+			printf("clean_cmd is null\n");
+			break ;
+		}
 		// write(1, "passed3\n", 8);
 		join_part(&clean_cmd, temp);
 		// write(1, "passed4\n", 8);

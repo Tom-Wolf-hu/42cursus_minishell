@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/31 17:32:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/31 20:12:51 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	struct s_saved_std std;
 	char *clean_cmd;
 
-	// printf("[execute_pipe_commands] starting\n");
+	printf("[execute_pipe_commands] starting\n");
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
@@ -302,20 +302,36 @@ void	execute_command_single(char *cmd, int *status)
 	// printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
 	{
-		return (execute_builtin(cmd, 1, status));
+		execute_builtin(cmd, 1, status);
+		exit(EXIT_SUCCESS);
 	}
 	clean_cmd = remove_redirects(cmd);
+
 	if (!clean_cmd)
+	{
+		// std.saved_stdout = dup(STDOUT_FILENO);
+		// std.saved_stdin = dup(STDIN_FILENO);
+		handle_redirection(cmd, status);
+		char buffer[1024];
+		ssize_t bytes_read;
+		while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0)
+			write(STDOUT_FILENO, buffer, bytes_read);
+		// dup2(std.saved_stdin, STDIN_FILENO);
+		// dup2(std.saved_stdout, STDOUT_FILENO);
+		// close(std.saved_stdin);
+		// close(std.saved_stdout);
 		return ;
+	}
 	cmd_arr = ft_split(clean_cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
+	{
 		exit(EXIT_FAILURE);
-
+	}
 	path = get_command_path(cmd_arr[0]);
 	if (!path)
 	{
 		*status = 127;
-		printf("%s: Command not found\n", clean_cmd);// ---------------------------------------------------
+		printf("%s: Command not found\n", clean_cmd);
 		return ;
 	}
 	std.saved_stdin = dup(STDIN_FILENO);
@@ -376,7 +392,12 @@ int main(void)
 	setup_signal_handlers();
 	while (1)
 	{
-		line = readline("> ");
+		if (isatty(STDIN_FILENO))
+			line = readline("> ");
+		else
+		{
+			line = get_next_line(STDIN_FILENO);
+		}
 		if (g_status == 130)
 		{
 			status = g_status;
