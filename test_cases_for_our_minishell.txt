@@ -7,6 +7,11 @@ env
 export TEST_VAR=hello
 unset TEST_VAR=hello
 
+Commands with redirections
+<file>file3
+<file >file3
+<file   >file3
+
 Commands with pipe and redirections
 ps aux | grep zsh							----------
 cat < file3 | grep day
@@ -23,6 +28,11 @@ cat < file3 | grep 'day'
 
 Commands with doublequotes
 echo "hello alex" "how are you"
+grep "day" "file3"
 echo "hello alex" 123 "how are you"
 echo "This is the exit status: $?"
 cat < file3 | grep "day"
+
+Commands with single and doublequotes
+echo "Hello '$USER'"
+echo 'Hello "$USER"'
