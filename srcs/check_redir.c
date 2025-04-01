@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/31 19:47:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/01 14:43:37 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,9 +214,14 @@ char	*before_red(char *cmd, int *i)
 	j = 0;
 	while (cmd[*i] && cmd[*i] != '>' && cmd[*i] != '<')
 		(*i)++;
-	if (start == *i)
-		return (NULL);
-	bef_red = (char *)malloc((*i - start + 1) * sizeof(char));
+	// printf("*i == %d\n", *i);
+	// printf("ch == %c\n", cmd[*i]);
+	// if (start == *i)
+	// 	return (NULL);
+	if (start + 1 == *i || *i + 1 == start || start == *i)
+		return NULL;
+	// printf("*i - start == %d\n", *i - start);
+	bef_red = malloc((*i - start + 1));
 	if (!bef_red)
 	{
 		perror("Failed to allocate memory for bef_red");
@@ -245,17 +250,17 @@ char	*remove_redirects(char *cmd)
 	{
 		// write(1, "passed2\n", 8);
 		temp = before_red(cmd, &i);
-		if (!temp)
-		{
-			printf("clean_cmd is null\n");
-			break ;
-		}
+		// if (!temp)
+		// {
+		// 	printf("clean_cmd is null\n");
+		// 	break ;
+		// }
 		// write(1, "passed3\n", 8);
 		join_part(&clean_cmd, temp);
 		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
-	// printf("clean_cmd in remove redirects: %s\n", clean_cmd);
+	printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
 	return (clean_cmd);
 }
 
