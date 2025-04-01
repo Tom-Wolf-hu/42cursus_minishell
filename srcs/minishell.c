@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/03/31 20:12:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/01 11:50:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,23 +303,25 @@ void	execute_command_single(char *cmd, int *status)
 	if (is_builtin(cmd))
 	{
 		execute_builtin(cmd, 1, status);
-		exit(EXIT_SUCCESS);
+		return ;
+		// exit(EXIT_SUCCESS);
 	}
 	clean_cmd = remove_redirects(cmd);
 
 	if (!clean_cmd)
 	{
-		// std.saved_stdout = dup(STDOUT_FILENO);
-		// std.saved_stdin = dup(STDIN_FILENO);
+		std.saved_stdout = dup(STDOUT_FILENO);
+		std.saved_stdin = dup(STDIN_FILENO);
 		handle_redirection(cmd, status);
 		char buffer[1024];
 		ssize_t bytes_read;
 		while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0)
 			write(STDOUT_FILENO, buffer, bytes_read);
-		// dup2(std.saved_stdin, STDIN_FILENO);
-		// dup2(std.saved_stdout, STDOUT_FILENO);
-		// close(std.saved_stdin);
-		// close(std.saved_stdout);
+		dup2(std.saved_stdin, STDIN_FILENO);
+		dup2(std.saved_stdout, STDOUT_FILENO);
+		close(std.saved_stdin);
+		close(std.saved_stdout);
+		// write(2, "2passed1\n", 9);
 		return ;
 	}
 	cmd_arr = ft_split(clean_cmd, ' ');
@@ -377,8 +379,10 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
+	// write(1, "passed1\n", 8);
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
+	// write(1, "passed2\n", 8);
 	execute_pipe_commands(*line, 1, status);
 }
 
@@ -387,11 +391,12 @@ int main(void)
 	char			*line;
 	static int		status = 0;
 
-	// check_tty();
 	disable_ctrl_c_output(&status);
 	setup_signal_handlers();
 	while (1)
 	{
+		// check_tty();
+		// write(2, "passed1\n", 8);
 		if (isatty(STDIN_FILENO))
 			line = readline("> ");
 		else
