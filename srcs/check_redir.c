@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 14:43:37 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:34:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,10 +216,10 @@ char	*before_red(char *cmd, int *i)
 		(*i)++;
 	// printf("*i == %d\n", *i);
 	// printf("ch == %c\n", cmd[*i]);
-	// if (start == *i)
-	// 	return (NULL);
-	if (start + 1 == *i || *i + 1 == start || start == *i)
-		return NULL;
+	if (start == *i)
+		return (NULL);
+	// if (start + 1 == *i || *i + 1 == start || start == *i)
+	// 	return NULL;
 	// printf("*i - start == %d\n", *i - start);
 	bef_red = malloc((*i - start + 1));
 	if (!bef_red)

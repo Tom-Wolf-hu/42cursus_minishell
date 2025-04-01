@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 15:16:46 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:44:43 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,11 @@ void	execute_command_single(char *cmd, int *status)
 		// exit(EXIT_SUCCESS);
 	}
 	clean_cmd = remove_redirects(cmd);
-
+	if (clean_cmd && is_empty(clean_cmd))
+	{
+		free(clean_cmd);
+		clean_cmd = NULL;
+	}
 	if (!clean_cmd)
 	{
 		std.saved_stdout = dup(STDOUT_FILENO);
