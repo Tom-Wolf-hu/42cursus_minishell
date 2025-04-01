@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 14:43:37 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:24:44 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ char	*remove_redirects(char *cmd)
 		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
-	printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
+	// printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
 	return (clean_cmd);
 }
 
