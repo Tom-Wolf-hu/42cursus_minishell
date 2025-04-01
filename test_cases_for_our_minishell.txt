@@ -1,0 +1,27 @@
+Builtin commands
+pwd
+cd
+cd /Users/tfarkas
+cd ..
+env
+export TEST_VAR=hello
+unset TEST_VAR=hello
+
+Commands with pipe and redirections
+ps aux | grep zsh
+cat < file3 | grep day
+ls | sort > file4
+grep day < file3 | sort >> file4
+cat file3 | grep day | awk '{print $2}' >> file4
+sort < file3 | uniq >> file4
+
+Commands with singlequotes
+echo 'hello alex' 'how are you'
+echo 'This is the exit status: $?'
+cat < file3 | grep 'day'
+
+Commands with doublequotes
+echo "hello alex" "how are you"
+echo "hello alex" 123 "how are you"
+echo "This is the exit status: $?"
+cat < file3 | grep "day"

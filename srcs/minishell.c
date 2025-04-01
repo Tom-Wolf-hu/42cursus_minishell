@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 11:50:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/01 12:55:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	struct s_saved_std std;
 	char *clean_cmd;
 
-	printf("[execute_pipe_commands] starting\n");
+	// printf("[execute_pipe_commands] starting\n");
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
