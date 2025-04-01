@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 15:50:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:45:30 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,14 @@ void	execute_command_single(char *cmd, int *status)
 		std.saved_stdout = dup(STDOUT_FILENO);
 		std.saved_stdin = dup(STDIN_FILENO);
 		handle_redirection(cmd, status);
+		if (*status == 1)
+		{
+			dup2(std.saved_stdin, STDIN_FILENO);
+			dup2(std.saved_stdout, STDOUT_FILENO);
+			close(std.saved_stdin);
+			close(std.saved_stdout);
+			return ;
+		}
 		line = get_next_line(STDIN_FILENO);
 		while (line)
 		{
@@ -359,6 +367,14 @@ void	execute_command_single(char *cmd, int *status)
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
 	handle_redirection(cmd, status);
+	// if (*status == 1)
+	// {
+	// 	dup2(std.saved_stdin, STDIN_FILENO);
+	// 	dup2(std.saved_stdout, STDOUT_FILENO);
+	// 	close(std.saved_stdin);
+	// 	close(std.saved_stdout);
+	// 	return ;
+	// }
 	pid = fork();
 	if (pid == 0)
 	{
