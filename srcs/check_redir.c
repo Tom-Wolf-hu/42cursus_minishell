@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 15:49:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:44:12 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*get_filename(char *cmd)
 	int		i = 0, j = 0, start;
 	char	*filename;
 
+	filename = NULL;
 	while (cmd[i] && (cmd[i] == '>' || cmd[i] == '<'))
 		i++;
 	while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t' || cmd[i] == '\n'))
@@ -35,7 +36,7 @@ char	*get_filename(char *cmd)
 	while (start < i)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
-	printf("filename: %s\n", filename);
+	// printf("filename: %s\n", filename);
 	return filename;
 }
 
@@ -76,18 +77,21 @@ void	handle_redirection(char *line, int *status)
 	int		i = 0;
 	int		file_fd;
 	char	*filename;
+	struct s_saved_std std;
 
-	// printf("[handle_redirection] start\n");
+	printf("[handle_redirection] starting....\n");
+	// std.saved_stdin = dup(STDIN_FILENO);
+	// std.saved_stdout = dup(STDOUT_FILENO);
 	while (line[i])
 	{
 		// printf("[handle_redirection] in cycle...\n");
 		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
+			printf("filename: %s\n", filename);
 			if (!filename)
 			{
 				printf("no name for file\n");
-				// fprintf(stderr, "Ошибка: отсутствует имя файла после редиректа\n");
 				*status = 1;
 				return ;
 			}
@@ -105,12 +109,10 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDOUT_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDOUT_FILENO);
+				close(file_fd);
 				i++;
 			}
 			else if (line[i] == '>') // truncate >
@@ -121,12 +123,10 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDOUT_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDOUT_FILENO);
+				close(file_fd);
 			}
 			else if (line[i] == '<') // input <
 			{
@@ -136,17 +136,22 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDIN_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDIN_FILENO);
+				close(file_fd);
 			}
 			free(filename);
 		}
 		i++;
 	}
+	// if (*status == 1)
+	// {
+	// 	dup2(std.saved_stdin, STDIN_FILENO);
+	// 	dup2(std.saved_stdout, STDOUT_FILENO);
+	// }
+	// close(std.saved_stdin);
+	// close(std.saved_stdout);
 }
 
 void	join_part(char **s1, char *s2)
