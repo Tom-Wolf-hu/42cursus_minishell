@@ -1,2 +1,372 @@
+USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+omalovic         36663   1.0  4.7 1222186092 391004   ??  S     2:07PM   4:47.73 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer) --type=renderer --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-path=/Applications/Visual Studio Code.app/Contents/Resources/app --enable-sandbox --enable-blink-features=HighlightAPI --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --lang=en-US --num-raster-threads=4 --enable-zero-copy --enable-gpu-memory-buffer-compositor-resources --enable-main-frame-before-activation --renderer-client-id=4 --time-ticks-at-unix-epoch=-1743264713227302 --launch-time-ticks=244519265203 --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version --vscode-window-config=vscode:6fdab217-0a83-494d-acb8-3cb45fe85164 --seatbelt-client=56
+_driverkit         825   0.5  0.0  4801868   1236   ??  Ss   Sat05PM  22:59.27 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserUSBHostHIDDeviceKB 0x10000044f
+_windowserver    30736   0.3  0.6  7423256  50380   ??  Ss    9:54PM   2:55.97 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon
+omalovic         36659   0.3  0.7 38866056  61068   ??  S     2:07PM   1:29.63 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (GPU).app/Contents/MacOS/Code Helper (GPU) --type=gpu-process --user-data-dir=/Users/omalovic/Library/Application Support/Code --gpu-preferences=UAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAEAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version --seatbelt-client=37
+_driverkit         829   0.2  0.0  4809556   1432   ??  Ss   Sat05PM   9:46.05 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserHIDEventDriver 0x100000499
+root               398   0.1  0.1  5501632   5580   ??  Ss   Sat05PM   0:13.50 /usr/bin/killidle
+omalovic         36719   0.1  2.0 1218274652 166200   ??  S     2:07PM   0:09.85 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin) --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --dns-result-order=ipv4first --inspect-port=0 --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36723   0.1  0.7 1218248564  58252   ??  S     2:07PM   0:10.78 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36649   0.1  1.8 1218499320 151112   ??  S     2:07PM   1:17.45 /Applications/Visual Studio Code.app/Contents/MacOS/Electron
+omalovic         41518   0.0  0.2  8620124  15060   ??  S     2:16PM   0:00.57 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools-srv 36842 {A64048C6-B37E-8742-966F-378FEA11BCC5}
+omalovic         39028   0.0  0.0  4278824   1644   ??  S     2:12PM   0:00.01 /Users/omalovic/Library/Application Support/iTerm2/iTermServer-3.5.11 /Users/omalovic/Library/Application Support/iTerm2/iterm2-daemon-1.socket
+omalovic         39027   0.0  0.0  4343416   2976   ??  Ss    2:12PM   0:00.03 /Applications/iTerm.app/Contents/XPCServices/pidinfo.xpc/Contents/MacOS/pidinfo
+omalovic         39026   0.0  0.2  4894728  15372   ??  Ss    2:12PM   0:00.30 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         39024   0.0  0.7  5266056  57900   ??  S     2:12PM   0:26.16 /Applications/iTerm.app/Contents/MacOS/iTerm2
+omalovic         38563   0.0  0.1  4392176   5824   ??  S     2:10PM   0:00.10 /System/Library/PrivateFrameworks/ProtectedCloudStorage.framework/Helpers/ProtectedCloudKeySyncing
+omalovic         38560   0.0  0.1  4426592   7040   ??  Ss    2:10PM   0:00.04 /System/Library/PrivateFrameworks/IMFoundation.framework/XPCServices/IMRemoteURLConnectionAgent.xpc/Contents/MacOS/IMRemoteURLConnectionAgent
+omalovic         38557   0.0  0.1  4426700   7172   ??  Ss    2:10PM   0:00.04 /System/Library/PrivateFrameworks/IMFoundation.framework/XPCServices/IMRemoteURLConnectionAgent.xpc/Contents/MacOS/IMRemoteURLConnectionAgent
+omalovic         38556   0.0  0.0  4378636   1828   ??  Ss    2:10PM   0:00.02 /System/Library/PrivateFrameworks/IMFoundation.framework/XPCServices/IMRemoteURLConnectionAgent.xpc/Contents/MacOS/IMRemoteURLConnectionAgent
+omalovic         38555   0.0  0.0  4362308   1792   ??  S     2:10PM   0:00.01 /System/Library/PrivateFrameworks/MediaRemote.framework/Support/mediaremoteagent
+omalovic         38554   0.0  0.1  4418508   7148   ??  Ss    2:10PM   0:00.05 /System/Library/PrivateFrameworks/IMFoundation.framework/XPCServices/IMRemoteURLConnectionAgent.xpc/Contents/MacOS/IMRemoteURLConnectionAgent
+omalovic         38546   0.0  0.1  4431352   6972   ??  S     2:10PM   0:00.14 /usr/libexec/adprivacyd
+omalovic         38544   0.0  0.2  4437400  15512   ??  S     2:10PM   0:00.20 /System/Library/PrivateFrameworks/TelephonyUtilities.framework/callservicesd
+omalovic         38543   0.0  0.1  4440808  12268   ??  S     2:10PM   0:00.75 /System/Library/PrivateFrameworks/IDS.framework/identityservicesd.app/Contents/MacOS/identityservicesd
+omalovic         38532   0.0  0.1  4434248   7200   ??  S     2:10PM   0:00.21 /usr/libexec/nsurlsessiond
+omalovic         38383   0.0  0.1  4919748  10760   ??  S     2:10PM   0:00.07 /System/Library/CoreServices/OSDUIHelper.app/Contents/MacOS/OSDUIHelper
+omalovic         38211   0.0  0.0  4364820   2836   ??  S     2:09PM   0:00.02 /usr/libexec/neagent
+_datadetectors   37861   0.0  0.0  4315628   1660   ??  Ss    2:08PM   0:00.05 /usr/libexec/DataDetectorsSourceAccess
+omalovic         37769   0.0  0.1  4430868   7152   ??  S     2:08PM   0:00.04 /usr/libexec/keyboardservicesd
+omalovic         37768   0.0  0.3  4500028  22548   ??  S     2:08PM   0:00.83 /System/Library/Services/AppleSpell.service/Contents/MacOS/AppleSpell
+omalovic         37767   0.0  0.1  4390584   6520   ??  S     2:08PM   0:00.03 /System/Library/PrivateFrameworks/AMPLibrary.framework/Versions/A/Support/AMPArtworkAgent --launchd
+omalovic         37766   0.0  0.0  4372440   2420   ??  S     2:08PM   0:00.04 /System/Library/CoreServices/ScopedBookmarkAgent
+omalovic         37765   0.0  0.1  4382128   5604   ??  S     2:08PM   0:00.04 /System/Library/PrivateFrameworks/BookKit.framework/Versions/A/XPCServices/com.apple.BKAgentService.xpc/Contents/MacOS/com.apple.BKAgentService
+omalovic         37764   0.0  0.1  4418028   4784   ??  S     2:08PM   0:00.05 /System/Library/PrivateFrameworks/PodcastServices.framework/XPCServices/PodcastContentService.xpc/Contents/MacOS/PodcastContentService
+omalovic         37761   0.0  0.3  4493060  21300   ??  S     2:08PM   0:00.31 /System/Library/PrivateFrameworks/AMPLibrary.framework/Versions/A/Support/AMPLibraryAgent --launchd
+omalovic         37760   0.0  0.1  4401756   5556   ??  Ss    2:08PM   0:00.04 /System/Library/PrivateFrameworks/AssistantServices.framework/Versions/A/XPCServices/media-indexer.xpc/Contents/MacOS/media-indexer
+omalovic         37127   0.0  0.0  4326008   2372   ??  S     2:07PM   0:00.01 /System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Versions/A/Support/mdwrite
+omalovic         37115   0.0  0.1  4429456   7200   ??  S     2:07PM   0:00.06 /System/Library/PrivateFrameworks/ClassKit.framework/Versions/A/progressd
+_applepay        37114   0.0  0.1  4394348   4284   ??  Ss    2:07PM   0:00.06 /usr/libexec/nfcd
+omalovic         37112   0.0  0.2  4471164  19196   ??  S     2:07PM   0:00.29 /usr/libexec/studentd
+omalovic         36965   0.0  0.1  8627740  11108   ??  S     2:07PM   0:00.47 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools-srv 36841 {89A420B4-28C7-0244-AF88-BD833C4560FC}
+omalovic         36963   0.0  0.1  4370456   4416   ??  S     2:07PM   0:00.06 /usr/libexec/silhouette
+omalovic         36961   0.0  0.4  8642476  32856   ??  S     2:07PM   0:04.57 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools-srv 36842 {87D7F89C-3300-5647-A247-8B0F2958E906}
+omalovic         36842   0.0  1.8  4523268 148668   ??  S     2:07PM   1:42.44 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools
+omalovic         36841   0.0  0.5  4469676  43904   ??  S     2:07PM   0:02.60 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools
+omalovic         36762   0.0  0.0  4371704   3392 s003  Ss    2:07PM   0:00.21 /bin/zsh -il
+omalovic         36737   0.0  0.0  4371704   4124 s001  Ss    2:07PM   0:00.83 /bin/zsh -il
+omalovic         36722   0.0  2.4 1218274716 198412   ??  S     2:07PM   0:29.91 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin) --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --dns-result-order=ipv4first --inspect-port=0 --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36678   0.0  0.6 1218297512  50308   ??  S     2:07PM   0:02.17 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36677   0.0  0.6 1218280104  46240   ??  S     2:07PM   0:01.64 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36676   0.0  0.9 1218288872  75788   ??  S     2:07PM   0:05.16 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+omalovic         36664   0.0  2.6 1218347964 218344   ??  S     2:07PM   0:17.09 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Renderer).app/Contents/MacOS/Code Helper (Renderer) --type=renderer --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-path=/Applications/Visual Studio Code.app/Contents/Resources/app --enable-sandbox --enable-blink-features=HighlightAPI --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --lang=en-US --num-raster-threads=4 --enable-zero-copy --enable-gpu-memory-buffer-compositor-resources --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1743264713227302 --launch-time-ticks=244519285232 --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version --vscode-window-config=vscode:1438c7ac-13dd-4b8f-8174-f744d36f9ec0 --seatbelt-client=57
+omalovic         36661   0.0  0.1  4845404   7484   ??  Ss    2:07PM   0:00.08 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36660   0.0  0.3 38196504  23160   ??  S     2:07PM   0:00.98 /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper.app/Contents/MacOS/Code Helper --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=network --user-data-dir=/Users/omalovic/Library/Application Support/Code --standard-schemes=vscode-webview,vscode-file --enable-sandbox --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files --field-trial-handle=1718379636,r,2317252756577902548,752630043197269605,262144 --disable-features=CalculateNativeWinOcclusion,MacWebContentsOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version --seatbelt-client=37
+omalovic         36658   0.0  0.0  4331048   2020   ??  S     2:07PM   0:00.01 /System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/XPCServices/com.apple.hiservices-xpcservice.xpc/Contents/MacOS/com.apple.hiservices-xpcservice
+omalovic         36657   0.0  0.0 37850560   3296   ??  S     2:07PM   0:00.02 /Applications/Visual Studio Code.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler --no-rate-limit --monitor-self-annotation=ptype=crashpad-handler --database=/Users/omalovic/Library/Application Support/Code/Crashpad --url=appcenter://code?aid=860d6632-f65b-490b-85a8-3e72944f7774&uid=1cbf9764-81e6-4a7c-84ff-4243706bfd17&iid=1cbf9764-81e6-4a7c-84ff-4243706bfd17&sid=1cbf9764-81e6-4a7c-84ff-4243706bfd17 --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.97.2 --annotation=plat=OS X --annotation=prod=Electron --annotation=ver=32.2.7 --handshake-fd=24
+omalovic         36655   0.0  0.1  4396108   8032   ??  S     2:07PM   0:00.04 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storedownloadd
+omalovic         36654   0.0  0.2  4440952  14116   ??  S     2:07PM   0:00.10 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storeuid.app/Contents/MacOS/storeuid
+_gamecontrollerd 36651   0.0  0.0  4362932   4096   ??  Ss    2:07PM   0:00.18 /usr/libexec/gamecontrollerd
+omalovic         36646   0.0  0.1  4424748   5956   ??  S     2:07PM   0:00.09 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd
+omalovic         36645   0.0  0.1  4381080   6536   ??  S     2:07PM   0:00.04 /usr/libexec/replayd
+omalovic         36642   0.0  0.0  4428672   3448   ??  S     2:07PM   0:00.11 /System/Library/PrivateFrameworks/CacheDelete.framework/deleted
+omalovic         36640   0.0  0.1  4431360   6448   ??  S     2:07PM   0:00.15 /usr/libexec/transparencyd
+omalovic         36634   0.0  0.2  4944196  14268   ??  Ss    2:06PM   0:00.56 /System/Library/CoreServices/Siri.app/Contents/XPCServices/SiriNCService.xpc/Contents/MacOS/SiriNCService
+omalovic         36612   0.0  0.2  4441664  12836   ??  S     2:06PM   0:00.12 /System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbagent.app/Contents/MacOS/nbagent
+omalovic         36611   0.0  0.1  4417752   7844   ??  S     2:06PM   0:00.03 /System/Library/PrivateFrameworks/IMDPersistence.framework/IMAutomaticHistoryDeletionAgent.app/Contents/MacOS/IMAutomaticHistoryDeletionAgent
+omalovic         36602   0.0  0.1  4381576   7124   ??  S     2:06PM   0:00.08 /System/Library/PrivateFrameworks/PhotoLibraryServices.framework/Versions/A/Support/photolibraryd
+omalovic         36595   0.0  0.0  4411324   3484   ??  S     2:06PM   0:00.07 /System/Library/Frameworks/AudioToolbox.framework/AudioComponentRegistrar
+omalovic         36594   0.0  0.3  6724312  22980   ??  S     2:06PM   0:00.13 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39244 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {37fd0e2d-a555-404c-a622-3e31d2e9939e} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.782976674 15 tab
+omalovic         36593   0.0  0.3  6709976  23060   ??  S     2:06PM   0:00.13 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39278 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {047ee5ac-1241-41b5-ace5-0d5995143f0a} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.738971314 14 tab
+omalovic         36592   0.0  2.5  7104484 211000   ??  S     2:06PM   0:04.73 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39279 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {f7cb1dfc-50d8-460a-9425-599f2bff4eef} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1630678612 13 tab
+omalovic         36591   0.0  0.2  4500176  12792   ??  S     2:06PM   0:00.11 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -parentBuildID 20250216192613 -sandboxingKind 1 -prefsHandle 0 -prefsLen 43632 -prefMapHandle 1 -prefMapSize 263771 -sbStartup -sbAppPath /Applications/Firefox.app -ipcHandle 0 -initialChannelId {abca2618-e89e-4e04-9e29-13292e27d785} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.2134630989 12 utility
+omalovic         36589   0.0  0.9  6825372  71332   ??  S     2:06PM   0:01.87 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39279 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {e1ab7b0e-39d0-4048-b898-7560fd5963f7} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.408064858 11 tab
+omalovic         36582   0.0  0.1  4314104   7124   ??  S     2:06PM   0:00.01 /System/Library/CoreServices/EscrowSecurityAlert.app/Contents/MacOS/EscrowSecurityAlert
+omalovic         36570   0.0  0.0  4324476   1952   ??  S     2:06PM   0:00.02 /System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Support/fontworker
+omalovic         36561   0.0  0.4  6722476  33096   ??  S     2:06PM   0:00.17 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39279 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {a92c838d-3e08-48e0-bb60-d009fea3a887} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1024203832 10 tab
+omalovic         36560   0.0  0.0  4346128   3196   ??  S     2:06PM   0:00.01 /System/Library/PrivateFrameworks/CoreFollowUp.framework/Versions/A/Support/followupd
+omalovic         36559   0.0  5.0  7339580 415264   ??  S     2:06PM   0:14.89 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39279 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {d77afbe5-a0c3-4a1b-b52e-c98c84d25dfa} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1426152443 9 tab
+omalovic         36553   0.0  0.1  4466508  11408   ??  S     2:06PM   0:00.32 /System/Library/PrivateFrameworks/SoftwareUpdate.framework/Resources/SoftwareUpdateNotificationManager.app/Contents/MacOS/SoftwareUpdateNotificationManager
+omalovic         36549   0.0  1.3  7125408 106736   ??  S     2:05PM   0:04.26 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39004 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {5303591b-a300-47df-879f-002903bdf747} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1120904058 7 tab
+omalovic         36546   0.0  0.2  4523408  14676   ??  S     2:05PM   0:00.15 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -parentBuildID 20250216192613 -sandboxingKind 0 -prefsHandle 0 -prefsLen 43345 -prefMapHandle 1 -prefMapSize 263771 -sbStartup -sbAppPath /Applications/Firefox.app -ipcHandle 0 -initialChannelId {e9998994-ed76-4396-bcad-9ff40da4e71a} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1018217565 5 utility
+omalovic         36545   0.0  0.5  6744800  38660   ??  S     2:05PM   0:00.37 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 43247 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {b0662cb7-5738-402d-8064-c3801d21c67a} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1639391514 4 tab
+omalovic         36543   0.0  0.0  4394520   3056   ??  Ss    2:05PM   0:00.03 /System/Library/Frameworks/VideoToolbox.framework/Versions/A/XPCServices/VTDecoderXPCService.xpc/Contents/MacOS/VTDecoderXPCService
+omalovic         36542   0.0  0.2  4556476  13100   ??  S     2:05PM   0:00.13 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -parentBuildID 20250216192613 -prefsHandle 0 -prefsLen 35325 -prefMapHandle 1 -prefMapSize 263771 -sbStartup -sbAppPath /Applications/Firefox.app -ipcHandle 0 -initialChannelId {50579283-20e6-420b-9cd4-4971ccba19ea} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.2020337206 3 rdd
+omalovic         36541   0.0  1.0  6783124  86344   ??  S     2:05PM   0:01.11 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 35325 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {8a247002-be80-48d6-a803-235578047ae7} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1915993899 2 tab
+omalovic         36539   0.0  0.0  4857952   1972   ??  Ss    2:05PM   0:00.05 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36538   0.0  0.1  4499016  12264   ??  S     2:05PM   0:00.10 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -parentBuildID 20250216192613 -prefsHandle 0 -prefsLen 35200 -prefMapHandle 1 -prefMapSize 263771 -sbStartup -sbAppPath /Applications/Firefox.app -ipcHandle 0 -initialChannelId {4000d83c-ac24-45f4-89c0-618e703c29aa} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.591388696 1 socket
+omalovic         36535   0.0  4.2 25243364 354748   ??  S     2:05PM   0:41.94 /Applications/Firefox.app/Contents/MacOS/firefox
+omalovic         36533   0.0  0.1  4440176  10372   ??  S     2:05PM   0:00.11 /System/Library/CoreServices/CoreLocationAgent.app/Contents/MacOS/CoreLocationAgent
+omalovic         36532   0.0  0.1  4944880   9616   ??  Ss    2:05PM   0:00.20 /System/Library/Input Methods/PressAndHold.app/Contents/PlugIns/PAH_Extension.appex/Contents/MacOS/PAH_Extension
+omalovic         36531   0.0  0.1  4449104  10192   ??  Ss    2:05PM   0:00.19 /System/Library/Frameworks/QuickLook.framework/Versions/A/XPCServices/QuickLookSatellite.xpc/Contents/MacOS/QuickLookSatellite
+omalovic         36526   0.0  0.0  4864780   1968   ??  Ss    2:05PM   0:00.09 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36525   0.0  0.0  4863784   2008   ??  Ss    2:05PM   0:00.16 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36521   0.0  0.0  4369024   2220   ??  S     2:05PM   0:00.01 /System/Library/CoreServices/ReportCrash agent
+omalovic         36520   0.0  0.0  4342760   4088   ??  Ss    2:05PM   0:00.01 /System/Library/CoreServices/NotificationCenter.app/Contents/XPCServices/com.apple.notificationcenterui.WeatherSummary.xpc/Contents/MacOS/com.apple.notificationcenterui.WeatherSummary
+omalovic         36519   0.0  0.1  4376756   5164   ??  S     2:05PM   0:00.02 /System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistoryPluginHelper
+omalovic         36518   0.0  0.1  4432512   7812   ??  S     2:05PM   0:00.09 /System/Library/PrivateFrameworks/ScreenTimeCore.framework/Versions/A/ScreenTimeAgent
+omalovic         36516   0.0  0.1  4457088   6776   ??  S     2:05PM   0:05.02 /Library/Apple/System/Library/CoreServices/XProtect.app/Contents/XPCServices/XProtectPluginService.xpc/Contents/MacOS/XProtectPluginService
+omalovic         36515   0.0  0.1  4936620   9068   ??  S     2:05PM   0:00.16 /System/Library/PrivateFrameworks/AppSSO.framework/Support/AppSSOAgent.app/Contents/MacOS/AppSSOAgent
+omalovic         36514   0.0  0.1  4939872   6036   ??  S     2:05PM   0:00.16 /System/Library/Frameworks/QuickLookThumbnailing.framework/Support/com.apple.quicklook.ThumbnailsAgent
+omalovic         36513   0.0  0.3  4941104  29108   ??  Ss    2:05PM   0:00.13 /System/Library/CoreServices/Dock.app/Contents/XPCServices/com.apple.dock.extra.xpc/Contents/MacOS/com.apple.dock.extra
+omalovic         36512   0.0  0.1  4933780   8924   ??  Ss    2:05PM   0:00.06 /System/Library/CoreServices/Dock.app/Contents/XPCServices/com.apple.dock.external.extra.xpc/Contents/MacOS/com.apple.dock.external.extra
+omalovic         36511   0.0  0.2  4465964  18772   ??  S     2:05PM   0:00.13 /System/Library/CoreServices/TextInputSwitcher.app/Contents/MacOS/TextInputSwitcher
+omalovic         36510   0.0  0.1  4428468   5688   ??  S     2:05PM   0:00.14 /System/Library/PrivateFrameworks/UserActivity.framework/Agents/useractivityd
+omalovic         36509   0.0  0.1  4362732   5944   ??  Ss    2:05PM   0:00.02 /System/Library/PrivateFrameworks/SiriUI.framework/Versions/A/XPCServices/SiriUISetupXPC.xpc/Contents/MacOS/SiriUISetupXPC
+omalovic         36504   0.0  0.1  4432656  10212   ??  S     2:05PM   0:00.13 /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/MacOS/IMDPersistenceAgent
+omalovic         36503   0.0  0.0  4427656   3012   ??  S     2:05PM   0:00.05 /System/Library/Frameworks/CryptoTokenKit.framework/ctkd -tw
+omalovic         36501   0.0  0.0  4860000   1964   ??  Ss    2:05PM   0:00.07 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36499   0.0  0.0  4396732   2572   ??  S     2:05PM   0:00.03 /System/Library/Frameworks/CryptoTokenKit.framework/ctkahp.bundle/Contents/MacOS/ctkahp
+omalovic         36496   0.0  0.1  4428972   8620   ??  S     2:05PM   0:00.20 /System/Library/PrivateFrameworks/AppleMediaServices.framework/Resources/amsaccountsd
+omalovic         36495   0.0  0.2  4968956  12596   ??  S     2:05PM   0:00.23 /System/Library/CoreServices/TextInputMenuAgent.app/Contents/MacOS/TextInputMenuAgent
+omalovic         36494   0.0  0.1  4426536   5444   ??  S     2:05PM   0:00.07 /System/Library/CoreServices/diagnostics_agent
+omalovic         36493   0.0  0.1  4428612  10632   ??  S     2:05PM   0:00.13 /System/Library/PrivateFrameworks/IMCore.framework/imagent.app/Contents/MacOS/imagent
+omalovic         36492   0.0  0.1  4427236   8132   ??  S     2:05PM   0:00.11 /System/Library/CoreServices/cloudpaird
+omalovic         36491   0.0  0.1  4934884   8928   ??  S     2:05PM   0:00.06 /System/Library/CoreServices/AirPlayUIAgent.app/Contents/MacOS/AirPlayUIAgent --launchd
+omalovic         36490   0.0  0.2  4437128  19628   ??  S     2:05PM   0:00.46 /usr/libexec/sharingd
+omalovic         36488   0.0  0.1  4427624   6732   ??  S     2:05PM   0:00.16 /System/Library/PrivateFrameworks/AskPermission.framework/Versions/A/Resources/askpermissiond
+omalovic         36487   0.0  0.0  4426556   3744   ??  S     2:05PM   0:00.10 /System/Library/Image Capture/Support/icdd
+omalovic         36486   0.0  0.2  4437444  14504   ??  S     2:05PM   0:00.62 /System/Library/CoreServices/Siri.app/Contents/MacOS/Siri launchd
+omalovic         36484   0.0  0.1  4443200  11124   ??  S     2:05PM   0:06.36 /System/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python /usr/local/munki/app_usage_monitor
+omalovic         36483   0.0  0.1  4429248   5256   ??  S     2:05PM   0:00.28 /System/Library/Frameworks/InputMethodKit.framework/Resources/imklaunchagent
+omalovic         36481   0.0  0.1  4416988   4604   ??  S     2:05PM   0:00.02 /System/Library/CoreServices/SocialPushAgent.app/Contents/MacOS/SocialPushAgent
+omalovic         36479   0.0  0.1  4431416  10700   ??  S     2:05PM   0:00.18 /System/Library/PrivateFrameworks/CoreDuetContext.framework/Resources/ContextStoreAgent
+omalovic         36477   0.0  0.1  4430272  10756   ??  S     2:05PM   0:00.13 /System/Library/PrivateFrameworks/CoreSpeech.framework/corespeechd
+omalovic         36473   0.0  0.1  4397156   7936   ??  S     2:05PM   0:00.06 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storeaccountd
+omalovic         36472   0.0  0.0  4417156   3928   ??  S     2:05PM   0:00.02 /usr/libexec/WiFiVelocityAgent
+omalovic         36470   0.0  0.1  4426672   5660   ??  S     2:05PM   0:00.03 /System/Library/PrivateFrameworks/AMPDevices.framework/Versions/A/Support/AMPDeviceDiscoveryAgent --launchd
+omalovic         36469   0.0  0.1  4434580  11904   ??  S     2:05PM   0:00.14 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/commerce
+omalovic         36468   0.0  0.2  4439524  15712   ??  S     2:05PM   0:00.24 /System/Library/PrivateFrameworks/CoreParsec.framework/parsecd
+omalovic         36467   0.0  0.1  4427764   6684   ??  S     2:05PM   0:00.16 /System/Library/CoreServices/sharedfilelistd
+omalovic         36466   0.0  0.2  4901536  16432   ??  Ss    2:05PM   0:00.80 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         36465   0.0  0.1  4480892   9852   ??  S     2:05PM   0:00.74 /System/Library/CoreServices/iconservicesagent
+omalovic         36464   0.0  0.1  4438684  11256   ??  S     2:05PM   0:00.06 /System/Library/CoreServices/CoreServicesUIAgent.app/Contents/MacOS/CoreServicesUIAgent
+omalovic         36463   0.0  0.1  4429780   5760   ??  S     2:05PM   0:00.39 /usr/libexec/swcd
+omalovic         36462   0.0  0.2  4413840  16980   ??  Ss    2:05PM   0:00.12 /System/Library/Frameworks/VideoToolbox.framework/Versions/A/XPCServices/VTDecoderXPCService.xpc/Contents/MacOS/VTDecoderXPCService
+omalovic         36461   0.0  0.1  4431656   9740   ??  S     2:05PM   0:00.12 /usr/libexec/dmd
+omalovic         36460   0.0  0.3  5007564  26412   ??  S     2:05PM   0:00.45 /System/Library/CoreServices/Spotlight.app/Contents/MacOS/Spotlight
+omalovic         36458   0.0  0.1  4418296   4628   ??  S     2:05PM   0:00.02 /System/Library/CoreServices/backgroundtaskmanagementagent
+omalovic         36455   0.0  0.0  4431036   3844   ??  S     2:05PM   0:00.05 /System/Library/CoreServices/pbs
+omalovic         36454   0.0  0.1  4365864   4856   ??  S     2:05PM   0:00.01 /System/Library/CoreServices/Menu Extras/SafeEjectGPUExtra.menu/Contents/XPCServices/SafeEjectGPUService.xpc/Contents/MacOS/SafeEjectGPUService
+omalovic         36453   0.0  0.0  4821508   3244   ??  S     2:05PM   0:00.01 SafeEjectGPUAgent
+omalovic         36450   0.0  0.4  4430008  34092   ??  S     2:05PM   0:01.16 /System/Library/Frameworks/ApplicationServices.framework/Frameworks/ATS.framework/Support/fontd
+omalovic         36448   0.0  0.0  4436156   2448   ??  S     2:05PM   0:00.06 /System/Library/PrivateFrameworks/ContextKit.framework/Versions/A/XPCServices/ContextService.xpc/Contents/MacOS/ContextService
+omalovic         36447   0.0  0.1  4436332   8016   ??  S     2:05PM   0:00.56 /System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod
+omalovic         36445   0.0  0.1  4426712   6080   ??  S     2:05PM   0:04.43 /usr/libexec/pkd
+omalovic         36443   0.0  0.1  4430544   6292   ??  S     2:05PM   0:00.11 /System/Library/PrivateFrameworks/AuthKit.framework/Versions/A/Support/akd
+omalovic         36442   0.0  0.1  4397948   8848   ??  S     2:05PM   0:00.12 /System/Library/PrivateFrameworks/FamilyCircle.framework/Versions/A/Resources/familycircled
+omalovic         36441   0.0  0.1  4432656  10424   ??  S     2:05PM   0:00.13 /System/Library/PrivateFrameworks/AssistantServices.framework/Versions/A/Support/assistantd
+omalovic         36437   0.0  0.1  4429296   4272   ??  S     2:05PM   0:00.20 /usr/libexec/nsurlstoraged
+omalovic         36436   0.0  0.1  4566432  10132   ??  S     2:05PM   0:00.08 /System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Versions/A/Support/corespotlightd
+omalovic         36433   0.0  0.1  4428084   8424   ??  S     2:05PM   0:00.09 /usr/libexec/fmfd
+omalovic         36432   0.0  0.1  4426048  11032   ??  S     2:05PM   0:00.40 /System/Library/Frameworks/AddressBook.framework/Executables/ContactsAccountsService
+omalovic         36431   0.0  0.2  4462344  20864   ??  S     2:05PM   0:00.19 /System/Library/CoreServices/RemoteManagement/SSMenuAgent.app/Contents/MacOS/SSMenuAgent
+omalovic         36430   0.0  0.1  4432080  12080   ??  Ss    2:05PM   0:00.34 /System/Library/PrivateFrameworks/CalendarNotification.framework/Versions/A/XPCServices/CalNCService.xpc/Contents/MacOS/CalNCService
+omalovic         36429   0.0  0.1  4426656   5552   ??  S     2:05PM   0:00.04 /System/Library/PrivateFrameworks/UsageTracking.framework/Versions/A/UsageTrackingAgent
+omalovic         36428   0.0  0.0  4386912   1404   ??  S     2:05PM   0:00.01 /System/Library/PrivateFrameworks/DeviceCheckInternal.framework/devicecheckd
+omalovic         36427   0.0  0.2  4525216  15504   ??  S     2:05PM   0:00.47 /System/Library/PrivateFrameworks/CoreSuggestions.framework/Versions/A/Support/suggestd
+omalovic         36426   0.0  0.6  4749892  51876   ??  S     2:05PM   0:00.16 /Library/Apple/System/Library/CoreServices/SafariSupport.bundle/Contents/MacOS/SafariBookmarksSyncAgent
+omalovic         36425   0.0  0.1  4430616   8204   ??  S     2:05PM   0:00.04 /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/MacOS/ARDAgent
+omalovic         36424   0.0  0.2  4438572  13108   ??  S     2:05PM   0:01.58 /System/Library/CoreServices/WiFiAgent.app/Contents/MacOS/WiFiAgent
+omalovic         36423   0.0  0.1  4430420   8700   ??  S     2:05PM   0:00.11 /usr/libexec/searchpartyuseragent
+omalovic         36421   0.0  0.1  4428888  10044   ??  S     2:05PM   0:00.17 /System/Library/CoreServices/mapspushd
+omalovic         36420   0.0  0.4  4985408  32020   ??  S     2:05PM   0:00.80 /System/Library/CoreServices/NotificationCenter.app/Contents/MacOS/NotificationCenter
+omalovic         36419   0.0  0.2  4435760  17184   ??  S     2:05PM   0:00.76 /System/Library/PrivateFrameworks/CalendarAgent.framework/Executables/CalendarAgent
+omalovic         36418   0.0  0.0  4362788   2460   ??  S     2:05PM   0:00.01 /System/Library/CoreServices/APFSUserAgent
+omalovic         36417   0.0  0.1  4427488   4336   ??  S     2:05PM   0:00.04 /usr/libexec/networkserviceproxy
+omalovic         36416   0.0  0.2  4438336  19800   ??  S     2:05PM   0:00.34 /System/Library/Frameworks/CoreTelephony.framework/Support/CommCenter -L
+omalovic         36415   0.0  0.1  4430792  11524   ??  S     2:05PM   0:00.21 /usr/sbin/usernoted
+omalovic         36414   0.0  0.3  4435068  21760   ??  S     2:05PM   0:01.30 /usr/libexec/routined LAUNCHED_BY_LAUNCHD
+omalovic         36412   0.0  0.1  4427404  11360   ??  S     2:05PM   0:00.08 /usr/libexec/rapportd
+omalovic         36411   0.0  0.1  4426216   8408   ??  S     2:05PM   0:00.47 /System/Library/PrivateFrameworks/ViewBridge.framework/Versions/A/XPCServices/ViewBridgeAuxiliary.xpc/Contents/MacOS/ViewBridgeAuxiliary
+omalovic         36409   0.0  0.1  4433188   8628   ??  S     2:05PM   0:00.27 /System/Library/PrivateFrameworks/TCC.framework/Resources/tccd
+omalovic         36407   0.0  0.1  4388348   5760   ??  S     2:05PM   0:00.10 /usr/libexec/pboard
+omalovic         36406   0.0  0.0  4395524   3700   ??  S     2:05PM   0:00.02 /System/Library/Frameworks/Security.framework/Versions/A/Resources/CloudKeychainProxy.bundle/Contents/MacOS/CloudKeychainProxy
+omalovic         36405   0.0  0.1  4430380   8056   ??  S     2:05PM   0:00.33 /System/Library/Frameworks/Accounts.framework/Versions/A/Support/accountsd
+omalovic         36404   0.0  0.2  4433028  16276   ??  S     2:05PM   0:00.34 /System/Library/PrivateFrameworks/CloudKitDaemon.framework/Support/cloudd
+omalovic         36403   0.0  0.1  4428756   8668   ??  S     2:05PM   0:00.61 /usr/libexec/secinitd
+omalovic         36402   0.0  0.2  4943912  13360   ??  Ss    2:05PM   0:00.07 /System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/QuickLookUI.framework/Versions/A/XPCServices/QuickLookUIService.xpc/Contents/MacOS/QuickLookUIService
+omalovic         36401   0.0  0.1  4427192   9084   ??  S     2:05PM   0:00.06 /System/Library/PrivateFrameworks/CloudDocsDaemon.framework/Versions/A/Support/bird
+omalovic         36400   0.0  0.4  4994576  33816   ??  S     2:05PM   0:01.86 /System/Library/CoreServices/Finder.app/Contents/MacOS/Finder
+omalovic         36399   0.0  0.1  4431040  11904   ??  S     2:05PM   0:07.82 /usr/libexec/trustd --agent
+omalovic         36398   0.0  0.5  4975088  40356   ??  S     2:05PM   0:01.35 /System/Library/CoreServices/SystemUIServer.app/Contents/MacOS/SystemUIServer
+omalovic         36397   0.0  0.3  5011372  23684   ??  S     2:05PM   0:02.37 /System/Library/CoreServices/Dock.app/Contents/MacOS/Dock
+omalovic         36396   0.0  0.1  4445200  11760   ??  S     2:05PM   0:00.16 /System/Library/CoreServices/talagent
+omalovic         36395   0.0  0.1  4431208  12064   ??  S     2:05PM   0:00.24 /usr/libexec/secd
+omalovic         36394   0.0  0.3  4447480  23320   ??  S     2:05PM   0:10.99 /usr/libexec/lsd
+omalovic         36393   0.0  0.1  4431200   9536   ??  S     2:05PM   0:00.24 /usr/sbin/universalaccessd launchd -s
+omalovic         36392   0.0  0.1  4432140  11296   ??  S     2:05PM   0:00.35 /usr/libexec/knowledge-agent
+omalovic         36391   0.0  0.1  4396692   5184   ??  S     2:05PM   0:00.39 /usr/sbin/distnoted agent
+omalovic         36390   0.0  0.0  4353564   2980   ??  S     2:05PM   0:00.01 /System/Library/PrivateFrameworks/CloudServices.framework/Helpers/com.apple.sbd
+omalovic         36388   0.0  0.2  4427992  19380   ??  S     2:05PM   0:00.63 /usr/libexec/UserEventAgent (Aqua)
+root             36307   0.0  0.1  4410432   6388   ??  Ss    2:05PM   0:00.03 /usr/sbin/iscsid
+omalovic         36073   0.0  0.0  4395664   3504   ??  S     2:05PM   0:00.82 /usr/sbin/cfprefsd agent
+omalovic         36072   0.0  0.1  4384588   5496   ??  S     2:05PM   0:00.04 /System/Library/Frameworks/LocalAuthentication.framework/Support/coreauthd
+root             34596   0.0  0.2  4433520  17944   ??  Ss    8:24AM   0:05.58 /usr/libexec/PerfPowerServices
+root             31613   0.0  0.1  4273836   7708   ??  S<    1:00AM   0:00.00 /Library/Frameworks/Python.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /var/root/venv/bin/celery -A deepthought.worker worker --loglevel=info --without-gossip --without-mingle -c 1
+root             31610   0.0  0.5  4283572  37988   ??  S<    1:00AM   0:16.42 /Library/Frameworks/Python.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python /var/root/venv/bin/celery -A deepthought.worker worker --loglevel=info --without-gossip --without-mingle -c 1
+root             31609   0.0  0.0  4268796    668   ??  S<s   1:00AM   0:00.00 /bin/bash /var/root/venv/bin/deepthought-worker-wrapper
+_usbmuxd         30812   0.0  0.0  4385044   3492   ??  Ss    9:55PM   0:00.05 /System/Library/PrivateFrameworks/MobileDevice.framework/Versions/A/Resources/usbmuxd -launchd
+root             30796   0.0  0.4  4517020  35480   ??  Ss    9:55PM   0:42.03 /System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Support/mds
+root             30786   0.0  0.1  4425852   5976   ??  Ss    9:55PM   0:00.42 /System/Library/PrivateFrameworks/AmbientDisplay.framework/Versions/A/XPCServices/com.apple.AmbientDisplayAgent.xpc/Contents/MacOS/com.apple.AmbientDisplayAgent
+daspring         30775   0.0  0.0  4346356   1264   ??  S     9:54PM   0:00.02 /usr/sbin/cfprefsd agent
+daspring         30774   0.0  0.0  4396692   3420   ??  S     9:54PM   0:00.14 /usr/sbin/distnoted agent
+omalovic         30735   0.0  0.4  4523108  34776   ??  Ss    9:54PM   0:03.20 /System/Library/CoreServices/loginwindow.app/Contents/MacOS/loginwindow console
+daspring         30734   0.0  0.1  4427228   4664   ??  S     9:54PM   0:00.03 /usr/libexec/secinitd
+root             16844   0.0  0.0  4340020   2048   ??  Ss   Mon01AM   0:00.02 /usr/libexec/applessdstatistics
+root              9955   0.0  0.0  4426412   2980   ??  Ss   Sun05PM   0:00.06 /System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/XPCServices/com.apple.PerformanceAnalysis.animationperfd.xpc/Contents/MacOS/com.apple.PerformanceAnalysis.animationperfd
+root              8403   0.0  0.0  4368320   3640   ??  Ss   Sun02PM   0:00.08 /System/Library/CoreServices/osanalyticshelper com.apple.osanalytics.osanalyticshelper
+_assetcache       6346   0.0  0.1  4430972   4808   ??  Ss   Sun06AM   0:01.36 /System/Library/PrivateFrameworks/AssetCacheServices.framework/Versions/A/XPCServices/AssetCacheLocatorService.xpc/Contents/MacOS/AssetCacheLocatorService -d
+_fpsd             6344   0.0  0.0  4353388   1840   ??  Ss   Sun06AM   0:01.89 /System/Library/PrivateFrameworks/CoreLSKD.framework/Versions/A/lskdd
+root              5256   0.0  0.1  4395404   8484   ??  Ss   Sun03AM   0:02.28 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/commerced
+root              5255   0.0  0.1  4389040   5824   ??  Ss   Sun03AM   0:00.16 /System/Library/PrivateFrameworks/CommerceKit.framework/Versions/A/Resources/storeaccountd daemon
+root              5151   0.0  0.0  4425584   1852   ??  Ss   Sun01AM   0:00.08 /usr/libexec/microstackshot
+root              4192   0.0  0.0  4353776   2752   ??  Ss   Sun12AM   0:00.03 /usr/libexec/tzd
+_locationd        3973   0.0  0.0  4396692   1160   ??  S    Sun12AM   0:00.45 /usr/sbin/distnoted agent
+root              2730   0.0  0.0  4316644    548   ??  SNs  Sat07PM   0:00.01 /usr/libexec/periodic-wrapper daily
+root              2574   0.0  0.0  4386508   2412   ??  Ss   Sat07PM   0:00.08 /Library/Apple/System/Library/CoreServices/XProtect.app/Contents/MacOS/XProtect
+root              2526   0.0  0.0  4431956   2944   ??  Ss   Sat06PM   0:00.25 /usr/libexec/dprivacyd
+root              1720   0.0  0.0  4427176   4092   ??  Ss   Sat05PM   0:00.09 /usr/bin/sysdiagnose
+root              1671   0.0  0.0  4427064   2464   ??  Ss   Sat05PM   0:00.21 /System/Library/PrivateFrameworks/Noticeboard.framework/Versions/A/Resources/nbstated
+_fpsd             1651   0.0  0.0  4399624   1376   ??  Ss   Sat05PM   0:00.58 /System/Library/PrivateFrameworks/CoreADI.framework/adid
+_spotlight        1613   0.0  0.0  4396692   1212   ??  S    Sat05PM   0:00.53 /usr/sbin/distnoted agent
+root              1606   0.0  0.2  4432000  14952   ??  Ss   Sat05PM   0:02.26 /usr/libexec/rtcreportingd
+_spotlight        1589   0.0  0.1  4429688   6488   ??  S    Sat05PM   0:01.73 /usr/libexec/trustd --agent
+_atsserver        1582   0.0  0.1  4428412   4236   ??  Ss   Sat05PM   0:00.28 /System/Library/Frameworks/ApplicationServices.framework/Frameworks/ATS.framework/Support/fontd
+root              1581   0.0  0.0  4396912   4152   ??  Ss   Sat05PM   0:00.13 /System/Library/CoreServices/Software Update.app/Contents/Resources/suhelperd
+_softwareupdate   1580   0.0  0.9  5682048  79040   ??  Ss   Sat05PM   1:49.39 /System/Library/CoreServices/Software Update.app/Contents/Resources/softwareupdated
+root              1465   0.0  0.1  4428836   9008   ??  Ss   Sat05PM   0:00.64 /usr/sbin/spindump
+root              1409   0.0  0.0  4354280    900   ??  Ss   Sat05PM   0:00.03 /usr/libexec/smd
+root              1395   0.0  0.1  4428184   4464   ??  Ss   Sat05PM   0:00.40 /usr/libexec/wifivelocityd
+root              1359   0.0  0.0  4427488   2352   ??  Ss   Sat05PM   0:00.09 /System/Library/PrivateFrameworks/AssetCacheServicesExtensions.framework/XPCServices/AssetCacheTetheratorService.xpc/Contents/MacOS/AssetCacheTetheratorService
+root              1354   0.0  0.0  4397192   2372   ??  Ss   Sat05PM   0:03.50 /System/Library/PrivateFrameworks/CoreSymbolication.framework/coresymbolicationd
+_assetcache       1351   0.0  0.0  4429496   3868   ??  Ss   Sat05PM   0:00.13 /usr/libexec/AssetCache/AssetCache
+root              1350   0.0  0.0  4369928   2928   ??  Ss   Sat05PM   0:00.02 /System/Library/PrivateFrameworks/PackageKit.framework/Resources/system_installd
+root              1347   0.0  0.0  4370952   2916   ??  Ss   Sat05PM   0:00.02 /System/Library/PrivateFrameworks/PackageKit.framework/Resources/installd
+root              1343   0.0  0.0  4379120   1592   ??  Ss   Sat05PM   0:00.01 /System/Library/PrivateFrameworks/CacheDelete.framework/deleted_helper
+_fpsd             1334   0.0  0.0  4426212   3180   ??  Ss   Sat05PM   0:00.17 /System/Library/PrivateFrameworks/CoreFP.framework/Versions/A/fpsd
+root              1322   0.0  0.1  4401360   5080   ??  Ss   Sat05PM   0:00.16 /usr/sbin/filecoordinationd
+_nsurlstoraged    1313   0.0  0.0  4389720   2468   ??  Ss   Sat05PM   0:00.12 /usr/libexec/nsurlstoraged --privileged
+root              1303   0.0  0.1  4426376   4340   ??  Ss   Sat05PM   0:00.20 /usr/sbin/WirelessRadioManagerd
+root              1259   0.0  0.0  4338744   1832   ??  Ss   Sat05PM   0:00.06 /usr/libexec/securityd_service
+root               974   0.0  0.1  4425340   6184   ??  Ss   Sat05PM   0:02.82 /usr/libexec/mobileactivationd
+root               936   0.0  0.0  4313960   1440   ??  Ss   Sat05PM   0:00.02 /System/Library/Frameworks/GSS.framework/Helpers/GSSCred
+root               929   0.0  0.0  4428492   3008   ??  S    Sat05PM   0:00.18 /usr/libexec/secinitd
+root               928   0.0  0.1  4440464   8296   ??  S    Sat05PM   0:16.18 /System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod
+root               927   0.0  0.4  4448940  34576   ??  Ss   Sat05PM   0:17.40 /System/Library/PrivateFrameworks/ApplePushService.framework/apsd
+root               926   0.0  0.1  4418360   7796   ??  Ss   Sat05PM   0:01.23 /usr/libexec/findmydeviced
+root               911   0.0  0.0  4425896   4032   ??  Ss   Sat05PM   0:00.72 /System/Library/CoreServices/SubmitDiagInfo server-init
+root               892   0.0  0.1  4430708   4896   ??  Ss   Sat05PM   0:00.20 /usr/sbin/systemsoundserverd
+root               890   0.0  0.0  4333120   1820   ??  Ss   Sat05PM   0:00.02 /System/Library/PrivateFrameworks/AccountPolicy.framework/XPCServices/com.apple.AccountPolicyHelper.xpc/Contents/MacOS/com.apple.AccountPolicyHelper
+_ctkd              888   0.0  0.0  4397192   1976   ??  Ss   Sat05PM   0:00.03 /System/Library/Frameworks/CryptoTokenKit.framework/ctkd -s
+root               885   0.0  0.0  4395468   3876   ??  Ss   Sat05PM   0:00.08 /System/Library/Frameworks/LocalAuthentication.framework/Support/coreauthd
+root               884   0.0  0.0  4396696   2828   ??  Ss   Sat05PM   0:00.06 /System/Library/Frameworks/CryptoTokenKit.framework/ctkahp.bundle/Contents/MacOS/ctkahp -d
+root               881   0.0  0.0  4395092   2532   ??  Ss   Sat05PM   0:00.12 /System/Library/CoreServices/CrashReporterSupportHelper server-init
+root               880   0.0  0.0  4426924   4028   ??  Ss   Sat05PM   0:00.19 /System/Library/CoreServices/sharedfilelistd
+root               878   0.0  0.0  4388500   1196   ??  S    Sat05PM   0:00.52 /usr/sbin/distnoted agent
+root               876   0.0  0.0  4397192   2132   ??  Ss   Sat05PM   0:00.06 /System/Library/CoreServices/iconservicesagent runAsRoot
+root               875   0.0  0.0  4395616    728   ??  Ss   Sat05PM   0:00.06 /System/Library/Frameworks/CoreMediaIO.framework/Versions/A/XPCServices/com.apple.cmio.registerassistantservice.xpc/Contents/MacOS/com.apple.cmio.registerassistantservice
+root               874   0.0  0.0  4428700   3148   ??  S    Sat05PM   0:00.26 /usr/sbin/systemstats --logger-helper /private/var/db/systemstats
+root               870   0.0  0.0  4328708   3036   ??  Ss   Sat05PM   0:00.02 /usr/libexec/bootinstalld
+root               869   0.0  0.0  4395500   2144   ??  Ss   Sat05PM   0:11.40 /usr/libexec/sysmond
+_netbios           868   0.0  0.0  4397552   3720   ??  SNs  Sat05PM   0:09.04 /usr/sbin/netbiosd
+_appleevents       866   0.0  0.1  4427468   4796   ??  Ss   Sat05PM   0:00.77 /System/Library/CoreServices/appleeventsd --server
+root               863   0.0  0.0  4355932   1424   ??  Ss   Sat05PM   0:00.03 /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/CVMServer
+root               862   0.0  0.0  4396272   1800   ??  Ss   Sat05PM   0:00.04 /usr/libexec/colorsyncd
+root               861   0.0  0.0  4395112   3508   ??  Ss   Sat05PM   0:00.19 /usr/libexec/colorsync.displayservices
+_captiveagent      859   0.0  0.0  4397768   2240   ??  Ss   Sat05PM   0:00.12 /usr/libexec/captiveagent
+root               858   0.0  0.1  4428492   4892   ??  Ss   Sat05PM   0:00.25 /usr/libexec/secinitd
+root               844   0.0  0.1  4397852   5944   ??  Ss   Sat05PM   0:01.09 /usr/libexec/diskmanagementd
+root               843   0.0  0.7  5258872  59296   ??  Ss   Sat05PM   2:57.69 /System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+root               841   0.0  0.1  4397896   4296   ??  Ss   Sat05PM   0:00.83 /System/Library/Frameworks/Security.framework/Versions/A/XPCServices/com.apple.CodeSigningHelper.xpc/Contents/MacOS/com.apple.CodeSigningHelper
+root               839   0.0  0.1  4425784   8168   ??  Ss   Sat05PM   0:01.16 /System/Library/CoreServices/backupd.bundle/Contents/Resources/backupd-helper -launchd
+root               831   0.0  0.1  4432076   7560   ??  Ss   Sat05PM   0:03.28 /usr/libexec/runningboardd
+root               830   0.0  0.0  4303884   2104   ??  Ss   Sat05PM   0:00.01 /usr/libexec/thermald
+_driverkit         828   0.0  0.0  4810580    952   ??  Ss   Sat05PM   0:00.01 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserHIDEventDriver 0x100000497
+_driverkit         827   0.0  0.0  4798292    948   ??  Ss   Sat05PM   0:00.00 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserHIDEventDriver 0x10000048d
+_driverkit         826   0.0  0.0  4809560   1316   ??  Ss   Sat05PM   0:14.86 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserHIDEventDriver 0x10000048a
+_driverkit         824   0.0  0.0  4799296   1224   ??  Ss   Sat05PM   0:27.96 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserUSBHostHIDDevice1 0x10000044d
+_driverkit         823   0.0  0.0  4808512   1392   ??  Ss   Sat05PM   0:00.36 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserUSBHostHIDDevice0 0x10000044b
+_driverkit         822   0.0  0.0  4799296    940   ??  Ss   Sat05PM   0:00.02 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserUSBHostHIDDevice0 0x100000449
+_driverkit         821   0.0  0.0  4799296    944   ??  Ss   Sat05PM   0:00.03 /System/Library/DriverExtensions/AppleUserHIDDrivers.dext/AppleUserHIDDrivers com.apple.driverkit.AppleUserUSBHostHIDDevice0 0x100000447
+root               815   0.0  0.1  4449100  11988   ??  SN   Sat05PM   0:23.37 /Library/Scripts/42/crc/osqueryd  
+_coreaudiod        814   0.0  0.0  4316376   2540   ??  Ss   Sat05PM   0:00.01 /System/Library/Frameworks/AudioToolbox.framework/XPCServices/com.apple.audio.SandboxHelper.xpc/Contents/MacOS/com.apple.audio.SandboxHelper
+root               813   0.0  0.0  4345148   2488   ??  Ss   Sat05PM   0:00.03 /System/Library/Frameworks/AudioToolbox.framework/AudioComponentRegistrar -daemon
+root               811   0.0  0.1  4431820   9848   ??  Ss   Sat05PM   0:03.16 /usr/libexec/lsd runAsRoot
+root               807   0.0  0.0  4457172   3556   ??  Ss   Sat05PM   0:16.73 /Library/Apple/System/Library/CoreServices/XProtect.app/Contents/XPCServices/XProtectPluginService.xpc/Contents/MacOS/XProtectPluginService
+_softwareupdate    805   0.0  0.0  4395668   1480   ??  Ss   Sat05PM   0:00.64 /System/Library/PrivateFrameworks/BridgeOSSoftwareUpdate.framework/Support/bosUpdateProxy
+root               804   0.0  0.1  4448420   4916   ??  Ss   Sat05PM   0:09.83 /System/Library/CoreServices/ReportCrash daemon
+_locationd         802   0.0  0.0  4429740   2964   ??  S    Sat05PM   0:00.40 /usr/libexec/trustd --agent
+_locationd         801   0.0  0.0  4346356   1004   ??  S    Sat05PM   0:00.06 /usr/sbin/cfprefsd agent
+_locationd         800   0.0  0.0  4428568   3016   ??  S    Sat05PM   0:00.13 /usr/libexec/secinitd
+_cmiodalassistants   799   0.0  0.1  4456952   5512   ??  Ss   Sat05PM   0:36.84 /System/Library/Frameworks/CoreMediaIO.framework/Resources/VDC.plugin/Contents/Resources/VDCAssistant
+root               798   0.0  0.0  4313392    944   ??  Ss   Sat05PM   0:00.01 /usr/libexec/firmwarecheckers/ethcheck/ethcheck --integrity-check-daemon
+root               797   0.0  0.0  4418456   2952   ??  Ss   Sat05PM   0:00.16 /usr/libexec/usbd
+root               796   0.0  0.2  4439176  17708   ??  Ss   Sat05PM   9:53.77 /usr/libexec/airportd
+root               795   0.0  0.0  4395068   2408   ??  Ss   Sat05PM   0:00.05 /usr/libexec/apfsd
+root               794   0.0  0.0  4336712   2068   ??  Ss   Sat05PM   0:00.01 /System/Library/CryptoTokenKit/com.apple.ifdreader.slotd/Contents/MacOS/com.apple.ifdreader
+root               793   0.0  0.0  4334644   1004   ??  Ss   Sat05PM   0:00.01 /usr/libexec/multiversed
+_nsurlsessiond     792   0.0  0.1  4443580   7708   ??  Ss   Sat05PM   0:06.75 /usr/libexec/nsurlsessiond --privileged
+_locationd         791   0.0  0.1  4438080   6204   ??  S    Sat05PM   0:03.48 /System/Library/PrivateFrameworks/GeoServices.framework/Versions/A/XPCServices/com.apple.geod.xpc/Contents/MacOS/com.apple.geod
+root               790   0.0  0.0  4427176   3328   ??  Ss   Sat05PM   0:00.30 /System/Library/PrivateFrameworks/WirelessDiagnostics.framework/Support/awdd
+_coreaudiod        788   0.0  0.0  4425872   2240   ??  Ss   Sat05PM   0:00.11 /System/Library/Frameworks/CoreAudio.framework/Versions/A/XPCServices/com.apple.audio.DriverHelper.xpc/Contents/MacOS/com.apple.audio.DriverHelper
+_networkd          787   0.0  0.1  4439448   9932   ??  Ss   Sat05PM   0:55.10 /usr/libexec/symptomsd
+root               773   0.0  0.1  4430172   6724   ??  Ss   Sat05PM   0:00.18 /usr/libexec/searchpartyd
+root               764   0.0  0.2  4444884  15748   ??  Ss   Sat05PM   0:14.33 /usr/libexec/mobileassetd
+_coreaudiod        741   0.0  0.1  4443664  12116   ??  Ss   Sat05PM   0:43.18 /usr/sbin/coreaudiod
+root               740   0.0  0.1  4427352   4304   ??  Ss   Sat05PM   0:00.25 /usr/libexec/nehelper
+root               737   0.0  0.1  4432636  11204   ??  Ss   Sat05PM   0:20.56 /System/Library/PrivateFrameworks/CoreDuetContext.framework/Resources/contextstored
+root               736   0.0  0.0  4426248   3660   ??  Ss   Sat05PM   0:08.86 /usr/sbin/mDNSResponderHelper
+root               718   0.0  0.1  4441552  11124   ??  Ss   Sat05PM   4:54.71 /usr/libexec/trustd
+_analyticsd        642   0.0  0.1  4432716  10488   ??  Ss   Sat05PM   0:02.76 /System/Library/PrivateFrameworks/CoreAnalytics.framework/Support/analyticsd
+_mdnsresponder     493   0.0  0.1  4428668   6972   ??  Ss   Sat05PM   1:02.37 /usr/sbin/mDNSResponder
+root               492   0.0  0.1  4429972   6392   ??  Ss   Sat05PM   0:06.87 /System/Library/Frameworks/Security.framework/Versions/A/XPCServices/authd.xpc/Contents/MacOS/authd
+root               469   0.0  0.1  4420500   5952   ??  Ss   Sat05PM   0:03.12 /System/Library/CoreServices/coreservicesd
+root               461   0.0  0.1  4434688  11640   ??  Ss   Sat05PM   0:12.68 /System/Library/PrivateFrameworks/TCC.framework/Resources/tccd system
+root               460   0.0  0.0  4332112   1016   ??  Ss   Sat05PM   0:00.07 aslmanager
+root               458   0.0  0.2  4512972  13356   ??  Ss   Sat05PM   1:07.40 /usr/libexec/syspolicyd
+root               456   0.0  0.3  4408780  27436   ??  Ss   Sat05PM   0:44.30 /usr/sbin/cfprefsd daemon
+root               455   0.0  0.1  4427632   4460   ??  Ss   Sat05PM   0:01.01 /usr/libexec/taskgated
+root               454   0.0  0.1  4451036   8920   ??  Ss   Sat05PM   0:01.02 /usr/libexec/amfid
+_distnote          452   0.0  0.0  4396692   2444   ??  Ss   Sat05PM   0:03.85 /usr/sbin/distnoted daemon
+root               449   0.0  0.0  4396224   1900   ??  Ss   Sat05PM   0:10.58 /usr/sbin/notifyd
+root               448   0.0  0.1  4431324  10264   ??  Ss   Sat05PM   0:36.70 /usr/libexec/AirPlayXPCHelper
+root               447   0.0  0.1  4428876   7948   ??  Ss   Sat05PM   0:24.74 /usr/libexec/corebrightnessd --launchd
+root               446   0.0  0.0  4418724   2928   ??  Ss   Sat05PM   0:05.95 /usr/libexec/sandboxd
+_hidd              445   0.0  0.1  4398772   6700   ??  Ss   Sat05PM   0:37.52 /usr/libexec/hidd
+root               444   0.0  0.1  4429564   7956   ??  Ss   Sat05PM   0:16.69 /usr/sbin/bluetoothd
+root               442   0.0  0.0  4329708   1244   ??  Ss   Sat05PM   0:00.02 /usr/sbin/KernelEventAgent
+root               441   0.0  0.0  4428292   3296   ??  Ss   Sat05PM   0:00.97 /System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/Support/revisiond
+root               440   0.0  0.0  4395192   4060   ??  Ss   Sat05PM   0:00.23 /System/Library/CoreServices/logind
+root               436   0.0  0.1  4428340   6848   ??  Ss   Sat05PM   0:00.20 /System/Library/PrivateFrameworks/Heimdal.framework/Helpers/kdc
+root               435   0.0  0.1  4431896  10588   ??  Ss   Sat05PM   0:14.11 /usr/libexec/dasd
+_displaypolicyd    434   0.0  0.0  4398400   3504   ??  Ss   Sat05PM   0:00.51 /usr/libexec/displaypolicyd -k 1
+root               433   0.0  0.0  4338284   1732   ??  Ss   Sat05PM   0:00.03 autofsd
+_locationd         430   0.0  0.2  4442620  17188   ??  Ss   Sat05PM   5:11.00 /usr/libexec/locationd
+root               428   0.0  0.0  4324316    924   ??  Ss   Sat05PM   0:00.01 auditd -l
+root               427   0.0  0.1  4429132   7384   ??  Ss   Sat05PM   0:07.65 /usr/sbin/securityd -i
+root               425   0.0  0.1  4417140   5428   ??  SNs  Sat05PM   0:23.99 /Library/Scripts/42/crc/osqueryd --extensions_socket=/var/osquery/osquery.em --allow_unsafe
+root               424   0.0  0.1  5013044   9836   ??  Ss   Sat05PM   0:11.85 /Library/Scripts/42/crc/crc run -c /Library/Scripts/42/crc/config.yml
+_timed             423   0.0  0.0  4425588   4116   ??  Ss   Sat05PM   0:01.58 /usr/libexec/timed
+root               422   0.0  0.1  4428144  10168   ??  Ss   Sat05PM   0:30.33 /System/Library/CoreServices/launchservicesd
+root               421   0.0  0.0  5018972   1204   ??  Ss   Sat05PM   0:00.26 /Library/PrivilegedHelperTools/com.docker.vmnetd
+root               419   0.0  0.2  4461312  16344   ??  Ss   Sat05PM   0:30.20 /usr/libexec/opendirectoryd
+root               413   0.0  0.1  4433676  12060   ??  Ss   Sat05PM   0:03.76 /usr/libexec/coreduetd
+root               409   0.0  0.1  4425168   5644   ??  Ss   Sat05PM   0:04.99 /usr/libexec/diskarbitrationd
+_iconservices      408   0.0  0.0  4397080   2264   ??  Ss   Sat05PM   0:00.07 /System/Library/CoreServices/iconservicesd
+root               402   0.0  0.0  4396188   3580   ??  Ss   Sat05PM   0:11.79 /usr/libexec/watchdogd
+root               400   0.0  0.0  4369780   2200   ??  Ss   Sat05PM   1:07.18 /usr/libexec/snmpd -f
+root               397   0.0  0.0  4395444   3012   ??  Ss   Sat05PM   0:00.13 /usr/libexec/keybagd -t 15
+root               396   0.0  0.4  4488208  31828   ??  Ss   Sat05PM   0:44.40 /usr/libexec/logd
+root               392   0.0  0.1  4427188   6944   ??  Ss   Sat05PM   0:09.72 /System/Library/CoreServices/powerd.bundle/powerd
+root               391   0.0  0.0  4371468   1044   ??  Ss   Sat05PM   0:00.02 endpointsecurityd
+root               390   0.0  0.1  4431344   9052   ??  Ss   Sat05PM   0:18.97 /usr/libexec/configd
+root               389   0.0  0.1  4434860   8696   ??  Ss   Sat05PM   0:33.16 /usr/sbin/systemstats --daemon
+root               385   0.0  0.2  4429496  14352   ??  Ss   Sat05PM   0:01.46 /System/Library/PrivateFrameworks/MediaRemote.framework/Support/mediaremoted
+root               384   0.0  0.1  4451540   8656   ??  Ss   Sat05PM   1:08.68 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/Support/fseventsd
+root               383   0.0  0.1  4928384  11612   ??  Ss   Sat05PM   0:07.05 /usr/libexec/kextd
+root               382   0.0  0.0  4329188   2048   ??  Ss   Sat05PM   0:06.20 /System/Library/PrivateFrameworks/Uninstall.framework/Resources/uninstalld
+root               379   0.0  0.1  4428416  11780   ??  Ss   Sat05PM   0:12.99 /usr/libexec/UserEventAgent (System)
+root               378   0.0  0.0  4396204   1252   ??  Ss   Sat05PM   0:03.86 /usr/sbin/syslogd
+root             65219   0.0  0.0  4268652    828 s001  R+    3:13PM   0:00.00 ps aux
+root                 1   0.0  0.2  4401540  20208   ??  Ss   Sat05PM   8:26.55 /sbin/launchd
+omalovic         65076   0.0  0.0  4279896   1296 s001  S+    3:12PM   0:00.01 ./minishell
+omalovic         64283   0.0  0.4  6708400  37196   ??  S     3:11PM   0:00.14 /Applications/Firefox.app/Contents/MacOS/plugin-container.app/Contents/MacOS/plugin-container -isForBrowser -prefsHandle 0 -prefsLen 39362 -prefMapHandle 1 -prefMapSize 263771 -jsInitHandle 2 -jsInitLen 253512 -sbStartup -sbAppPath /Applications/Firefox.app -sbLevel 3 -parentBuildID 20250216192613 -ipcHandle 0 -initialChannelId {b4a33aec-9598-470b-b94d-35f7c6db50d7} -parentPid 36535 -crashReporter gecko-crash-server-pipe.36535 -greomni /Applications/Firefox.app/Contents/Resources/omni.ja -appomni /Applications/Firefox.app/Contents/Resources/browser/omni.ja -appDir /Applications/Firefox.app/Contents/Resources/browser -profile /Users/omalovic/Library/Application Support/Firefox/Profiles/tlevft1h.default-release org.mozilla.machname.1616254263 16 tab
+omalovic         63337   0.0  0.3  8620060  24164   ??  S     3:09PM   0:00.46 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools-srv 36842 {58B7EBB9-B4FC-C649-8421-2FB6601D80F2}
+omalovic         56506   0.0  0.0  4377292   3296   ??  S     2:48PM   0:00.05 /Library/Apple/System/Library/CoreServices/XProtect.app/Contents/MacOS/XProtect
+omalovic         56339   0.0  0.0  4826956   2048   ??  Ss    2:47PM   0:00.04 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+root             50611   0.0  0.0  4830304   1952   ??  Ss    2:36PM   0:00.05 /System/Library/Frameworks/Metal.framework/Versions/A/XPCServices/MTLCompilerService.xpc/Contents/MacOS/MTLCompilerService
+omalovic         46743   0.0  0.2  8642920  14244   ??  S     2:29PM   0:02.95 /Users/omalovic/.vscode/extensions/ms-vscode.cpptools-1.23.6-darwin-x64/bin/cpptools-srv 36842 {1BB9078F-E65D-F54C-910A-890E8B640F36}
+omalovic         45441   0.0  0.0  4282968    756 s003  S+    2:25PM   0:00.00 ./minishell
 what's up?
 helo bro

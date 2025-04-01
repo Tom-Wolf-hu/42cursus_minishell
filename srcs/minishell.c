@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 14:29:05 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:16:46 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,7 @@ void	execute_command_single(char *cmd, int *status)
 	int wstatus;
 	struct s_saved_std std;
 	char *clean_cmd;
+	char *line;
 
 	// printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
@@ -313,10 +314,13 @@ void	execute_command_single(char *cmd, int *status)
 		std.saved_stdout = dup(STDOUT_FILENO);
 		std.saved_stdin = dup(STDIN_FILENO);
 		handle_redirection(cmd, status);
-		char buffer[1024];
-		ssize_t bytes_read;
-		while ((bytes_read = read(STDIN_FILENO, buffer, sizeof(buffer))) > 0)
-			write(STDOUT_FILENO, buffer, bytes_read);
+		line = get_next_line(STDIN_FILENO);
+		while (line)
+		{
+			write(STDOUT_FILENO, line, ft_strlen(line));
+			free(line);
+			line = get_next_line(STDIN_FILENO);
+		}
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
 		close(std.saved_stdin);
@@ -326,9 +330,7 @@ void	execute_command_single(char *cmd, int *status)
 	}
 	cmd_arr = ft_split(clean_cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
-	{
 		exit(EXIT_FAILURE);
-	}
 	path = get_command_path(cmd_arr[0]);
 	if (!path)
 	{
@@ -395,8 +397,6 @@ int main(void)
 	setup_signal_handlers();
 	while (1)
 	{
-		// check_tty();
-		// write(2, "passed1\n", 8);
 		if (isatty(STDIN_FILENO))
 			line = readline("> ");
 		else
@@ -439,5 +439,7 @@ int main(void)
 # Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
 sleep 5
 
+ps aux | grep smth
+quotes
 
 */
