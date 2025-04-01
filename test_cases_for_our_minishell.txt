@@ -13,7 +13,7 @@ Commands with redirections
 <file   >file3
 
 Commands with pipe and redirections
-ps aux | grep zsh							----------
+ps aux | grep zsh							
 cat < file3 | grep day
 ls | sort > file4
 grep day < file3 | sort >> file4
@@ -36,3 +36,8 @@ cat < file3 | grep "day"
 Commands with single and doublequotes
 echo "Hello '$USER'"
 echo 'Hello "$USER"'
+
+Commands with heredoc
+<<hello
+cat <<hello
+cat <<hello | wc -l

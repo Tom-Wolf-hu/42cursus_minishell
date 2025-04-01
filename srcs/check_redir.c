@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 16:44:12 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:47:26 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 	while (1)
 	{
 		// write(STDOUT_FILENO, "> ", 2);
-		line = readline("> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
-		if (!line || strncmp(line, delimiter, strlen(delimiter)) == 0)
+		line = readline("heredoc> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
+		if (!line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
 		{
 			free(line);
 			break ;
@@ -79,7 +79,7 @@ void	handle_redirection(char *line, int *status)
 	char	*filename;
 	struct s_saved_std std;
 
-	printf("[handle_redirection] starting....\n");
+	// printf("[handle_redirection] starting....\n");
 	// std.saved_stdin = dup(STDIN_FILENO);
 	// std.saved_stdout = dup(STDOUT_FILENO);
 	while (line[i])
