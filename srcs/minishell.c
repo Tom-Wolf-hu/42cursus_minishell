@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 15:44:43 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/01 15:50:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,11 +217,18 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		return;
 	while (commands[num_commands])
 		num_commands++;
-	prev_fd = 0;
+	prev_fd = -1;
 	i = 0;
 	while (i < num_commands)
 	{
-		pipe(pipefd);
+		// pipe(pipefd);
+		if (i < num_commands - 1 && pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+		// if (prev_fd != -1)//////////
+		// 	close(prev_fd);
 		pid = fork();
 		if (pid == -1)
 			return (perror("fork"), exit(EXIT_FAILURE));
@@ -236,6 +243,8 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
+			// if (prev_fd != -1)///////////
+				// close(prev_fd);
 			if (is_builtin(commands[i]))
 			{
 				printf("execute builtin wa here\n");
@@ -271,20 +280,25 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		else
 		{
-			close(pipefd[1]);
-			if (prev_fd != 0)
-				close(prev_fd);
-			prev_fd = pipefd[0];
-			if (i == num_commands - 1)
-				waitpid(pid, status, 0);
-			else
-				waitpid(pid, NULL, 0);
-			if (WIFEXITED(*status))
-				*status = WEXITSTATUS(*status);
+			// close(pipefd[1]);
+			// if (prev_fd != -1)
+			// 	close(prev_fd);
+			// prev_fd = pipefd[0];
+			// if (i == num_commands - 1)
+			// 	waitpid(pid, status, 0);
+			// else
+			// 	waitpid(pid, NULL, 0);
+			// if (WIFEXITED(*status))
+			// 	*status = WEXITSTATUS(*status);
+			if (prev_fd != -1)
+                close(prev_fd); // Закрываем только если он уже был открыт
+            close(pipefd[1]); // Закрываем запись в пайп
+            prev_fd = pipefd[0];
 		}
 		// free_arr(cmd_args);
 		i++;
 	}
+	waitpid(pid, status, 0);
 	if (prev_fd != -1)
 		close(prev_fd);
 	free_arr(commands);
