@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 14:16:29 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/01 20:54:37 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	mywrite(char *line, int fd)
 
 	i = 0;
 	len = ft_strlen(line);
-	if (line[i] == 34)
-		i++;
-	if (line[len - 1] == 34)
-		len--;
+	// if (line[i] == 34)
+	// 	i++;
+	// if (line[len - 1] == 34)
+	// 	len--;
 	while (i < len)
 	{
 		write(fd, &line[i], 1);

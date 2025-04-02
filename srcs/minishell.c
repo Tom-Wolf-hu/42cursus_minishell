@@ -6,10 +6,9 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 11:43:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/02 11:58:23 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 
@@ -36,10 +35,11 @@ void	sig_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		// rl_done = 1;
 	}
 	if (sig == SIGQUIT)
 	{
-		rl_replace_line("", 1);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 }
@@ -216,7 +216,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	int prev_fd;
 	struct s_saved_std std;
 	char *clean_cmd;
-
+	int wstatus;
 	// printf("[execute_pipe_commands] starting\n");
 	commands = ft_split(cmd, '|');
 	if (!commands)
@@ -227,7 +227,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	i = 0;
 	while (i < num_commands)
 	{
-		// pipe(pipefd);
 		if (i < num_commands - 1 && pipe(pipefd) == -1)
 		{
 			perror("pipe");
@@ -240,9 +239,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			return (perror("fork"), exit(EXIT_FAILURE));
 		if (pid == 0)
 		{
-			std.saved_stdin = dup(STDIN_FILENO);
-			std.saved_stdout = dup(STDOUT_FILENO);
-			handle_redirection(commands[i], status);
 			if (prev_fd != 0)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -256,16 +252,15 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				// close(prev_fd);
 			if (is_builtin(commands[i]))
 			{
-				printf("execute builtin wa here\n");
 				execute_builtin(commands[i], 1, status);
 				exit(*status);
 			}
 			clean_cmd = remove_redirects(commands[i]);
 			cmd_args = ft_split(clean_cmd, ' ');
 			// printf("clean_cmd: %s\n", clean_cmd);
-			// std.saved_stdin = dup(STDIN_FILENO);
-			// std.saved_stdout = dup(STDOUT_FILENO);
-			// handle_redirection(commands[i], status);
+			std.saved_stdin = dup(STDIN_FILENO);
+			std.saved_stdout = dup(STDOUT_FILENO);
+			handle_redirection(commands[i], status);
 			int j = 0;
 			while (cmd_args[j])
 			{
@@ -289,25 +284,28 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		else
 		{
-			// close(pipefd[1]);
-			// if (prev_fd != -1)
-			// 	close(prev_fd);
-			// prev_fd = pipefd[0];
-			// if (i == num_commands - 1)
-			// 	waitpid(pid, status, 0);
-			// else
-			// 	waitpid(pid, NULL, 0);
-			// if (WIFEXITED(*status))
-			// 	*status = WEXITSTATUS(*status);
+			waitpid(pid, &wstatus, 0);
+			if (WIFEXITED(wstatus))
+			{
+				*status = WEXITSTATUS(wstatus);
+				if (*status == 127)
+				{
+					printf("Error: Command not found\n");
+					break;
+				}
+			}
+			else if (WIFSIGNALED(wstatus))
+			{
+				*status = 128 + WTERMSIG(wstatus);
+			}
 			if (prev_fd != -1)
                 close(prev_fd); // Закрываем только если он уже был открыт
             close(pipefd[1]); // Закрываем запись в пайп
             prev_fd = pipefd[0];
 		}
-		// free_arr(cmd_args);
 		i++;
 	}
-	waitpid(pid, status, 0);
+	// waitpid(pid, status, 0);
 	if (prev_fd != -1)
 		close(prev_fd);
 	free_arr(commands);
@@ -328,7 +326,6 @@ void	execute_command_single(char *cmd, int *status)
 	{
 		execute_builtin(cmd, 1, status);
 		return ;
-		// exit(EXIT_SUCCESS);
 	}
 	clean_cmd = remove_redirects(cmd);
 	if (clean_cmd && is_empty(clean_cmd))
@@ -376,14 +373,13 @@ void	execute_command_single(char *cmd, int *status)
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
 	handle_redirection(cmd, status);
-	// if (*status == 1)
-	// {
-	// 	dup2(std.saved_stdin, STDIN_FILENO);
-	// 	dup2(std.saved_stdout, STDOUT_FILENO);
-	// 	close(std.saved_stdin);
-	// 	close(std.saved_stdout);
-	// 	return ;
-	// }
+	if (*status == 1)
+	{
+		dup2(std.saved_stdin, STDIN_FILENO);
+		dup2(std.saved_stdout, STDOUT_FILENO);
+		close(std.saved_stdin);
+		close(std.saved_stdout);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
@@ -431,7 +427,7 @@ void	run_ex(char **line, int *status)
 	execute_pipe_commands(*line, 1, status);
 }
 
-int main(void)
+int	main(void)
 {
 	char			*line;
 	static int		status = 0;
@@ -465,8 +461,8 @@ int main(void)
 	rl_clear_history();
 	free(line);
 }
-// status after ctrl + c
 
+// status after ctrl + c
 // не рабатает:
 // cd			+
 // export		+
@@ -482,7 +478,6 @@ int main(void)
 # Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
 sleep 5
 
-ps aux | grep smth
-quotes
-
+ctrl + \ after some stuff should do nothing
+если писать cat и затем нажимать ctrl+c появляется лишний > 
 */
