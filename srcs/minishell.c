@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 11:16:42 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/02 12:00:44 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,7 +414,6 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	// write(1, "passed1\n", 8);
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	// write(1, "passed2\n", 8);

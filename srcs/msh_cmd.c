@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/31 17:09:12 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/02 11:42:24 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	*status = 1;
 	if (!cmd)
 		return ;
+	// printf("[execute_builtin] cmd: %s\n", cmd);
 	clean_cmd = remove_redirects(cmd);
-	// printf("clean_cmd: %s\n", clean_cmd);
+	// printf("[execute_builtin] clean_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;
 	// printf("clean_cmd: %s; len: %d\n", clean_cmd, ft_strlen(clean_cmd));
