@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/03/27 16:07:06 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/02 14:58:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
 
 //echo.c
+void	wr_stillquotes(char *line, int fd, int *i, char quotes);
 void	mywrite(char *line, int fd);
 void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);

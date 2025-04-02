@@ -3,19 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 20:54:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/02 15:09:26 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+void	wr_stillquotes(char *line, int fd, int *i, char quotes)
+{
+	int	len;
+
+	len = ft_strlen(line);
+	(*i)++;
+	while (*i < len)
+	{
+		if (line[*i] == quotes)
+			break ;
+		write(fd, &line[*i], 1);
+		(*i)++;
+	}
+	if (line[*i] == quotes)
+		(*i)++;
+}
+
 void	mywrite(char *line, int fd)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 
 	i = 0;
 	len = ft_strlen(line);
@@ -25,8 +42,13 @@ void	mywrite(char *line, int fd)
 	// 	len--;
 	while (i < len)
 	{
-		write(fd, &line[i], 1);
-		i++;
+		if (line[i] == '\'' || line[i] == '\"')
+			wr_stillquotes(line, fd, &i, line[i]);
+		else
+		{
+			write(fd, &line[i], 1);
+			i++;
+		}
 	}
 }
 

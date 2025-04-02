@@ -41,3 +41,6 @@ Commands with heredoc
 <<hello
 cat <<hello
 cat <<hello | wc -l
+
+Commands with heredoc pipe and quotes
+<<finish | awk '{print $2}' | tr '\n' ' '
