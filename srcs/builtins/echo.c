@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/02 15:09:26 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/02 19:26:31 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	wr_stillquotes(char *line, int fd, int *i, char quotes)
 	int	len;
 
 	len = ft_strlen(line);
+	printf("Founded quotes: %c\tlen: %i\n", quotes, len);
 	(*i)++;
 	while (*i < len)
 	{

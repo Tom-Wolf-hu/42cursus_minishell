@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 14:58:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/02 19:01:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,9 @@ int		handle_export(char *line, int fd);
 int		my_unsetenv(char *name);
 int		handle_unset(char *line, int fd);
 
+//msh_quotes.c
+void	write_stderr(char *str);
+int		check_quotes(char *line);
 
 /*
 The following file includes functions for checking 

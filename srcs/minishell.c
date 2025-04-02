@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 12:41:26 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/02 19:02:36 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,12 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				if (ft_strchr(cmd_args[j], '\'') != NULL)
 				{
 					remove_chars(&cmd_args[j], '\'');
+					// break ;
+				}
+				if (ft_strchr(cmd_args[j], '\"') != NULL)
+				{
+					remove_chars(&cmd_args[j], '\"');
+					// break ;
 				}
 				j++;
 			}
@@ -421,6 +427,8 @@ void	run_ex(char **line, int *status)
 	if (is_empty(*line))
 		return ;
 	add_history(*line);
+	if (check_quotes(*line) == 1)
+		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
 	// write(1, "passed1\n", 8);
