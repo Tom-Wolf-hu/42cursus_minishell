@@ -31,7 +31,7 @@ echo $ User
 echo $USER
 echo $uSER
 echo $ USER
-| wc -l >>test_file1
+# | wc -l >>test_file1
 
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/31 19:47:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/01 18:47:26 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*get_filename(char *cmd)
 	int		i = 0, j = 0, start;
 	char	*filename;
 
+	filename = NULL;
 	while (cmd[i] && (cmd[i] == '>' || cmd[i] == '<'))
 		i++;
 	while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t' || cmd[i] == '\n'))
@@ -35,7 +36,7 @@ char	*get_filename(char *cmd)
 	while (start < i)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
-	printf("filename: %s\n", filename);
+	// printf("filename: %s\n", filename);
 	return filename;
 }
 
@@ -54,8 +55,8 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 	while (1)
 	{
 		// write(STDOUT_FILENO, "> ", 2);
-		line = readline("> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
-		if (!line || strncmp(line, delimiter, strlen(delimiter)) == 0)
+		line = readline("heredoc> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
+		if (!line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
 		{
 			free(line);
 			break ;
@@ -76,18 +77,21 @@ void	handle_redirection(char *line, int *status)
 	int		i = 0;
 	int		file_fd;
 	char	*filename;
+	struct s_saved_std std;
 
-	// printf("[handle_redirection] start\n");
+	// printf("[handle_redirection] starting....\n");
+	// std.saved_stdin = dup(STDIN_FILENO);
+	// std.saved_stdout = dup(STDOUT_FILENO);
 	while (line[i])
 	{
 		// printf("[handle_redirection] in cycle...\n");
 		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
+			printf("filename: %s\n", filename);
 			if (!filename)
 			{
 				printf("no name for file\n");
-				// fprintf(stderr, "Ошибка: отсутствует имя файла после редиректа\n");
 				*status = 1;
 				return ;
 			}
@@ -105,12 +109,10 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDOUT_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDOUT_FILENO);
+				close(file_fd);
 				i++;
 			}
 			else if (line[i] == '>') // truncate >
@@ -121,12 +123,10 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDOUT_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDOUT_FILENO);
+				close(file_fd);
 			}
 			else if (line[i] == '<') // input <
 			{
@@ -136,17 +136,22 @@ void	handle_redirection(char *line, int *status)
 				{
 					perror("open");
 					*status = 1;
+					break ;
 				}
-				else
-				{
-					dup2(file_fd, STDIN_FILENO);
-					close(file_fd);
-				}
+				dup2(file_fd, STDIN_FILENO);
+				close(file_fd);
 			}
 			free(filename);
 		}
 		i++;
 	}
+	// if (*status == 1)
+	// {
+	// 	dup2(std.saved_stdin, STDIN_FILENO);
+	// 	dup2(std.saved_stdout, STDOUT_FILENO);
+	// }
+	// close(std.saved_stdin);
+	// close(std.saved_stdout);
 }
 
 void	join_part(char **s1, char *s2)
@@ -214,9 +219,14 @@ char	*before_red(char *cmd, int *i)
 	j = 0;
 	while (cmd[*i] && cmd[*i] != '>' && cmd[*i] != '<')
 		(*i)++;
+	// printf("*i == %d\n", *i);
+	// printf("ch == %c\n", cmd[*i]);
 	if (start == *i)
 		return (NULL);
-	bef_red = (char *)malloc((*i - start + 1) * sizeof(char));
+	// if (start + 1 == *i || *i + 1 == start || start == *i)
+	// 	return NULL;
+	// printf("*i - start == %d\n", *i - start);
+	bef_red = malloc((*i - start + 1));
 	if (!bef_red)
 	{
 		perror("Failed to allocate memory for bef_red");
@@ -245,17 +255,17 @@ char	*remove_redirects(char *cmd)
 	{
 		// write(1, "passed2\n", 8);
 		temp = before_red(cmd, &i);
-		if (!temp)
-		{
-			printf("clean_cmd is null\n");
-			break ;
-		}
+		// if (!temp)
+		// {
+		// 	printf("clean_cmd is null\n");
+		// 	break ;
+		// }
 		// write(1, "passed3\n", 8);
 		join_part(&clean_cmd, temp);
 		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
-	// printf("clean_cmd in remove redirects: %s\n", clean_cmd);
+	// printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
 	return (clean_cmd);
 }
 
