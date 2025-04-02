@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/01 19:05:20 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/02 11:43:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,18 @@ void	ft_error(char *error, int exit_status)
 
 void	sig_handler(int sig)
 {
+	int		status;
+	pid_t	pid;
+
 	if (sig == SIGINT)
 	{
 		g_status = 130;
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
+		write(STDOUT_FILENO, "\n", 1);
+		pid = waitpid(-1, &status, WNOHANG);
+		if (pid == 0)
+			return ;
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	if (sig == SIGQUIT)
