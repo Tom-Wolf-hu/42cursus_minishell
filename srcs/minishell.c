@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 13:37:12 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 14:14:32 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,7 +424,9 @@ void	execute_command_single(char *cmd, int *status)
 
 void	run_ex(char **line, int *status)
 {
+	char **arr;
 	char *clean_cmd;
+	char *new_line;
 
 	if (is_empty(*line))
 		return ;
@@ -433,14 +435,24 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	clean_cmd = remove_quotes_first_word(*line, '\"');
-	clean_cmd = remove_quotes_first_word(clean_cmd, '\'');
-	// printf("clean_cmd: %s\n", clean_cmd);
+	
+	arr = ft_split(*line, ' ');
+	for (int i = 0; arr[i]; i++)
+	{
+		if (check_quotes(arr[i]) == 1)
+			return ;
+	}
+	clean_cmd = remove_quotes(arr[0]);
 	if (!clean_cmd)
-		return ;
-	if (!ft_strchr(clean_cmd, '|'))
-		return (execute_command_single(clean_cmd, status));
-	execute_pipe_commands(clean_cmd, 1, status);
+		return (free_arr(arr));
+	free(arr[0]);
+	arr[0] = clean_cmd;
+	new_line = ft_join(arr);
+	if (!new_line)
+		return (free_arr(arr), free(clean_cmd));
+	if (!ft_strchr(new_line, '|'))
+		return (execute_command_single(new_line, status));
+	execute_pipe_commands(new_line, 1, status);
 }
 
 int	main(void)

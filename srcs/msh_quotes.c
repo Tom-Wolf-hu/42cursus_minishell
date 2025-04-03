@@ -6,11 +6,42 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/03 13:27:57 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 14:13:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char *ft_join(char **arr)
+{
+	int i = 0;
+	char *result;
+	char *temp;
+
+	if (!*arr)
+		return (NULL);
+	result = strdup(arr[i]);
+	if (!result)
+		return (NULL);
+	while (arr[i + 1])
+	{
+		temp = ft_strjoin(result, " ");
+		if (!temp)
+			return (free(result), NULL);
+		free(result);
+		result = temp;
+		temp = ft_strjoin(result, arr[i + 1]);
+		if (!temp)
+		{
+			free(result);
+			return (NULL);
+		}
+		free(result);
+		result = temp;
+		i++;
+	}
+	return (result);
+}
 
 char *get_temp_remove_quotes(char *line, int *i, char quotes)
 {
@@ -76,41 +107,6 @@ char *remove_quotes(char *line)
     return result;
 }
 
-char *remove_quotes_first_word(char *str, char ch)
-{
-	int i;
-	int j;
-	char *result;
-
-	i = 0;
-	j = 0;
-	if (!str)
-		return (NULL);
-	if (str[i] == ch)
-	{
-		result = malloc(strlen(str) - 2 + 1);
-		if (!result)
-			return (NULL);
-		i++;
-		while (str[i] && str[i] != ch)
-		{
-			result[j] = str[i];
-			j++;
-			i++;
-		}
-		i++;
-		while (str[i])
-		{
-			result[j] = str[i];
-			j++;
-			i++;
-		}
-		result[j] = '\0';
-		return (result);
-	}
-	return (strdup(str));
-}
-
 void	write_stderr(char *str)
 {
 	int	strlen;
@@ -150,7 +146,7 @@ int	check_quotes(char *line)
 	}
 	if (end_q == 0)
 	{
-		write_stderr("Please close the quotes!");
+		write_stderr("The command not found");
 		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}

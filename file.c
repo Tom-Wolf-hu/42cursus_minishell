@@ -3,74 +3,84 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *wr_stillquotes(char *line, int *i, char quotes)
+char	*join_str(char const *s1, char const *s2, char *result)
 {
-    int len;
-    int start;
-    int end;
-	char *result;
+	unsigned int	index;
+	unsigned int	len_s;
 
-	len = strlen(line);
-	start = *i + 1;
-	end = start;
-    while (end < len)
+	index = 0;
+	len_s = 0;
+	while (s1[len_s] != '\0')
 	{
-        if (line[end] == '\\' && quotes == '\"' && end + 1 < len && (quotes == '\"' || quotes == '\''))
-            end += 2;
-        else if (line[end] == quotes)
-            break;
-		else
-            end++;
-    }
-    result = (char *)malloc((end - start + 1) * sizeof(char));
-    if (!result)
-		return NULL;
-    memcpy(result, line + start, end - start);
-    result[end - start] = '\0';
-    if (end < len && line[end] == quotes)
-		*i = end + 1;
-	else
-		*i = end;
-    return result;
+		result[len_s] = s1[len_s];
+		len_s++;
+	}
+	while (s2[index] != '\0')
+	{
+		result[len_s] = s2[index];
+		index++;
+		len_s++;
+	}
+	result[len_s] = '\0';
+	return (result);
 }
 
-char *remove_quotes(char *line)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    int i;
-	int len;
-    char *result;
-	int pos;
-	char *tmp;
+	char			*result;
+	unsigned int	len_s;
+	unsigned int	general_len;
 
-	i = 0;
-	len = strlen(line);
-	result = (char *)malloc(len + 1);
-    if (!result)
-		return NULL;
-    pos = 0;
-    while (i < len)
+	if (!s1 || !s2)
+		return (NULL);
+	general_len = 0;
+	len_s = 0;
+	while (s1[len_s] != '\0')
+		len_s++;
+	while (s2[general_len] != '\0')
+		general_len++;
+	general_len = len_s + general_len;
+	result = (char *)malloc(sizeof(char) * (general_len + 1));
+	if (!result)
+		return (NULL);
+	return (join_str(s1, s2, result));
+}
+
+char *ft_join(char **arr)
+{
+	int i = 0;
+	char *result;
+	char *temp;
+
+	if (!*arr)
+		return (NULL);
+	result = strdup(arr[i]);
+	if (!result)
+		return (NULL);
+	while (arr[i + 1])
 	{
-        if (line[i] == '\'' || line[i] == '\"')
+		temp = ft_strjoin(result, " ");
+		if (!temp)
+			return (free(result), NULL);
+		free(result);
+		result = temp;
+		temp = ft_strjoin(result, arr[i + 1]);
+		if (!temp)
 		{
-            tmp = wr_stillquotes(line, &i, line[i]);
-            if (tmp)
-			{
-                strcpy(result + pos, tmp);
-                pos += strlen(tmp);
-                free(tmp);
-            }
-        }
-		else
-            result[pos++] = line[i++];
-    }
-    result[pos] = '\0';
-    return result;
+			free(result);
+			return (NULL);
+		}
+		free(result);
+		result = temp;
+		i++;
+	}
+	return (result);
 }
 
 int main()
 {
-	char *str = "\"\"cat\"\" hello";
-	char *newstr = mywrite(str);
-	if (newstr)
-		printf("%s\n", newstr);
+	char *str[] = {"echo", "hello", "how", "are", "you?", NULL};
+	char *new_str = ft_join(str);
+	if (new_str)
+		printf("%s\n", new_str);
 }
