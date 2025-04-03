@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 16:10:27 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 13:29:15 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	handle_cd(char *line)
 	char	**arr;
 	char	*path;
 	int 	i;
+	char	*clean_path;
 
 	i = 0;
 	arr = ft_split(line, ' ');
@@ -41,9 +42,16 @@ int	handle_cd(char *line)
 		}
 	}
 	else
-		path = arr[1];
+	{
+		clean_path = remove_quotes(arr[1]);
+		if (!clean_path)
+			return (free_arr(arr), 1);
+		// path = arr[1];
+		path = clean_path;
+	}
 	if (chdir(path) != 0)
 		return (perror("minishell: cd"), 1);
 	free_arr(arr);
+	free(clean_path);
 	return (0);
 }

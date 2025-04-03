@@ -3,45 +3,74 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *remove_quotes_first_word(char *str, char ch)
+char *wr_stillquotes(char *line, int *i, char quotes)
 {
-	int i;
-	int j;
+    int len;
+    int start;
+    int end;
 	char *result;
 
-	i = 0;
-	j = 0;
-	if (!str)
-		return (NULL);
-	if (str[i] == ch)
+	len = strlen(line);
+	start = *i + 1;
+	end = start;
+    while (end < len)
 	{
-		result = malloc(strlen(str) - 2 + 1);
-		if (!result)
-			return (NULL);
-		i++;
-		while (str[i] && str[i] != ch)
+        if (line[end] == '\\' && quotes == '\"' && end + 1 < len && (quotes == '\"' || quotes == '\''))
+            end += 2;
+        else if (line[end] == quotes)
+            break;
+		else
+            end++;
+    }
+    result = (char *)malloc((end - start + 1) * sizeof(char));
+    if (!result)
+		return NULL;
+    memcpy(result, line + start, end - start);
+    result[end - start] = '\0';
+    if (end < len && line[end] == quotes)
+		*i = end + 1;
+	else
+		*i = end;
+    return result;
+}
+
+char *remove_quotes(char *line)
+{
+    int i;
+	int len;
+    char *result;
+	int pos;
+	char *tmp;
+
+	i = 0;
+	len = strlen(line);
+	result = (char *)malloc(len + 1);
+    if (!result)
+		return NULL;
+    pos = 0;
+    while (i < len)
+	{
+        if (line[i] == '\'' || line[i] == '\"')
 		{
-			result[j] = str[i];
-			j++;
-			i++;
-		}
-		i++;
-		while (str[i])
-		{
-			result[j] = str[i];
-			j++;
-			i++;
-		}
-		result[j] = '\0';
-		return (result);
-	}
-	return (strdup(str));
+            tmp = wr_stillquotes(line, &i, line[i]);
+            if (tmp)
+			{
+                strcpy(result + pos, tmp);
+                pos += strlen(tmp);
+                free(tmp);
+            }
+        }
+		else
+            result[pos++] = line[i++];
+    }
+    result[pos] = '\0';
+    return result;
 }
 
 int main()
 {
-	char *str = "'cat' hello";
-	char *newstr = remove_quotes_first_word(str, '\'');
+	char *str = "\"\"cat\"\" hello";
+	char *newstr = mywrite(str);
 	if (newstr)
-		printf("result: %s\n", newstr);
+		printf("%s\n", newstr);
 }

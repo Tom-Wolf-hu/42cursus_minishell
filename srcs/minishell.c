@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 12:48:43 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 13:37:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,9 +239,9 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			return (perror("fork"), exit(EXIT_FAILURE));
 		if (pid == 0)
 		{
-			std.saved_stdin = dup(STDIN_FILENO);
-			std.saved_stdout = dup(STDOUT_FILENO);
-			handle_redirection(commands[i], status);
+			// std.saved_stdin = dup(STDIN_FILENO);
+			// std.saved_stdout = dup(STDOUT_FILENO);
+			// handle_redirection(commands[i], status);
 			if (prev_fd != 0)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -261,9 +261,9 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			clean_cmd = remove_redirects(commands[i]);
 			cmd_args = ft_split(clean_cmd, ' ');
 			// printf("clean_cmd: %s\n", clean_cmd);
-			// std.saved_stdin = dup(STDIN_FILENO);
-			// std.saved_stdout = dup(STDOUT_FILENO);
-			// handle_redirection(commands[i], status);
+			std.saved_stdin = dup(STDIN_FILENO);
+			std.saved_stdout = dup(STDOUT_FILENO);
+			handle_redirection(commands[i], status);
 			int j = 0;
 			while (cmd_args[j])
 			{
@@ -435,6 +435,7 @@ void	run_ex(char **line, int *status)
 	bridge_var(line);
 	clean_cmd = remove_quotes_first_word(*line, '\"');
 	clean_cmd = remove_quotes_first_word(clean_cmd, '\'');
+	// printf("clean_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;
 	if (!ft_strchr(clean_cmd, '|'))
@@ -462,9 +463,14 @@ int	main(void)
 			status = g_status;
 			g_status = 0;
 		}
-		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		// if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		// {
+		// 	handle_exit(line, &status);
+		// 	break ;
+		// }
+		if (!line)
 		{
-			handle_exit(line, &status);
+			// handle_exit(line, &status);
 			break ;
 		}
 		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
