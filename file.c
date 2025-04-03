@@ -3,35 +3,43 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *remove_quotes(char *str)
+void	wr_stillquotes(char *line, int fd, int *i, char quotes)
 {
-	int i = 0;
-	char *result;
-	int quote_closed = 0;
-	int in_quote = 0;
+	int	len;
 
-	while (str[i])
+	len = strlen(line);
+	(*i)++;
+	while (*i < len)
 	{
-		if (str[i] == '\"' && !in_quote)
+		if (line[*i] == quotes)
+			break ;
+		write(fd, &line[*i], 1);
+		(*i)++;
+	}
+	if (line[*i] == quotes)
+		(*i)++;
+}
+
+void	mywrite(char *line, int fd)
+{
+	int		i;
+	int		len;
+
+	i = 0;
+	len = strlen(line);
+	while (i < len)
+	{
+		if (line[i] == '\'' || line[i] == '\"')
+			wr_stillquotes(line, fd, &i, line[i]);
+		else
 		{
+			write(fd, &line[i], 1);
 			i++;
-			in_quote = 1;
-			continue;
 		}
-		if (str[i] == '\"' && in_quote)
-		{
-			i++;
-			in_quote = 0;
-			continue;
-		}
-		write(1, &str[i], 1);
-		i++;
 	}
 }
 
 int main()
 {
-    char *str = "echo \"hello\"";
-	remove_quotes(str);
-	// printf("%s\n", remove_quotes(str));
+	mywrite("sex on the beach \"'\"hello\"'\"\n", 1);
 }

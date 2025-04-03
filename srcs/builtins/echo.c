@@ -6,117 +6,105 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/02 12:51:30 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/02 19:26:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char *remove_quotes(char *str)
+void	wr_stillquotes(char *line, int fd, int *i, char quotes)
 {
-    int i = 0, j = 0;
-    int len = strlen(str);
-    char *new_str = malloc(len + 1);
+	int	len;
 
-    if (!new_str)
-        return NULL;
-
-    int inside_quotes = 0;
-
-    while (str[i])
-    {
-        // Если мы находим кавычки, меняем состояние
-        if ((str[i] == '"' || str[i] == '\'') && !inside_quotes)
-        {
-            inside_quotes = 1;
-            i++;
-            continue;
-        }
-        if ((str[i] == '"' || str[i] == '\'') && inside_quotes)
-        {
-            inside_quotes = 0;
-            i++;
-            continue;
-        }
-
-        // Если мы не внутри кавычек, копируем символ в новый массив
-        if (!inside_quotes)
-            new_str[j++] = str[i];
-        i++;
-    }
-
-    new_str[j] = '\0';
-    return new_str;
+	len = ft_strlen(line);
+	(*i)++;
+	while (*i < len)
+	{
+		if (line[*i] == quotes)
+			break ;
+		write(fd, &line[*i], 1);
+		(*i)++;
+	}
+	if (line[*i] == quotes)
+		(*i)++;
 }
 
-void mywrite(char *line, int fd)
+void	mywrite(char *line, int fd)
 {
-    int i = 0;
-    int len = strlen(line);
-    
-    while (i < len)
-    {
-        write(fd, &line[i], 1);
-        i++;
-    }
+	int		i;
+	int		len;
+
+	i = 0;
+	len = ft_strlen(line);
+	while (i < len)
+	{
+		if (line[i] == '\'' || line[i] == '\"')
+			wr_stillquotes(line, fd, &i, line[i]);
+		else
+		{
+			write(fd, &line[i], 1);
+			i++;
+		}
+	}
 }
 
-int handle_echo(char *line, int fd)
+void	show_input(char **arr, int fd, int flag)
 {
-    char **arr;
-    int i = 0;
+	int	i;
+	int len;
 
-    arr = ft_split(line, ' ');
-    if (!arr)
-        return (free(line), exit(1), 1);
+	if (flag)
+		i = 2;
+	else
+		i = 1;
+	len = 0;
+	while (arr[len])
+		len++;
+	while (arr[i])
+	{
+		if (i == len - 1)
+		{
+			mywrite(arr[i], fd);
+			if (!flag)
+				write(fd, "\n", 1);
+			return ;
+		}
+		mywrite(arr[i], fd);
+		write(fd, " ", 1);
+		i++;
+	}
+}
 
-    while (arr[i])
-        i++;
+int	handle_echo(char *line, int fd)
+{
+	char	**arr;
+	int		i;
 
-    // Если передана только пустая строка
-    if (i == 1)
-    {
-        write(fd, "\n", 1);
-        free_arr(arr);
-        return 0;
-    }
-
-    // Если флаг "-n" найден
-    if (i == 2 && ft_strcmp(arr[1], "-n") == 0)
-    {
-        free_arr(arr);
-        return 0;
-    }
-
-    // Если более двух аргументов, проверяем флаг "-n"
-    if (i > 2 && ft_strcmp(arr[1], "-n") == 0)
-    {
-        // Обрабатываем строки начиная с третьего элемента
-        for (int j = 2; j < i; j++)
-        {
-            char *cleaned_str = remove_quotes(arr[j]);
-            mywrite(cleaned_str, fd);
-            free(cleaned_str);
-            if (j < i - 1)
-                write(fd, " ", 1);
-        }
-        free_arr(arr);
-        return 0;
-    }
-
-    // Если нет флага "-n", просто выводим все строки
-    for (int j = 1; j < i; j++)
-    {
-        char *cleaned_str = remove_quotes(arr[j]);
-        mywrite(cleaned_str, fd);
-        free(cleaned_str);
-        if (j < i - 1)
-            write(fd, " ", 1);
-    }
-
-    write(fd, "\n", 1);
-    free_arr(arr);
-    return 0;
+	i = 0;
+	arr = ft_split(line, ' ');
+	if (!arr)
+		return (free(line), exit(1), 1);
+	while (arr[i])
+		i++;
+	if (i == 1)
+	{
+		return (write(fd, "\n", 1), free_arr(arr), 0);
+	}
+	if (i == 2)
+	{
+		if (ft_strcmp(arr[1], "-n") == 0)
+			return (free_arr(arr), 0);
+		else
+			return (mywrite(arr[1], fd), write(1, "\n", 1), 0);
+	}
+	if (i > 2)
+	{
+		if (ft_strcmp(arr[1], "-n") == 0)
+			return (show_input(arr, fd, 1), free_arr(arr), 0);
+		show_input(arr, fd, 0);
+	}
+	free_arr(arr);
+	return (0);
 }
 
 // int main()
