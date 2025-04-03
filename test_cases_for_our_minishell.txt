@@ -32,11 +32,13 @@ grep "day" "file3"
 echo "hello alex" 123 "how are you"
 echo "This is the exit status: $?"
 cat < file3 | grep "day"
+"echo" hello
 
 Commands with single and doublequotes
 echo "Hello '$USER'"
 echo 'Hello "$USER"'
 echo "hello ' tak"   --> still not working
+"cat" 'file3'
 
 Commands with heredoc
 <<hello

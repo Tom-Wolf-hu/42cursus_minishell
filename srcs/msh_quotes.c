@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/02 19:09:49 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:28:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,9 @@ int	check_quotes(char *line)
 		return (1);
 	}
 	return (0);
+}
+
+char	**split_cmdarg(char *line)
+{
+	
 }
