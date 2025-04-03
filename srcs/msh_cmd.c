@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/02 11:42:24 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 12:19:27 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	is_builtin(char *cmd)
 {
+	
 	if (ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)

@@ -3,43 +3,45 @@
 #include <stdlib.h>
 #include <string.h>
 
-void	wr_stillquotes(char *line, int fd, int *i, char quotes)
+char *remove_quotes_first_word(char *str, char ch)
 {
-	int	len;
-
-	len = strlen(line);
-	(*i)++;
-	while (*i < len)
-	{
-		if (line[*i] == quotes)
-			break ;
-		write(fd, &line[*i], 1);
-		(*i)++;
-	}
-	if (line[*i] == quotes)
-		(*i)++;
-}
-
-void	mywrite(char *line, int fd)
-{
-	int		i;
-	int		len;
+	int i;
+	int j;
+	char *result;
 
 	i = 0;
-	len = strlen(line);
-	while (i < len)
+	j = 0;
+	if (!str)
+		return (NULL);
+	if (str[i] == ch)
 	{
-		if (line[i] == '\'' || line[i] == '\"')
-			wr_stillquotes(line, fd, &i, line[i]);
-		else
+		result = malloc(strlen(str) - 2 + 1);
+		if (!result)
+			return (NULL);
+		i++;
+		while (str[i] && str[i] != ch)
 		{
-			write(fd, &line[i], 1);
+			result[j] = str[i];
+			j++;
 			i++;
 		}
+		i++;
+		while (str[i])
+		{
+			result[j] = str[i];
+			j++;
+			i++;
+		}
+		result[j] = '\0';
+		return (result);
 	}
+	return (strdup(str));
 }
 
 int main()
 {
-	mywrite("sex on the beach \"'\"hello\"'\"\n", 1);
+	char *str = "'cat' hello";
+	char *newstr = remove_quotes_first_word(str, '\'');
+	if (newstr)
+		printf("result: %s\n", newstr);
 }

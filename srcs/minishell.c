@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 12:09:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 12:48:43 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,6 +424,8 @@ void	execute_command_single(char *cmd, int *status)
 
 void	run_ex(char **line, int *status)
 {
+	char *clean_cmd;
+
 	if (is_empty(*line))
 		return ;
 	add_history(*line);
@@ -431,10 +433,13 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status));
-	// write(1, "passed2\n", 8);
-	execute_pipe_commands(*line, 1, status);
+	clean_cmd = remove_quotes_first_word(*line, '\"');
+	clean_cmd = remove_quotes_first_word(clean_cmd, '\'');
+	if (!clean_cmd)
+		return ;
+	if (!ft_strchr(clean_cmd, '|'))
+		return (execute_command_single(clean_cmd, status));
+	execute_pipe_commands(clean_cmd, 1, status);
 }
 
 int	main(void)

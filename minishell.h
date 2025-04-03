@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 19:01:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:44:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int		my_unsetenv(char *name);
 int		handle_unset(char *line, int fd);
 
 //msh_quotes.c
+char	*remove_quotes_first_word(char *str, char ch);
 void	write_stderr(char *str);
 int		check_quotes(char *line);
 
