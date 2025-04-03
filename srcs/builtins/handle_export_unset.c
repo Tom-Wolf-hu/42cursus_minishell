@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/20 13:39:21 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 14:35:02 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,16 @@ int mysetenv(char *name, char *value)
 		new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
 	else
 		new_var = malloc(ft_strlen(name) + 1);
-
+	if (!new_var)
+		return (1);
 	if (new_var == NULL)
 		return (perror("malloc"), 1);
-
 	strcpy(new_var, name);
 	if (value)
 	{
 		strcat(new_var, "=");
 		strcat(new_var, value);
 	}
-	
 	if (index != -1)
 		environ[index] = new_var;
 	else
@@ -75,14 +74,25 @@ int mysetenv(char *name, char *value)
 int	handle_export(char *line, int fd)
 {
 	char	*arg;
+	char	**arr;
 	char	*equals_pos;
 	char	*value;
+	char	*clean_line;
 
 	if (ft_strlen(line) == 6 || check_line(line, 7))
 		return (print_env(fd));
 	else
 	{
-		arg = line + 7;
+		arr = ft_split(line, ' ');
+		if (!arr)
+			return (1);
+		clean_line = remove_quotes(arr[1]);
+		if (!clean_line)
+			return (free_arr(arr), 1);
+		// printf("clean_line: %s\n", clean_line);
+		// printf("line + 7: %s\n", line + 7);
+		// arg = line + 7;
+		arg = clean_line;
 		equals_pos = ft_strchr(arg, '=');
 		if (equals_pos != NULL)
 		{
@@ -91,8 +101,11 @@ int	handle_export(char *line, int fd)
 		}
 		else
 			value = NULL;
-		return (mysetenv(arg, value));
-	}
+		if (mysetenv(arg, value) == 1)
+			return (free(clean_line), free_arr(arr), 1);
+		}
+	free(clean_line);
+	free_arr(arr);
 	return (0);
 }
 
