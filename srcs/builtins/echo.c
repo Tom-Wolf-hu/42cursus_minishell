@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/02 19:26:26 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 12:09:50 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	mywrite(char *line, int fd)
 
 	i = 0;
 	len = ft_strlen(line);
+	// if (line[i] == 34)
+	// 	i++;
+	// if (line[len - 1] == 34)
+	// 	len--;
 	while (i < len)
 	{
 		if (line[i] == '\'' || line[i] == '\"')
