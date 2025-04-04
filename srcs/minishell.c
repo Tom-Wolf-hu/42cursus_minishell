@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 12:29:55 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/03 19:20:04 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,6 +424,10 @@ void	execute_command_single(char *cmd, int *status)
 
 void	run_ex(char **line, int *status)
 {
+	char **arr;
+	char *clean_cmd;
+	char *new_line;
+
 	if (is_empty(*line))
 		return ;
 	add_history(*line);
@@ -431,11 +435,24 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	// write(1, "passed1\n", 8);
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status));
-	// write(1, "passed2\n", 8);
-	execute_pipe_commands(*line, 1, status);
+	
+	arr = ft_split(*line, ' ');
+	for (int i = 0; arr[i]; i++)
+	{
+		if (check_quotes(arr[i]) == 1)
+			return ;
+	}
+	clean_cmd = remove_quotes(arr[0]);
+	if (!clean_cmd)
+		return (free_arr(arr));
+	free(arr[0]);
+	arr[0] = clean_cmd;
+	new_line = ft_join(arr);
+	if (!new_line)
+		return (free_arr(arr), free(clean_cmd));
+	if (!ft_strchr(new_line, '|'))
+		return (execute_command_single(new_line, status));
+	execute_pipe_commands(new_line, 1, status);
 }
 
 int	main(void)
@@ -458,9 +475,14 @@ int	main(void)
 			status = g_status;
 			g_status = 0;
 		}
-		if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		// if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
+		// {
+		// 	handle_exit(line, &status);
+		// 	break ;
+		// }
+		if (!line)
 		{
-			handle_exit(line, &status);
+			// handle_exit(line, &status);
 			break ;
 		}
 		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)

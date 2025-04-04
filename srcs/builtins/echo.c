@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/02 19:26:31 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:13:42 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,19 @@ void	wr_stillquotes(char *line, int fd, int *i, char quotes)
 	int	len;
 
 	len = ft_strlen(line);
-	printf("Founded quotes: %c\tlen: %i\n", quotes, len);
 	(*i)++;
 	while (*i < len)
 	{
-		if (line[*i] == quotes)
+		if (line[*i] == '\\' && quotes == '\"' && *i + 1 < len)
+		{
+			(*i)++;
+		}
+		else if (line[*i] == quotes)
 			break ;
 		write(fd, &line[*i], 1);
 		(*i)++;
 	}
-	if (line[*i] == quotes)
+	if (*i < len && line[*i] == quotes)
 		(*i)++;
 }
 
@@ -37,10 +40,6 @@ void	mywrite(char *line, int fd)
 
 	i = 0;
 	len = ft_strlen(line);
-	// if (line[i] == 34)
-	// 	i++;
-	// if (line[len - 1] == 34)
-	// 	len--;
 	while (i < len)
 	{
 		if (line[i] == '\'' || line[i] == '\"')

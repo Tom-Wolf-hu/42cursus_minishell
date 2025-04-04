@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/03/31 17:09:12 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/03 13:38:43 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_builtin(char *cmd)
 {
+	if (ft_strcmp(cmd, "exit") == 0 || ft_strncmp(cmd, "exit ", 5) == 0)
+		return (1);
 	if (ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
 		return (1);
 	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
@@ -39,8 +41,9 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	*status = 1;
 	if (!cmd)
 		return ;
+	// printf("[execute_builtin] cmd: %s\n", cmd);
 	clean_cmd = remove_redirects(cmd);
-	// printf("clean_cmd: %s\n", clean_cmd);
+	// printf("[execute_builtin] clean_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;
 	// printf("clean_cmd: %s; len: %d\n", clean_cmd, ft_strlen(clean_cmd));
@@ -50,6 +53,8 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	
 	handle_redirection(cmd, status);
 	// printf("[execute_buitin] clean_cmd: %s\n", clean_cmd);
+	if (ft_strcmp(clean_cmd, "exit") == 0 || ft_strncmp(clean_cmd, "exit ", 5) == 0)
+		handle_exit(cmd, status);
 	if (ft_strcmp(clean_cmd, "pwd") == 0 || ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(clean_cmd, fd);
 	else if (ft_strncmp(clean_cmd, "cd ", 3) == 0 || ft_strcmp(clean_cmd, "cd") == 0)

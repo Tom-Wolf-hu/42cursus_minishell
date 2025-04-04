@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/17 14:56:56 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/02 12:06:33 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void change_to_exit_status(int i, char **line, char *status)
 		j++;
 		index++;
 	}
-	rest+=2; // pass the $?
+	rest += 2; // pass the $?
 	while ((*line)[rest]) // overwriting after the status
 	{
 		result[index] = (*line)[rest];
@@ -48,32 +48,57 @@ void change_to_exit_status(int i, char **line, char *status)
 	*line = result;
 }
 
-int	check_quastion_sign(char **line, char *status)
+int check_quastion_sign(char **line, char *status)
 {
-	int	i;
-	int	flag;
+    int i = 0;
+    int flag_single = 0;
+    int flag_double = 0;
 
-	flag = 0;
-	i = 0;
-	while ((*line)[i])
-	{
-		if ((*line)[i] == '\'' && flag == 0)
-			flag = 1;
-		else if ((*line)[i] == '\'' && flag == 1)
-			flag = 0;
-		if ((*line)[i] == '$' && flag == 0)
-		{
-			if ((*line)[i + 1] == '?')
-			{
-				change_to_exit_status(i, line, status);
-				i = -1;
-			}
-		}
-		i++;
-	}
-	free(status);
-	return (0);
+    while ((*line)[i])
+    {
+        if ((*line)[i] == '\'' && flag_double == 0)
+            flag_single = !flag_single;
+        else if ((*line)[i] == '\"' && flag_single == 0)
+            flag_double = !flag_double;
+        if ((*line)[i] == '$' && flag_single == 0)
+        {
+            if ((*line)[i + 1] == '?')
+            {
+                change_to_exit_status(i, line, status);
+            }
+        }
+        i++;
+    }
+    free(status);
+    return (0);
 }
+
+// int	check_quastion_sign(char **line, char *status)
+// {
+// 	int	i;
+// 	int	flag;
+
+// 	flag = 0;
+// 	i = 0;
+// 	while ((*line)[i])
+// 	{
+// 		if ((*line)[i] == '\'' && flag == 0)
+// 			flag = 1;
+// 		else if ((*line)[i] == '\'' && flag == 1)
+// 			flag = 0;
+// 		if ((*line)[i] == '$' && flag == 0)
+// 		{
+// 			if ((*line)[i + 1] == '?')
+// 			{
+// 				change_to_exit_status(i, line, status);
+// 				i = -1;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	free(status);
+// 	return (0);
+// }
 
 // int main()
 // {
