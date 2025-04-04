@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/04 14:36:05 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/04 14:41:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ char	*remove_quotes_commands(char *line)
 		clean_str = remove_redirects(arr[i]);
 		if (!clean_str)
 		{
-			// free_arr(arr);
+			free_arr(arr);
 			return (NULL);
 		}
 		if (!check_command_quotes(clean_str))
 		{
 			free(clean_str);
-			// free_arr(arr);
+			free_arr(arr);
 			return (NULL);
 		}
 		clean_str = remove_quotes_first_word(clean_str);

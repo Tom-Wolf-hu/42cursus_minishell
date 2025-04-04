@@ -5,15 +5,20 @@ cd /Users/tfarkas
 cd ..
 env
 export TEST_VAR=hello
-unset TEST_VAR=hello
+unset TEST_VAR
 
 Commands with redirections
-<file>file3
-<file >file3
-<file   >file3
+<file>file3			--> not working now (the filename not correct: can't find the first < sign)
+<file >file3		--> behave like bash, but it does not the copy with the write part (358-364 lines)
+<file   >file3		--> behave like bash, but it does not the copy with the write part (358-364 lines)
+
+Commands with pipe
+sleep 5 | sleep 3 | sleep 1		-->this pipeline now not working paralel. I don't know it can casue a truoble for us during the evaluation
+ls -l | wc -l
+echo hello | wc -l
 
 Commands with pipe and redirections
-ps aux | grep zsh							
+ps aux | grep zsh	--> now it's not working right way, it can't get the result, just after press CTRL + C						
 cat < file3 | grep day
 ls | sort > file4
 grep day < file3 | sort >> file4
@@ -27,21 +32,23 @@ echo 'This is the exit status: $?'
 cat < file3 | grep 'day'
 
 Commands with doublequotes
-echo "hello alex" "how are you"
-grep "day" "file3"
-echo "hello alex" 123 "how are you"
-echo "This is the exit status: $?"
+echo "hello alex" "how are you"		-->it is not working now, error message: The command not found
+grep "day" "file3"					-->problem with the second argument " remove, error message: grep: "file3": No such file or directory
+echo "hello alex" 123 "how are you"	-->it is not working now, error message: The command not found
+echo "This is the exit status: $?"	-->it is not working now, error message: The command not found
 cat < file3 | grep "day"
+"echo" hello
 
 Commands with single and doublequotes
-echo "Hello '$USER'"
-echo 'Hello "$USER"'
-echo "hello ' tak"   --> still not working
+echo "Hello '$USER'"				-->it is not working now, error message: The command not found
+echo 'Hello "$USER"'				--> here the minishell write The command not found, the bash write bash: Hello "$USER": command not found
+echo "hello ' tak"   				-->it is not working now, error message: The command not found
+"cat" 'file3'						-->problem with the second argument single quotes remove, error message: cat: 'file3': No such file or directory
 
 Commands with heredoc
 <<hello
-cat <<hello
-cat <<hello | wc -l
+cat <<hello							-->after finish the heredoc with hello the cat command stucked, it cann finished with ctrl + c
+cat <<hello | wc -l					But this is working, I'm surprised
 
 Commands with heredoc pipe and quotes
-<<finish | awk '{print $2}' | tr '\n' ' '
+<<finish | awk '{print $2}' | tr '\n' ' '	-->heredoc part working but after finis it is printing the following error message: Error: Command not found
