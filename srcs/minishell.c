@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 19:20:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/04 14:40:46 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,23 +436,16 @@ void	run_ex(char **line, int *status)
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
 	
-	arr = ft_split(*line, ' ');
-	for (int i = 0; arr[i]; i++)
-	{
-		if (check_quotes(arr[i]) == 1)
-			return ;
-	}
-	clean_cmd = remove_quotes(arr[0]);
+	clean_cmd = remove_quotes_commands(*line);
 	if (!clean_cmd)
-		return (free_arr(arr));
-	free(arr[0]);
-	arr[0] = clean_cmd;
-	new_line = ft_join(arr);
-	if (!new_line)
-		return (free_arr(arr), free(clean_cmd));
-	if (!ft_strchr(new_line, '|'))
-		return (execute_command_single(new_line, status));
-	execute_pipe_commands(new_line, 1, status);
+	{
+		printf("wrong command\n");
+		return ;
+	}
+
+	if (!ft_strchr(clean_cmd, '|'))
+		return (execute_command_single(clean_cmd, status));
+	execute_pipe_commands(clean_cmd, 1, status);
 }
 
 int	main(void)
@@ -513,4 +506,7 @@ sleep 5
 
 ctrl + \ after some stuff should do nothing
 если писать cat и затем нажимать ctrl+c появляется лишний > 
+
+echo "hello       wolrd"
+The command not found
 */
