@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/04 14:40:46 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/07 12:59:38 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -462,6 +462,9 @@ int	main(void)
 		else
 		{
 			line = get_next_line(STDIN_FILENO);
+			if (line)
+				line[ft_strlen(line) - 1] = '\0';
+			// fprintf(stderr, "\n\nThe standard in: %i\tThe line: '%s'\n\n", STDIN_FILENO, line);
 		}
 		if (g_status == 130)
 		{
