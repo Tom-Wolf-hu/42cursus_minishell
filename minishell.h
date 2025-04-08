@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/04 14:36:29 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/07 18:16:08 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,15 @@ int		check_quotes(char *line);
 The following file includes functions for checking 
 state of different aspect of minishell
 */
-//test_funcs.c
-// void	fds_state(void);
-// void	check_tty();
+// test_funcs.c
+void	fds_state(void);
+void	check_tty();
+void 	check_tty(void);
+void	fds_state_f(FILE *fd_monit);
+void	init_fds_struct(int fd_struct[6], t_store *st);
+void	struct_fds_state(FILE *fd_monit, t_store *st);
+void	check_tty_f(FILE *fd_monit);
+void	delete_file(char *monitor_file);
+void	print_arr(char **strarr);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:33:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/01 11:36:01 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:19:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,23 @@ void	delete_file(char *monitor_file)
 	{
 		perror("\033[1;31mFailed to delete the file\033[0m");
 		exit(EXIT_FAILURE);
+	}
+}
+
+void	print_arr(char **strarr)
+{
+	int	i;
+
+	i = 0;
+	if (!strarr)
+	{
+		fprintf(stderr, "The stringarray point to NULL.\n");
+		return ;
+	}
+	while (strarr[i])
+	{
+		fprintf(stderr, "[%i] -> %s\n", i, strarr[i]);
+		i++;
 	}
 }
 

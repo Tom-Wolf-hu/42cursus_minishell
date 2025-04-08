@@ -58,8 +58,8 @@ echo "Test builtin commands" | tee -a $CHECK
 run_test "echo HELLO WORLD" "Echo Test"
 run_test "pwd" "Print working directory Test"
 run_test "env" "Environment Test"
-# run_test "cd" "Single cd Test"
-# run_test "cd /Users" "cd with path Test"
+run_test "cd" "Single cd Test"
+run_test "cd /Users" "cd with path Test"
 # run_test "export TEST_VAR=hello" "Export variable test"
 # run_test "env" "Environment Test after export"
 # run_test "unset TEST_VAR" "Unset Test"
@@ -67,13 +67,13 @@ run_test "env" "Environment Test"
 # run_test "exit" "Exit Test"
 # echo -e "\n"
 
-# echo -e "\nTest external commands" | tee -a $CHECK
-# run_test "ls -l" "List Files Test"
-# run_test "whoami" "Whoami Test"
-# echo -e "\n"
+echo -e "\nTest external commands" | tee -a $CHECK
+run_test "ls -l" "List Files Test"
+run_test "whoami" "Whoami Test"
+echo -e "\n"
 
-# echo -e "\nTest pipe commands" | tee -a $CHECK
-# run_test "ls -l | wc -l" "ls -l line count Test"
+echo -e "\nTest pipe commands" | tee -a $CHECK
+run_test "ls -l | wc -l" "ls -l line count Test"
 # run_test "echo hello | wc -l" "echo line count Test"
 # run_test "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
 # run_test "ps aux | grep \"zsh\"" "Grep with doublequotes Test"
@@ -86,6 +86,6 @@ run_test "env" "Environment Test"
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
 
-rm -f $MINISH_TEMP $BASH_TEMP
-rm -f $MINISH_OUTPUT $BASH_OUTPUT $CHECK
+# rm -f $MINISH_TEMP $BASH_TEMP
+# rm -f $MINISH_OUTPUT $BASH_OUTPUT $CHECK
 rm -f output.txt sorted_list.txt

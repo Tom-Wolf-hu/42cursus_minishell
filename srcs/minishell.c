@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/07 12:59:38 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:05:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			}
 			close(std.saved_stdin);
 			close(std.saved_stdout);
+			print_arr(cmd_args);
 			execve(path, cmd_args, NULL);
 			perror("execve");
 			exit(EXIT_FAILURE);
@@ -435,14 +436,14 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	
+
 	clean_cmd = remove_quotes_commands(*line);
 	if (!clean_cmd)
 	{
-		printf("wrong command\n");
+		printf("The clean_cmd in run_ex is null\n");
 		return ;
 	}
-
+	fprintf(stderr, "The clean_cmd: %s\n", clean_cmd);
 	if (!ft_strchr(clean_cmd, '|'))
 		return (execute_command_single(clean_cmd, status));
 	execute_pipe_commands(clean_cmd, 1, status);

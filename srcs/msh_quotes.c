@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/04 14:41:21 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/07 19:52:00 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int check_command_quotes(char *line)
     int in_quote = 0;
     int i = 0;
 
-    while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+    fprintf(stderr, "line in check_command_quotes: %s\n", line);
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
         i++;
     if ((line[i] == '\'' || line[i] == '\"') && line[i + 1] == line[i])
         return 0;
@@ -80,6 +81,7 @@ char	*remove_quotes_commands(char *line)
 	int i = 0;
 
 	arr = ft_split(line, '|');
+	// print_arr(arr);
 	while (arr[i])
 	{
 		clean_str = remove_redirects(arr[i]);
@@ -88,21 +90,25 @@ char	*remove_quotes_commands(char *line)
 			free_arr(arr);
 			return (NULL);
 		}
+		write(2, "passed1\n", 8);
 		if (!check_command_quotes(clean_str))
 		{
 			free(clean_str);
 			free_arr(arr);
 			return (NULL);
 		}
+		write(2, "passed2\n", 8);
 		clean_str = remove_quotes_first_word(clean_str);
 		if (!clean_str)
 			return (NULL);
 		// printf("%s\n", clean_str);
+		write(2, "passed3\n", 8);
 		free(arr[i]);
 		arr[i] = clean_str;
 		i++;
 	}
 	clean_result = ft_join(arr);
+	fprintf(stderr, "clean_result in remove_quotes_commands: %s\n", clean_result);
 	return (free_arr(arr), clean_result);
 }
 
@@ -198,6 +204,7 @@ char *remove_quotes(char *line)
             result[pos++] = line[i++];
     }
     result[pos] = '\0';
+	// fprintf(stderr, "result in remove_quotes: %s\n", result);
     return result;
 }
 
@@ -240,7 +247,7 @@ int	check_quotes(char *line)
 	}
 	if (end_q == 0)
 	{
-		write_stderr("The command not found");
+		write_stderr("Unclosed quote");
 		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}
