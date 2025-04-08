@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 18:36:38 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:44:43 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,12 +468,13 @@ int	main(void)
 	setup_signal_handlers();
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			line = readline("> ");
-		else
-		{
-			line = get_next_line(STDIN_FILENO);
-		}
+		// if (isatty(STDIN_FILENO))
+		// 	line = readline("> ");
+		// else
+		// {
+		// 	line = get_next_line(STDIN_FILENO);
+		// }
+		line = readline("> ");
 		if (g_status == 130)
 		{
 			status = g_status;
