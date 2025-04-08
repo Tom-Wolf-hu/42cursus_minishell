@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 18:26:56 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:36:38 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,7 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd2;
 	while (cmd_arr[i])
 	{
+		// improve split func, not to divide cmd in double quotes
 		clean_cmd2 = remove_quotes_first_word(cmd_arr[i]);
 		if (!clean_cmd2)
 		{
