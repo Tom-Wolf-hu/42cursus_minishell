@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 18:44:43 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:49:14 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,10 +268,13 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			int j = 0;
 			while (cmd_args[j])
 			{
-				printf("cmd_args[j]: %s\n", cmd_args[j]);
+				// printf("cmd_args[j]: %s\n", cmd_args[j]);
 				clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
 				if (!clean_cmd2)
+				{
 					printf("%s: Command not found\n", cmd_args[j]);
+					exit(127);
+				}
 				free(cmd_args[j]);
 				cmd_args[j] = clean_cmd2;
 				j++;
@@ -326,7 +329,7 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd;
 	char *line;
 
-	printf("[execute_command_single] starting\n");
+	// printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
 	{
 		execute_builtin(cmd, 1, status);
