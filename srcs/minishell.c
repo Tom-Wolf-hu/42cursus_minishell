@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/04 14:40:46 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 16:12:40 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		else
 		{
-			waitpid(pid, &wstatus, 0);
 			if (WIFEXITED(wstatus))
 			{
 				*status = WEXITSTATUS(wstatus);
@@ -314,7 +313,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		i++;
 	}
-	// waitpid(pid, status, 0);
+	waitpid(pid, status, 0);
 	if (prev_fd != -1)
 		close(prev_fd);
 	free_arr(commands);
@@ -436,16 +435,16 @@ void	run_ex(char **line, int *status)
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
 	
-	clean_cmd = remove_quotes_commands(*line);
-	if (!clean_cmd)
-	{
-		printf("wrong command\n");
-		return ;
-	}
+	// clean_cmd = remove_quotes_commands(*line);
+	// if (!clean_cmd)
+	// {
+	// 	printf("wrong command\n");
+	// 	return ;
+	// }
 
-	if (!ft_strchr(clean_cmd, '|'))
-		return (execute_command_single(clean_cmd, status));
-	execute_pipe_commands(clean_cmd, 1, status);
+	if (!ft_strchr(*line, '|'))
+		return (execute_command_single(*line, status));
+	execute_pipe_commands(*line, 1, status);
 }
 
 int	main(void)
