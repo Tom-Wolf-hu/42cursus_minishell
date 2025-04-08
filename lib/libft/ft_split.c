@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:31:27 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/20 17:03:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 18:40:33 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,23 @@
 
 int	count_words(const char *s, char c)
 {
-	int	count;
-	int	in_word;
-	int	in_single_quote;
+	int	count = 0;
+	int	in_word = 0;
+	int	in_single_quote = 0;
+	int	in_double_quote = 0;
 
-	count = 0;
-	in_word = 0;
-	in_single_quote = 0;
 	while (*s)
 	{
-		if (*s == '\'' && !in_single_quote)
-			in_single_quote = 1;
-		else if (*s == '\'' && in_single_quote)
-			in_single_quote = 0;
-		if (*s != c && !in_single_quote && !in_word)
+		if (*s == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (*s == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		if (*s != c && !in_single_quote && !in_double_quote && !in_word)
 		{
 			in_word = 1;
 			count++;
 		}
-		else if (*s == c)
+		else if (*s == c && !in_single_quote && !in_double_quote)
 			in_word = 0;
 		s++;
 	}
@@ -41,17 +39,16 @@ int	count_words(const char *s, char c)
 
 int	get_word_length(const char **s, char c)
 {
-	int	length;
-	int	in_single_quote;
+	int	length = 0;
+	int	in_single_quote = 0;
+	int	in_double_quote = 0;
 
-	in_single_quote = 0;
-	length = 0;
-	while (**s && (**s != c || in_single_quote))
+	while (**s && (**s != c || in_single_quote || in_double_quote))
 	{
-		if (**s == '\'' && !in_single_quote)
-			in_single_quote = 1;
-		else if (**s == '\'' && in_single_quote)
-			in_single_quote = 0;
+		if (**s == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (**s == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
 		length++;
 		(*s)++;
 	}
