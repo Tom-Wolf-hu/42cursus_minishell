@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/03 13:38:43 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 17:29:51 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,28 @@
 
 int	is_builtin(char *cmd)
 {
-	if (ft_strcmp(cmd, "exit") == 0 || ft_strncmp(cmd, "exit ", 5) == 0)
-		return (1);
-	if (ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "pwd ", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "cd ", 3) == 0 || ft_strcmp(cmd, "cd") == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "echo ", 5) == 0 || ft_strcmp(cmd, "echo") == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "env", 3) == 0 || ft_strncmp(cmd, "env ", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "export ", 7) == 0 ||
-		ft_strcmp(cmd, "export") == 0)
-		return (1);
-	else if (ft_strncmp(cmd, "unset ", 6) == 0 || ft_strcmp(cmd, "unset") == 0)
-		return (1);
-	else
+
+	char *clean_cmd = remove_redirects(cmd);
+	clean_cmd = remove_quotes_first_word(clean_cmd);
+	// printf("[is_builtin] clean_cmd: %s\n", clean_cmd);
+	if (!clean_cmd)
 		return (0);
+	if (ft_strcmp(clean_cmd, "exit") == 0 || ft_strncmp(clean_cmd, "exit ", 5) == 0)
+		return (free(clean_cmd), 1);
+	if (ft_strncmp(clean_cmd, "pwd", 3) == 0 || ft_strncmp(clean_cmd, "pwd ", 4) == 0)
+		return (free(clean_cmd), 1);
+	else if (ft_strncmp(clean_cmd, "cd ", 3) == 0 || ft_strcmp(clean_cmd, "cd") == 0)
+		return (free(clean_cmd), 1);
+	else if (ft_strncmp(clean_cmd, "echo ", 5) == 0 || ft_strcmp(clean_cmd, "echo") == 0)
+		return (free(clean_cmd), 1);
+	else if (ft_strncmp(clean_cmd, "env", 3) == 0 || ft_strncmp(clean_cmd, "env ", 4) == 0)
+		return (free(clean_cmd), 1);
+	else if (ft_strncmp(clean_cmd, "export ", 7) == 0 ||
+		ft_strcmp(clean_cmd, "export") == 0)
+		return (free(clean_cmd), 1);
+	else if (ft_strncmp(clean_cmd, "unset ", 6) == 0 || ft_strcmp(clean_cmd, "unset") == 0)
+		return (free(clean_cmd), 1);
+	return (free(clean_cmd), 0);
 }
 
 void	execute_builtin(char *cmd, int fd, int *status)
@@ -43,6 +48,9 @@ void	execute_builtin(char *cmd, int fd, int *status)
 		return ;
 	// printf("[execute_builtin] cmd: %s\n", cmd);
 	clean_cmd = remove_redirects(cmd);
+	if (!clean_cmd)
+		return ;
+	clean_cmd = remove_quotes_first_word(clean_cmd);
 	// printf("[execute_builtin] clean_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;

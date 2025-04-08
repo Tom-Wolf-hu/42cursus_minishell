@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/04 14:41:21 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 17:28:48 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,12 @@ char *remove_quotes_first_word(char *line)
 	if (!result)
 		return (NULL);
 	i++;
+	if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t')
+		return (NULL);
 	while (line[i] && line[i] != '\'' && line[i] != '\"')
 	{
+		if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t')
+			return (free(result), NULL);
 		result[j] = line[i];
 		j++;
 		i++;
@@ -240,7 +244,7 @@ int	check_quotes(char *line)
 	}
 	if (end_q == 0)
 	{
-		write_stderr("The command not found");
+		write_stderr("The quotes are not closed");
 		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/04/03 13:29:15 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 17:33:39 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	handle_cd(char *line)
 	int 	i;
 	char	*clean_path;
 
+	clean_path = NULL;
 	i = 0;
 	arr = ft_split(line, ' ');
 	if (!arr)
@@ -52,6 +53,7 @@ int	handle_cd(char *line)
 	if (chdir(path) != 0)
 		return (perror("minishell: cd"), 1);
 	free_arr(arr);
-	free(clean_path);
+	if (clean_path)
+		free(clean_path);
 	return (0);
 }
