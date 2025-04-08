@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/01 18:47:26 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/08 17:00:27 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*get_filename(char *cmd)
 	if (!cmd[i])
 		return (NULL);
 	start = i;
-	while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\n')
+	while (cmd[i] && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\n' && cmd[i] != '<' && cmd[i] != '>')
 		i++;
 	filename = malloc(i - start + 1);
 	if (!filename)
@@ -79,9 +79,6 @@ void	handle_redirection(char *line, int *status)
 	char	*filename;
 	struct s_saved_std std;
 
-	// printf("[handle_redirection] starting....\n");
-	// std.saved_stdin = dup(STDIN_FILENO);
-	// std.saved_stdout = dup(STDOUT_FILENO);
 	while (line[i])
 	{
 		// printf("[handle_redirection] in cycle...\n");
@@ -145,13 +142,6 @@ void	handle_redirection(char *line, int *status)
 		}
 		i++;
 	}
-	// if (*status == 1)
-	// {
-	// 	dup2(std.saved_stdin, STDIN_FILENO);
-	// 	dup2(std.saved_stdout, STDOUT_FILENO);
-	// }
-	// close(std.saved_stdin);
-	// close(std.saved_stdout);
 }
 
 void	join_part(char **s1, char *s2)
