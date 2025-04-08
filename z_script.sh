@@ -31,8 +31,8 @@ run_test() {
 	# echo -e "$input" | $RUN_BASH >> $BASH_OUTPUT 2>&1
 	# echo -e "\n---------------------------------------\n" | $RUN_BASH >> $BASH_OUTPUT 2>&1
 
-	# echo -e "$input" | $RUN_MINISHELL | grep -v "$input" > $MINISH_TEMP 2>&1
-	echo -e "$input" | $RUN_MINISHELL > $MINISH_TEMP 2>&1
+	echo -e "$input" | $RUN_MINISHELL | grep -v ">" > $MINISH_TEMP 2>&1
+	# echo -e "$input" | $RUN_MINISHELL > $MINISH_TEMP 2>&1
 	echo -e "$input" | $RUN_BASH > $BASH_TEMP 2>&1
 
 	if diff -q $MINISH_TEMP $BASH_TEMP > /dev/null; then
@@ -86,6 +86,6 @@ run_test "env" "Environment Test"
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
 
-rm -f $MINISH_TEMP $BASH_TEMP
-rm -f $MINISH_OUTPUT $BASH_OUTPUT $CHECK
+# rm -f $MINISH_TEMP $BASH_TEMP
+# rm -f $MINISH_OUTPUT $BASH_OUTPUT $CHECK
 rm -f output.txt sorted_list.txt
