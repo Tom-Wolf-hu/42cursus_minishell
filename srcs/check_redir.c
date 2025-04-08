@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/08 17:00:27 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:07:51 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*get_filename(char *cmd)
 {
 	int		i = 0, j = 0, start;
+	char	*clean_filename;
 	char	*filename;
 
 	filename = NULL;
@@ -36,8 +37,10 @@ char	*get_filename(char *cmd)
 	while (start < i)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
-	// printf("filename: %s\n", filename);
-	return filename;
+	clean_filename = remove_quotes_first_word(filename);
+	printf("clean_filename: %s\n", clean_filename);
+	return clean_filename;
+	// return filename;
 }
 
 void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ НАДО!!!

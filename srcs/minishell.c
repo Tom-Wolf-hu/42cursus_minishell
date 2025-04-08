@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 16:45:22 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:26:56 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	struct s_saved_std std;
 	char *clean_cmd;
 	int wstatus;
+	char *clean_cmd2;
 	// printf("[execute_pipe_commands] starting\n");
 	commands = ft_split(cmd, '|');
 	if (!commands)
@@ -267,16 +268,12 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			int j = 0;
 			while (cmd_args[j])
 			{
-				if (ft_strchr(cmd_args[j], '\'') != NULL)
-				{
-					remove_chars(&cmd_args[j], '\'');
-					// break ;
-				}
-				if (ft_strchr(cmd_args[j], '\"') != NULL)
-				{
-					remove_chars(&cmd_args[j], '\"');
-					// break ;
-				}
+				printf("cmd_args[j]: %s\n", cmd_args[j]);
+				clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
+				if (!clean_cmd2)
+					printf("%s: Command not found\n", cmd_args[j]);
+				free(cmd_args[j]);
+				cmd_args[j] = clean_cmd2;
 				j++;
 			}
 			char *path = get_command_path(cmd_args[0]);
@@ -329,7 +326,7 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd;
 	char *line;
 
-	// printf("[execute_command_single] starting\n");
+	printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
 	{
 		execute_builtin(cmd, 1, status);
@@ -371,6 +368,20 @@ void	execute_command_single(char *cmd, int *status)
 	cmd_arr = ft_split(clean_cmd, ' ');
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
+	int i = 0;
+	char *clean_cmd2;
+	while (cmd_arr[i])
+	{
+		clean_cmd2 = remove_quotes_first_word(cmd_arr[i]);
+		if (!clean_cmd2)
+		{
+			printf("%s: The command not found\n", cmd_arr[i]);
+			return ;
+		}
+		free(cmd_arr[i]);
+		cmd_arr[i] = clean_cmd2;
+		i++;
+	}
 	path = get_command_path(cmd_arr[0]);
 	if (!path)
 	{

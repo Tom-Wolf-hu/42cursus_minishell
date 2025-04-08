@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/08 17:28:48 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:05:32 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char *remove_quotes_first_word(char *line)
 	int j = 0;
 	char *result;
 
+	if (!line)
+		return (NULL);
     while (line[i] && isspace(line[i]))
 		i++;
 	if (line[i] != '\'' && line[i] != '\"')

@@ -207,40 +207,68 @@
 //     return 1;
 // }
 
-char *remove_quotes_first_word(char *line)
+char *get_temp_remove_quotes(char *line, int *i, char quotes)
 {
-	int i = 0;
-	int j = 0;
+    int len;
+    int start;
+    int end;
 	char *result;
 
-    while (line[i] && isspace(line[i]))
-		i++;
-	if (line[i] != '\'' && line[i] != '\"')
-		return (strdup(line));
-	result = malloc(strlen(line) - 2 + 1);
-	if (!result)
-		return (NULL);
-	i++;
-	if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t')
-		return (NULL);
-	while (line[i] && line[i] != '\'' && line[i] != '\"')
+	len = strlen(line);
+	start = *i + 1;
+	end = start;
+    while (end < len)
 	{
-		if (line[i] == ' ' || line[i] == '\n' || line[i] == '\t')
-			return (free(result), NULL);
-		result[j] = line[i];
-		j++;
-		i++;
-	}
-	if (line[i] == '\'' || line[i] == '\"')
-		i++;
-	while (line[i])
+        if (line[end] == '\\' && quotes == '\"' && end + 1 < len && (quotes == '\"' || quotes == '\''))
+            end += 2;
+        else if (line[end] == quotes)
+            break;
+		else
+            end++;
+    }
+    result = (char *)malloc((end - start + 1) * sizeof(char));
+    if (!result)
+		return NULL;
+    memcpy(result, line + start, end - start);
+    result[end - start] = '\0';
+    if (end < len && line[end] == quotes)
+		*i = end + 1;
+	else
+		*i = end;
+    return result;
+}
+
+char *remove_quotes(char *line)
+{
+    int i;
+	int len;
+    char *result;
+	int pos;
+	char *tmp;
+
+	i = 0;
+	len = strlen(line);
+	result = (char *)malloc(len + 1);
+    if (!result)
+		return NULL;
+    pos = 0;
+    while (i < len)
 	{
-		result[j] = line[i];
-		j++;
-		i++;
-	}
-	result[j] = '\0';
-	return (result);
+        if (line[i] == '\'' || line[i] == '\"')
+		{
+            tmp = get_temp_remove_quotes(line, &i, line[i]);
+            if (tmp)
+			{
+                strcpy(result + pos, tmp);
+                pos += strlen(tmp);
+                free(tmp);
+            }
+        }
+		else
+            result[pos++] = line[i++];
+    }
+    result[pos] = '\0';
+    return result;
 }
 
 int main()
@@ -251,7 +279,7 @@ int main()
 	// 	printf("%s\n", newstr);
 
 	char *str = "\"echo\" hello";
-	char *new_str = remove_quotes_first_word(str);
+	char *new_str = remove_quotes(str);
 	if (new_str)
 		printf("%s\n", new_str);
 }
