@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/09 11:18:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 15:44:29 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,22 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 		perror("pipe");
 		return (exit(1));
 	}
+	fprintf(stderr, "start heredoc\n");
 	// printf("pipefd[0] == %d; pipefd[1] == %d\n", pipe_fd[0], pipe_fd[1]);
 	// printf("delimiter: %s; len: %d\n", delimiter, ft_strlen(delimiter));
-	while (1)
+	g_heredoc = 1;
+	while (g_heredoc)
 	{
 		// write(STDOUT_FILENO, "> ", 2);
+		printf("g_heredoc: %d\n", g_heredoc);
+		if (g_heredoc == 0)
+		{
+			printf("cond 1\n");
+			free(line);
+			break ;
+		}
 		line = readline("heredoc> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
-		if (!line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
+		if (!g_heredoc || !line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
 		{
 			free(line);
 			break ;
@@ -70,6 +79,7 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 		write(pipe_fd[1], "\n", 1);
 		free(line);
 	}
+	g_heredoc = 0;
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO); // Перенаправляем stdin на пайп
 	close(pipe_fd[0]);
@@ -99,7 +109,6 @@ void	handle_redirection(char *line, int *status)
 			}
 			if (line[i] == '<' && line[i + 1] == '<') // heredoc
 			{
-				// printf("sign: <<\n");
 				handle_heredoc(filename);
 				i++;
 			}

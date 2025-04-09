@@ -6,13 +6,14 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 14:36:17 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:42:50 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 int	g_status = 0;
+int g_heredoc = 0;
 
 void	ft_error(char *error, int exit_status)
 {
@@ -30,8 +31,17 @@ void	sig_handler(int sig)
 		g_status = 130;
 		write(STDOUT_FILENO, "\n", 1);
 		pid = waitpid(-1, &status, WNOHANG);
+		if (g_heredoc)
+		{
+			printf("Caught a sig\n");
+			write(1, "\n", 1);
+			g_heredoc = 0;
+		}
 		if (pid == 0)
+		{
+			printf("worked this cond\n");
 			return ;
+		}
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -332,24 +342,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		else
 		{
-			// if (prev_fd != -1)
-			// 	close(prev_fd);
-			// if (WIFEXITED(wstatus))
-			// {
-			// 	*status = WEXITSTATUS(wstatus);
-			// 	if (*status == 127)
-			// 	{
-			// 		printf("Error: Command not found\n");
-			// 		// break;
-			// 		exit(127);
-			// 	}
-			// }
-			// else if (WIFSIGNALED(wstatus))
-			// {
-			// 	*status = 128 + WTERMSIG(wstatus);
-			// }
-            // close(pipefd[1]); // Закрываем запись в пайп
-            // prev_fd = pipefd[0];
 			if (prev_fd != -1)
 				close(prev_fd);
 			if (i < num_commands - 1)
@@ -372,9 +364,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				*status = 128 + WTERMSIG(wstatus);
 		}
 	}
-	// waitpid(pid, status, 0);
-	// if (prev_fd != -1)
-	// 	close(prev_fd);
 	free_arr(commands);
 }
 
