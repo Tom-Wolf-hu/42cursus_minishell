@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/04 14:36:29 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/08 20:33:50 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 #include <stdio.h>
 #include <string.h>
@@ -82,6 +82,7 @@ void	handle_heredoc(const char *delimiter);
 void	handle_redirection(char *cmd, int *status);
 
 //minishell.c
+void	print_arr(char **strarr);
 void	remove_chars(char **str, char ch);
 void	execute_pipe_commands(char *cmd, int fd, int *status);
 int		is_nummeric(char *line);

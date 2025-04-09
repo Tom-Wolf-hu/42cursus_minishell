@@ -3,16 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 18:49:14 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/08 20:36:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 int	g_status = 0;
+
+void	print_arr(char **strarr)
+{
+	int	i;
+
+	i = 0;
+	if (!strarr)
+	{
+		printf("The stringarray point to NULL.\n");
+		return ;
+	}
+	while (strarr[i])
+	{
+		printf("[%i] -> %s\n", i, strarr[i]);
+		i++;
+	}
+}
 
 void	ft_error(char *error, int exit_status)
 {
@@ -268,7 +285,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			int j = 0;
 			while (cmd_args[j])
 			{
-				// printf("cmd_args[j]: %s\n", cmd_args[j]);
+				printf("cmd_args[j]: %s\n", cmd_args[j]);
 				clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
 				if (!clean_cmd2)
 				{
@@ -285,6 +302,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				printf("%s: Command not found\n", cmd);
 				exit(127);
 			}
+			// print_arr(cmd_args);
 			close(std.saved_stdin);
 			close(std.saved_stdout);
 			execve(path, cmd_args, NULL);

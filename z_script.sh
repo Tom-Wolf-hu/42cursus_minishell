@@ -67,21 +67,21 @@ run_test "env" "Environment Test"
 # run_test "exit" "Exit Test"
 # echo -e "\n"
 
-# echo -e "\nTest external commands" | tee -a $CHECK
-# run_test "ls -l" "List Files Test"
-# run_test "whoami" "Whoami Test"
-# echo -e "\n"
+echo -e "\nTest external commands" | tee -a $CHECK
+run_test "ls -l" "List Files Test"
+run_test "whoami" "Whoami Test"
+echo -e "\n"
 
-# echo -e "\nTest pipe commands" | tee -a $CHECK
-# run_test "ls -l | wc -l" "ls -l line count Test"
-# run_test "echo hello | wc -l" "echo line count Test"
-# run_test "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
+echo -e "\nTest pipe commands" | tee -a $CHECK
+run_test "ls -l | wc -l" "ls -l line count Test"
+run_test "echo hello | wc -l" "echo line count Test"
+run_test "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
 # run_test "ps aux | grep \"zsh\"" "Grep with doublequotes Test"
 
-# echo -e "\nTest pipe with redirections commands" | tee -a $CHECK
-# run_test "cat < check.txt | grep FAIL" "FAIL lines in check.txt Test"
-# run_test "ls | sort > sorted_list.txt" "Sort ls result into txt file Test"
-# run_test "grep FAIL < check.txt | sort > output.txt" "Sort from check FAIL lines into output.txt file"
+echo -e "\nTest pipe with redirections commands" | tee -a $CHECK
+run_test "cat < check.txt | grep FAIL" "FAIL lines in check.txt Test"
+run_test "ls | sort > sorted_list.txt" "Sort ls result into txt file Test"
+run_test "grep FAIL < check.txt | sort > output.txt" "Sort from check FAIL lines into output.txt file"
 
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
