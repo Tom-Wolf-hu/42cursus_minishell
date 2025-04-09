@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/09 10:00:14 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 14:06:29 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,17 @@ void	show_input(char **arr, int fd, int flag)
 	}
 }
 
+int	only_contains_char(char *str, char ch)
+{
+	while (*str)
+	{
+		if (*str != ch)
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
 int	handle_echo(char *line, int fd)
 {
 	char	**arr;
@@ -99,12 +110,11 @@ int	handle_echo(char *line, int fd)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
 			return (free_arr(arr), 0);
-		else
-			return (mywrite(arr[1], fd), write(1, "\n", 1), 0);
+		return (mywrite(arr[1], fd), write(1, "\n", 1), 0);
 	}
 	if (i > 2)
 	{
-		if (ft_strcmp(arr[1], "-n") == 0)
+		if (ft_strncmp(arr[1], "-n", 2) == 0 && only_contains_char(arr[1] + 1, 'n'))
 			return (show_input(arr, fd, 1), free_arr(arr), 0);
 		show_input(arr, fd, 0);
 	}

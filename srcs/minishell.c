@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 11:26:09 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 14:36:17 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,43 @@ char *get_command_path(char *cmd)
     return NULL;
 }
 
+int check_line_arr(char *str)
+{
+	int i;
+
+	i = 0;
+	// if (str[i] == '|' && str[i + 1])
+	// 	return (0);
+	while (str[i])
+	{
+		if (str[i] == '|' && str[i + 1] == '|')
+			return (0);
+		i++;
+	}
+	if (str[i - 1] == '|' || str[i - 1] == '\\')
+		return (0);
+	return (1);
+}
+
+int check_line_correct(char *str)
+{
+	int i;
+	char **arr;
+
+	arr = ft_split(str, ' ');
+	if (!arr)
+		return (exit(1), 0);
+	i = 0;
+	while (arr[i])
+	{
+		if (!check_line_arr(arr[i]))
+			return (free_arr(arr), 0);
+		i++;
+	}
+	free_arr(arr);
+	return (1);
+}
+
 void execute_pipe_commands(char *cmd, int fd, int *status)
 {
 	char **commands; // {"ls -l", "wc -l"}
@@ -218,7 +255,14 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	char *clean_cmd;
 	int wstatus;
 	char *clean_cmd2;
+	int last_pid;
 	// printf("[execute_pipe_commands] starting\n");
+
+	// if (!check_line_correct(cmd))
+	// {
+	// 	write_stderr("The string is not right\n");
+	// 	return ;
+	// }
 	commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
@@ -233,16 +277,11 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
-		// if (prev_fd != -1)//////////
-		// 	close(prev_fd);
 		pid = fork();
 		if (pid == -1)
 			return (perror("fork"), exit(EXIT_FAILURE));
 		if (pid == 0)
 		{
-			// std.saved_stdin = dup(STDIN_FILENO);
-			// std.saved_stdout = dup(STDOUT_FILENO);
-			// handle_redirection(commands[i], status);
 			if (prev_fd != 0)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -252,8 +291,6 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
-			// if (prev_fd != -1)///////////
-				// close(prev_fd);
 			if (is_builtin(commands[i]))
 			{
 				execute_builtin(commands[i], 1, status);
@@ -269,20 +306,22 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			while (cmd_args[j])
 			{
 				// printf("cmd_args[j]: %s\n", cmd_args[j]);
-				clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
+				// clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
+				clean_cmd2 = remove_quotes(cmd_args[j]);
 				if (!clean_cmd2)
 				{
-					printf("%s: Command not found\n", cmd_args[j]);
+					printf("!clean_cmd2: %s: Command not found\n", cmd_args[j]);
 					exit(127);
 				}
 				free(cmd_args[j]);
 				cmd_args[j] = clean_cmd2;
+				// printf("clean_cmd2: %s\n",clean_cmd2);
 				j++;
 			}
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
 			{
-				printf("%s: Command not found\n", cmd);
+				printf("%s: Command not found1\n", cmd);
 				exit(127);
 			}
 			close(std.saved_stdin);
@@ -293,29 +332,49 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 		}
 		else
 		{
-			if (WIFEXITED(wstatus))
-			{
-				*status = WEXITSTATUS(wstatus);
-				if (*status == 127)
-				{
-					printf("Error: Command not found\n");
-					break;
-				}
-			}
-			else if (WIFSIGNALED(wstatus))
-			{
-				*status = 128 + WTERMSIG(wstatus);
-			}
+			// if (prev_fd != -1)
+			// 	close(prev_fd);
+			// if (WIFEXITED(wstatus))
+			// {
+			// 	*status = WEXITSTATUS(wstatus);
+			// 	if (*status == 127)
+			// 	{
+			// 		printf("Error: Command not found\n");
+			// 		// break;
+			// 		exit(127);
+			// 	}
+			// }
+			// else if (WIFSIGNALED(wstatus))
+			// {
+			// 	*status = 128 + WTERMSIG(wstatus);
+			// }
+            // close(pipefd[1]); // Закрываем запись в пайп
+            // prev_fd = pipefd[0];
 			if (prev_fd != -1)
-                close(prev_fd); // Закрываем только если он уже был открыт
-            close(pipefd[1]); // Закрываем запись в пайп
-            prev_fd = pipefd[0];
+				close(prev_fd);
+			if (i < num_commands - 1)
+				close(pipefd[1]);
+			prev_fd = pipefd[0];
+			// сохраняем PID последнего
+			if (i == num_commands - 1)
+				last_pid = pid;
 		}
 		i++;
 	}
-	waitpid(pid, status, 0);
-	if (prev_fd != -1)
-		close(prev_fd);
+	pid_t wpid;
+	while ((wpid = waitpid(-1, &wstatus, 0)) > 0)
+	{
+		if (wpid == last_pid)
+		{
+			if (WIFEXITED(wstatus))
+				*status = WEXITSTATUS(wstatus);
+			else if (WIFSIGNALED(wstatus))
+				*status = 128 + WTERMSIG(wstatus);
+		}
+	}
+	// waitpid(pid, status, 0);
+	// if (prev_fd != -1)
+	// 	close(prev_fd);
 	free_arr(commands);
 }
 
@@ -451,14 +510,6 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-
-	// clean_cmd = remove_quotes_commands(*line);
-	// if (!clean_cmd)
-	// {
-	// 	printf("wrong command\n");
-	// 	return ;
-	// }
-
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
@@ -476,7 +527,10 @@ int	main(void)
 		if (isatty(fileno(stdin)))
 			line = readline("> ");
 		else
+		{
 			line = get_next_line(fileno(stdin));
+			line = ft_strtrim(line, "\n");
+		}
 		if (g_status == 130)
 		{
 			status = g_status;
@@ -495,16 +549,16 @@ int	main(void)
 }
 
 
-// ps aux | grep bash | awk '{print $2}'    снова не работает
-// Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
+// ps aux | grep bash | awk '{print $2}'    снова не работает		+
+// Введите Ctrl+C внутри minishell (появляется лишний > в приглашении) +
 // sleep 5
 
 /* 
-# Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
+# Введите Ctrl+C внутри minishell (появляется лишний > в приглашении) +
 sleep 5	(через раз)
 
 ctrl + \ after some stuff should do nothing
-если писать cat и затем нажимать ctrl+c появляется лишний > (иногда)
+если писать cat и затем нажимать ctrl+c появляется лишний > (иногда) +
 
 
 > export PATH=/usr/bin
@@ -520,13 +574,13 @@ open: No such file or directory
 
 > cat <<		(должна быть просто ошибка)	+
 
-> | ls			(должна быть просто ошибка)
-> ls |			(должна быть просто ошибка)
-> ls || grep test
+> | ls			(должна быть просто ошибка) +
+> ls |			(должна быть просто ошибка) +
+> ls || grep test							+
 
 НЕ ДОЛЖНА ИНТЕРПРЕТИРОВАТЬ ЭТИ СИМВОЛЫ
-echo hello; ls
-echo hello \
-echo \
-echo -nnn hello
+echo hello; ls			+
+echo hello \			+
+echo \			+
+echo -nnn hello			+
 */
