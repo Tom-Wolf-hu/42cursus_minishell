@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 15:42:50 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:42:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,15 @@ void	sig_handler(int sig)
 		if (g_heredoc)
 		{
 			printf("Caught a sig\n");
-			write(1, "\n", 1);
 			g_heredoc = 0;
+			write(STDOUT_FILENO, "\n", 1);
+			// rl_on_new_line();
+			// rl_replace_line("", 0);
+			// rl_redisplay();
+			return ;
 		}
 		if (pid == 0)
 		{
-			printf("worked this cond\n");
 			return ;
 		}
 		rl_on_new_line();
@@ -498,7 +501,11 @@ void	run_ex(char **line, int *status)
 	if (check_quotes(*line) == 1)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
+	// printf("after [check_quastion_sign] line: %s, len: %d\n", *line, ft_strlen(*line));
 	bridge_var(line);
+	// printf("after [bridge_var] line: %s, len: %d\n", *line, ft_strlen(*line));
+	if (!*line && **line != '\0' || ft_strlen(*line) == 0)
+		return ;
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
@@ -572,4 +579,7 @@ echo hello; ls			+
 echo hello \			+
 echo \			+
 echo -nnn hello			+
+
+$nonexist | wc -l
+$nonexist
 */

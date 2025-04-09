@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/02 12:29:23 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 16:35:46 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,42 +209,6 @@ void	remove_var_name(char **str, char *name)
 	result[start] = '\0';
 	free(*str);
 	*str = result;
-}
-
-void	remove_chars(char **str, char ch)
-{
-	char *new_str = NULL;
-	int i = 0;
-	int len = 0;
-	int j = 0;
-
-	// printf("i'm in func remove_chars\n");
-	if (!*str || !str || ch == '\0')
-		return ;
-	// printf("str before: %s\n", *str);
-	while ((*str)[i])
-    {
-        if ((*str)[i] != ch)
-            len++;
-        i++;
-    }
-	new_str = malloc(len + 1);
-	if (!new_str)
-		return ;
-	i = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] != ch)
-		{
-			new_str[j] = (*str)[i];
-			j++;
-		}
-		i++;
-	}
-	new_str[j] = '\0';
-	// printf("str after: %s\n", new_str);
-	free(*str);
-	*str = new_str;
 }
 
 void	bridge_var(char **str)
