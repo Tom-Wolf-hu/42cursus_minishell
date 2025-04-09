@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 10:28:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 11:26:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,13 +394,16 @@ void	execute_command_single(char *cmd, int *status)
 	}
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
+	// printf("[execute_command_single] before handle_redirection status: %d\n", *status);
 	handle_redirection(cmd, status);
+	// printf("[execute_command_single] after handle_redirection status: %d\n", *status);
 	if (*status == 1)
 	{
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
 		close(std.saved_stdin);
 		close(std.saved_stdout);
+		return ;// caused some problems
 	}
 	pid = fork();
 	if (pid == 0)
@@ -508,15 +511,15 @@ ctrl + \ after some stuff should do nothing
 zsh: segmentation fault  ./minishell
 
 
-> cat <filesfa    (виснит)
+> cat <filesfa    (виснит)			+
 clean_filename: filesfa
 filename: filesfa
 open: No such file or directory
 
 > 
 
+> cat <<		(должна быть просто ошибка)	+
 
-> cat <<		(должна быть просто ошибка)
 > | ls			(должна быть просто ошибка)
 > ls |			(должна быть просто ошибка)
 > ls || grep test

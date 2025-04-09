@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/08 18:07:51 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:18:51 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ char	*get_filename(char *cmd)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
 	clean_filename = remove_quotes_first_word(filename);
-	printf("clean_filename: %s\n", clean_filename);
-	return clean_filename;
+	// printf("clean_filename: %s\n", clean_filename);
+	return (clean_filename);
 	// return filename;
 }
 
@@ -51,7 +51,7 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 	if (pipe(pipe_fd) == -1) // Создаём пайп
 	{
 		perror("pipe");
-		return ;
+		return (exit(1));
 	}
 	// printf("pipefd[0] == %d; pipefd[1] == %d\n", pipe_fd[0], pipe_fd[1]);
 	// printf("delimiter: %s; len: %d\n", delimiter, ft_strlen(delimiter));
@@ -82,6 +82,8 @@ void	handle_redirection(char *line, int *status)
 	char	*filename;
 	struct s_saved_std std;
 
+	*status = 0;
+	// printf("[handle_redirection] status: %d\n", *status);
 	while (line[i])
 	{
 		// printf("[handle_redirection] in cycle...\n");
@@ -91,7 +93,7 @@ void	handle_redirection(char *line, int *status)
 			printf("filename: %s\n", filename);
 			if (!filename)
 			{
-				printf("no name for file\n");
+				printf("Such name for file doesn't exist\n");
 				*status = 1;
 				return ;
 			}
