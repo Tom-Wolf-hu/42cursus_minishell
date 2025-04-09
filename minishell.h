@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 12:47:18 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/09 18:41:38 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 
 #include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
+
+extern int g_heredoc;
 
 typedef struct s_saved_std
 {

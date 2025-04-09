@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/08 18:05:32 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:09:54 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,7 @@ void	write_stderr(char *str)
 		str = "Error occured.\n";
 	strlen = ft_strlen(str);
 	write(2, str, strlen);
+	write(2, "\n", 1);
 }
 
 int	check_quotes(char *line)
@@ -227,6 +228,8 @@ int	check_quotes(char *line)
 	end_q = 1;
 	while (line[i])
 	{
+		if (line[i] == ';' || line[i] == '\\')
+			return (write_stderr("The character is not supported"), 1);
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			j = i;
@@ -234,6 +237,8 @@ int	check_quotes(char *line)
 			end_q = 0;
 			while (line[i])
 			{
+				if (line[i] == '\\' && line[j] == '\"')
+					return (write_stderr("The character is not supported"), 1);
 				if (line[i] == line[j])
 				{
 					end_q = 1;
@@ -247,7 +252,6 @@ int	check_quotes(char *line)
 	if (end_q == 0)
 	{
 		write_stderr("The quotes are not closed");
-		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}
 	return (0);
