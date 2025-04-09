@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/08 17:44:06 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 09:59:40 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	is_builtin(char *cmd)
 {
+	char *clean_cmd;
 
 	// printf("[is_builtin] starting\n");
-	char *clean_cmd = remove_redirects(cmd);
+	clean_cmd = remove_redirects(cmd);
 	if (!clean_cmd)
 		return 0;
 	clean_cmd = remove_quotes_first_word(clean_cmd);

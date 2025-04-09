@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/08 18:49:14 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/09 10:28:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,7 +365,6 @@ void	execute_command_single(char *cmd, int *status)
 		dup2(std.saved_stdout, STDOUT_FILENO);
 		close(std.saved_stdin);
 		close(std.saved_stdout);
-		// write(2, "2passed1\n", 9);
 		return ;
 	}
 	cmd_arr = ft_split(clean_cmd, ' ');
@@ -449,7 +448,7 @@ void	run_ex(char **line, int *status)
 		return ;
 	check_quastion_sign(line, ft_itoa(*status));
 	bridge_var(line);
-	
+
 	// clean_cmd = remove_quotes_commands(*line);
 	// if (!clean_cmd)
 	// {
@@ -471,28 +470,17 @@ int	main(void)
 	setup_signal_handlers();
 	while (1)
 	{
-		// if (isatty(STDIN_FILENO))
-		// 	line = readline("> ");
-		// else
-		// {
-		// 	line = get_next_line(STDIN_FILENO);
-		// }
-		line = readline("> ");
+		if (isatty(fileno(stdin)))
+			line = readline("> ");
+		else
+			line = get_next_line(fileno(stdin));
 		if (g_status == 130)
 		{
 			status = g_status;
 			g_status = 0;
 		}
-		// if (!line || ft_strcmp(line, "exit") == 0 || ft_strncmp(line, "exit ", 5) == 0)
-		// {
-		// 	handle_exit(line, &status);
-		// 	break ;
-		// }
 		if (!line)
-		{
-			// handle_exit(line, &status);
 			break ;
-		}
 		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
 			rl_clear_history();
 		else
@@ -503,25 +491,39 @@ int	main(void)
 	free(line);
 }
 
-// status after ctrl + c
-// не рабатает:
-// cd			+
-// export		+
-// env | wc -l	+
-// полное отсутсвие redirections
-// ps aux | grep bash | awk '{print $2}'
+
+// ps aux | grep bash | awk '{print $2}'    снова не работает
 // Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
 // sleep 5
 
-// <file wc -l не работает (потому что все удаляется)
-
 /* 
 # Введите Ctrl+C внутри minishell (появляется лишний > в приглашении)
-sleep 5
+sleep 5	(через раз)
 
 ctrl + \ after some stuff should do nothing
-если писать cat и затем нажимать ctrl+c появляется лишний > 
+если писать cat и затем нажимать ctrl+c появляется лишний > (иногда)
 
-echo "hello       wolrd"
-The command not found
+
+> export PATH=/usr/bin
+zsh: segmentation fault  ./minishell
+
+
+> cat <filesfa    (виснит)
+clean_filename: filesfa
+filename: filesfa
+open: No such file or directory
+
+> 
+
+
+> cat <<		(должна быть просто ошибка)
+> | ls			(должна быть просто ошибка)
+> ls |			(должна быть просто ошибка)
+> ls || grep test
+
+НЕ ДОЛЖНА ИНТЕРПРЕТИРОВАТЬ ЭТИ СИМВОЛЫ
+echo hello; ls
+echo hello \
+echo \
+echo -nnn hello
 */
