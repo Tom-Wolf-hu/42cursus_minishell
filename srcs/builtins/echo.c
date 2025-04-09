@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/03 12:13:42 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/09 10:00:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	handle_echo(char *line, int fd)
 	char	**arr;
 	int		i;
 
+	// printf("[handle_echo] line: %s\n", line);
 	i = 0;
 	arr = ft_split(line, ' ');
 	if (!arr)
