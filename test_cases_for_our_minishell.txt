@@ -5,6 +5,7 @@ cd /Users/tfarkas
 cd ..
 env
 export TEST_VAR=hello
+export a -> env not consist just the export
 unset TEST_VAR
 
 Commands with redirections
@@ -49,6 +50,10 @@ Commands with heredoc
 <<hello
 cat <<hello							-->after finish the heredoc with hello the cat command stucked, it cann finished with ctrl + c
 cat <<hello | wc -l					But this is working, I'm surprised
+<< "$PATH" -> won't expand $
+<< hello
+heredoc> $PATH -> will expand but if hello in "", then it won't expand
 
 Commands with heredoc pipe and quotes
 <<finish | awk '{print $2}' | tr '\n' ' '	-->heredoc part working but after finis it is printing the following error message: Error: Command not found
+yes "no" | HEAD -n 10

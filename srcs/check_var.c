@@ -6,321 +6,184 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 16:35:46 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:43:16 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int get_var_name_size(char *str)
-{
-	int start = 0;
-	int end = 0;
-	int flag_single = 0;
-	int flag_double = 0;
-
-	while (str[start])
-	{
-		if (str[start] == '\'' && flag_double == 0)
-			flag_single = !flag_single;
-		else if (str[start] == '"' && flag_single == 0)
-			flag_double = !flag_double;
-		if (str[start] == '$' && flag_single == 0)
-			break;
-		start++;
-	}
-	if (str[start] != '$')
-		return 0;
-	start++;
-	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '$' && str[end] != '=' &&
-		str[end] != '\'' && str[end] != '"' && str[end] != '\t' && str[end] != '\0')
-	{
-		end++;
-	}
-	return (end - start);
-}
-
-void get_var_name(char *dest, char *str)
-{
-	int start = 0;
-	int end = 0;
-	int i = 0;
-	int flag_single = 0;
-	int flag_double = 0;
-
-	while (str[start] != '\0' && str[start] != '$')
-	{
-		if (str[start] == '\'' && flag_double == 0)
-			flag_single = !flag_single;
-		else if (str[start] == '"' && flag_single == 0)
-			flag_double = !flag_double;
-		if (str[start] == '$' && flag_single == 0)
-			break;
-		start++;
-	}
-	if (str[start] != '$')
-		return ;
-	start++;
-	end = start;
-	while (str[end] && str[end] != ' ' && str[end] != '$' && str[end] != '=' &&
-		str[end] != '\'' && str[end] != '"' && str[end] != '\t' && str[end] != '\0')
-	{
-		end++;
-	}
-	while (start < end)
-	{
-		dest[i] = str[start];
-		i++;
-		start++;
-	}
-	dest[i] = '\0';
-}
+extern char **environ;
 
 int cmp_names(char *name1, char *name2)
 {
-	int i = 0;
+    int i = 0;
 
-	while (name1[i] && name2[i] && name1[i] != '=' && name2[i] != '=')
-	{
-		if (name1[i] != name2[i])
-			return 0;
-		i++;
-	}
-	if ((name1[i] == '=' && name2[i] == '\0') || (name1[i] == '\0' && name2[i] == '\0'))
-		return 1;
-	return 0;
-}
-
-char *get_name(char *str)
-{
-	int i = 0;
-	char *result;
-	int j;
-
-	while (str[i] && str[i] != '=')
-		i++;
-	result = malloc(i + 1);
-	if (!result)
-		return NULL;
-	j = 0;
-	while (j < i)
-	{
-		result[j] = str[j];
-		j++;
-	}
-	result[j] = '\0';
-	return result;
+    while (name1[i] && name2[i] && name1[i] != '=' && name2[i] != '=')
+    {
+        if (name1[i] != name2[i])
+            return 0;
+        i++;
+    }
+    if ((name1[i] == '=' && name2[i] == '\0') || (name1[i] == '\0' && name2[i] == '\0'))
+        return 1;
+    return 0;
 }
 
 char *find_var_value(char *var_name)
 {
-	extern char **environ;
-	int i = 0;
-	char *value;
+    int i = 0;
+    char *value;
 
-	while (environ[i])
-	{
-		if (cmp_names(environ[i], var_name))
-		{
-			value = environ[i];
-			while (*value && *value != '=')
-				value++;
-			if (*value == '=')
-				return value + 1;
-		}
-		i++;
-	}
-	return NULL;
+    while (environ[i])
+    {
+        if (cmp_names(environ[i], var_name))
+        {
+            value = environ[i];
+            while (*value && *value != '=')
+                value++;
+            if (*value == '=')
+                return value + 1;
+        }
+        i++;
+    }
+    return NULL;
+}
+
+int get_var_name_size(char *str)
+{
+    int i = 0;
+
+    if (!str || str[0] != '$')
+        return 0;
+
+    i = 1;
+    if (str[i] == '\0' || str[i] == ' ' || str[i] == '$' || str[i] == '=' ||
+        str[i] == '\'' || str[i] == '"' || str[i] == '\t')
+        return 0;
+
+    while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '=' &&
+        str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|')
+        i++;
+
+    return i; // Убираем -1, потому что $ не включается в имя
+}
+
+void get_var_name(char *dest, char *str)
+{
+    int i = 1;
+    int j = 0;
+
+    while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '=' &&
+        str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|')
+    {
+        dest[j++] = str[i++];
+    }
+    dest[j] = '\0';
 }
 
 void change_str(char **str, char *name, char *value)
 {
-    int i = 0, start = 0, end = 0;
-    char *result;
-    int len = ft_strlen(*str) - ft_strlen(name) + ft_strlen(value) + 1;
+    char *start = strstr(*str, "$");
+    if (!start) return;
 
-    result = malloc(len);
+    int prefix_len = start - *str;
+    int name_len = strlen(name);
+    int value_len = strlen(value);
+    int total_len = prefix_len + value_len + strlen(start + name_len + 1) + 1;
+
+    char *result = malloc(total_len);
     if (!result)
         return;
 
-    // Копируем начало строки до $
-    while ((*str)[start] && (*str)[start] != '$')
-    {
-        result[start] = (*str)[start];
-        start++;
-    }
+    strncpy(result, *str, prefix_len);
+    result[prefix_len] = '\0';
+    strcat(result, value);
+    strcat(result, start + name_len + 1);
 
-    end = start; // Запоминаем индекс для result
-    start++; // Пропускаем $
-    
-    // Копируем значение переменной
-    while (i < ft_strlen(value))
-    {
-        result[end] = value[i];
-        end++;
-        i++;
-    }
-
-    i = end; // Теперь индекс для result
-    // Копируем остаток строки
-    while ((*str)[start] && (*str)[start] != ' ' && (*str)[start] != '$' &&
-           (*str)[start] != '=' && (*str)[start] != '\'' && (*str)[start] != '"' &&
-           (*str)[start] != '\t')
-    {
-        start++;
-    }
-
-    while ((*str)[start] && i < len)
-    {
-        result[i] = (*str)[start];
-        i++;
-        start++;
-    }
-    
-    result[i] = '\0'; // Завершаем строку
     free(*str);
     *str = result;
 }
 
-void	remove_var_name(char **str, char *name)
+void remove_var_name(char **str, char *name)
 {
-	int	i = 0;
-	int	start = 0;
-	char	*result;
-	int		len = ft_strlen(*str) - ft_strlen(name) + 1;
-	
-	result = malloc(len);
-	if (!result)
-		return ;
-	while ((*str)[i] && (*str)[i] != '$')
-	{
-		result[i] = (*str)[i];
-		i++;
-	}
-	start = i;
-	i = i + ft_strlen(name) + 1;
-	while ((*str)[i])
-	{
-		result[start] = (*str)[i];
-		i++;
-		start++;
-	}
-	result[start] = '\0';
-	free(*str);
-	*str = result;
-}
-
-void	bridge_var(char **str)
-{
-	char *var_name;
-	int size;
-	char *var_value;
-	int flag_single = 0;
-	int flag_double = 0;
-	int i = 0;
-
-	// проверяем есть ли переменная в строке
-	while ((*str)[i])
-	{
-		if ((*str)[i] == '\'' && flag_double == 0)
-			flag_single = !flag_single;
-		else if ((*str)[i] == '"' && flag_single == 0)
-			flag_double = !flag_double;
-
-		if ((*str)[i] == '$' && flag_single == 0) // Обрабатывать только вне одинарных кавычек
-			break;
-		i++;
-	}
-	if ((*str)[i] != '$') // Нет переменной
+    char *start = strstr(*str, "$");
+    if (!start)
 		return;
-	size = get_var_name_size(*str);
-	// printf("size: %d\n", size);
-	if (size < 1)
-	{
-		return ;
-	}
-	var_name = malloc(size + 1);
-	if (!var_name)
-		return ;
-	get_var_name(var_name, *str);
-	// printf("var_name: %s\n", var_name);
-	var_value = find_var_value(var_name);
-	if (var_value)
-	{
-		change_str(str, var_name, var_value);
-	}
-	else
-	{
-		remove_var_name(str, var_name);
-	}
-	// printf("Variable not found in environ\n");
-	free(var_name);
+    int prefix_len = start - *str;
+    int name_len = strlen(name);
+    char *result = malloc(strlen(*str) - name_len + 1);
+    if (!result)
+		return;
+    strncpy(result, *str, prefix_len);
+    result[prefix_len] = '\0';
+    strcat(result, start + name_len + 1);
+    free(*str);
+    *str = result;
 }
 
-// int main()
-// {
-//     char *str = strdup("echo \'\"$?\"\'mam");  // Можешь заменить на $PS или $PATH
-//     bridge_var(&str);
-// 	// remove_double_quotes(&str);
-// 	printf("%s\n", str);
-// 	free(str);
-// }
+int bridge_var_at(char **str, int dollar_pos)
+{
+    char *dollar = *str + dollar_pos;
+    int size = get_var_name_size(dollar);
+	// printf("size %d\n", size);
+    if (size < 1)
+        return 1;
+    char *var_name = malloc(size + 1);
+    if (!var_name)
+        return (exit(1), 0);
+    get_var_name(var_name, dollar);
+    char *var_value = find_var_value(var_name);
+	if (!var_value)
+	{
+		var_value = "";
+		// var_value = malloc(2);
+		// *var_value = ' ';
+	}
+    char *prefix = strndup(*str, dollar_pos);
+    char *suffix = strdup(dollar + size); // Не добавляем +1, т.к. за символом переменной может быть пробел
+    int new_str_len = strlen(prefix) + strlen(suffix) + 1;
+    if (var_value)
+        new_str_len += strlen(var_value);  // Учитываем длину значения переменной
+    char *new_str = malloc(new_str_len);
+    if (!new_str)
+	{
+        free(prefix);
+        free(suffix);
+        free(var_name);
+        return (exit(1), 0);
+    }
+    strcpy(new_str, prefix);
+    if (var_value)
+        strcat(new_str, var_value);
+    strcat(new_str, suffix);
+    free(*str);
+    *str = new_str;
+    free(prefix);
+    free(suffix);
+    free(var_name);
+	return 1;
+}
 
-// -L../lib/libft -lft
+void bridge_var(char **str)
+{
+    int i = 0;
+    int flag_single = 0;
+    int flag_double = 0;
 
-// void remove_double_quotes(char **str)
-// {
-//     int i = 0;
-//     int j = 0;
-//     char *new_str = NULL;
-//     int flag_single = 0;
-//     int flag_double = 0;
-
-//     new_str = malloc(get_len_double_quotes(str) + 1);
-//     if (!new_str)
-//         return ;
-//     while ((*str)[i])
-//     {
-//         if ((*str)[i] == '\'' && flag_double == 0)
-//             flag_single = !flag_single;
-//         if ((*str)[i] == '\"' && flag_single == 0)
-//             flag_double = !flag_double;
-//         if ((*str)[i] != '\"' || flag_single == 1)
-//         {
-//             new_str[j] = (*str)[i];
-//             j++;
-//         }
-//         i++;
-//     }
-//     new_str[j] = '\0';
-//     free(*str);
-//     *str = new_str;
-// }
-
-// int get_len_double_quotes(char **str)
-// {
-//     int i = 0;
-//     int len = 0;
-//     int flag_single = 0;  // Флаг для одинарных кавычек
-//     int flag_double = 0;  // Флаг для двойных кавычек
-
-//     while ((*str)[i])
-//     {
-//         // Переключаем флаг для одинарных кавычек
-//         if ((*str)[i] == '\'' && flag_double == 0)
-//             flag_single = !flag_single;
-        
-//         // Переключаем флаг для двойных кавычек
-//         if ((*str)[i] == '\"' && flag_single == 0)
-//             flag_double = !flag_double;
-
-//         // Увеличиваем длину только для символов, которые не в двойных кавычках
-//         if ((*str)[i] != '\"' && flag_single == 0)
-//         {
-//             len++;
-//         }
-//         i++;
-//     }
-//     return len;
-// }
+    while ((*str)[i])
+    {
+        if ((*str)[i] == '\'' && flag_double == 0)
+            flag_single = !flag_single;
+        else if ((*str)[i] == '"' && flag_single == 0)
+            flag_double = !flag_double;
+        if ((*str)[i] == '$' && flag_single == 0)
+        {
+            if (!bridge_var_at(str, i))
+				break;
+            i = -1;
+            flag_single = 0;
+            flag_double = 0;
+        }
+        i++;
+    }
+}

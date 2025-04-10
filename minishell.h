@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 19:14:09 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 20:37:55 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ char	*find_var_value(char *var_name);
 void	change_str(char **str, char *name, char *value);
 void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
+void	expand_vars(char **str);
 
 //echo.c
 void	wr_stillquotes(char *line, int fd, int *i, char quotes);
@@ -131,6 +132,7 @@ void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
+void	free_var_after_exit();
 int		find_var_in_env(char *name);
 int		mysetenv(char *name, char *value);
 int		handle_export(char *line, int fd);

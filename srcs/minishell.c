@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 19:30:28 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 20:39:09 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,32 @@ int check_line_correct(char *str)
 	return (1);
 }
 
+char	**get_commands(char *cmd, char *temp)
+{
+	int i;
+	int j;
+
+	j = 0;
+	i = 0;
+	if (cmd[i] == '|')
+	{
+		temp = malloc(ft_strlen(cmd) + 2);
+		if (!temp)
+			return (exit(1), NULL);
+		temp[i] = ' ';
+		i++;
+		while (cmd[j])
+		{
+			temp[i] = cmd[j];
+			j++;
+			i++;
+		}
+		temp[i] = '\0';
+		return (ft_split(temp, '|'));
+	}
+	return (ft_split(cmd, '|'));
+}
+
 void execute_pipe_commands(char *cmd, int fd, int *status)
 {
 	char **commands; // {"ls -l", "wc -l"}
@@ -294,7 +320,12 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	// 	write_stderr("The string is not right\n");
 	// 	return ;
 	// }
-	commands = ft_split(cmd, '|');
+	char *temp;
+	temp = NULL;
+	commands = get_commands(cmd, temp);
+	if (temp)
+		free(temp);
+	// commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
 	while (commands[num_commands])
@@ -303,6 +334,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	i = 0;
 	while (i < num_commands)
 	{
+		printf("commands[i]: %s; len: %d\n", commands[i], ft_strlen(commands[i]));
 		if (i < num_commands - 1 && pipe(pipefd) == -1)
 		{
 			perror("pipe");
@@ -341,7 +373,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				clean_cmd2 = remove_quotes(cmd_args[j]);
 				if (!clean_cmd2)
 				{
-					printf("!clean_cmd2: %s: Command not found\n", cmd_args[j]);
+					printf("%s: Command not found\n", cmd_args[j]);
 					exit(127);
 				}
 				free(cmd_args[j]);
@@ -352,7 +384,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
 			{
-				printf("%s: Command not found1\n", cmd);
+				printf("%s: Command not found\n", cmd);
 				exit(127);
 			}
 			// print_arr(cmd_args);
@@ -446,7 +478,6 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd2;
 	while (cmd_arr[i])
 	{
-		// improve split func, not to divide cmd in double quotes
 		clean_cmd2 = remove_quotes_first_word(cmd_arr[i]);
 		if (!clean_cmd2)
 		{
@@ -502,6 +533,7 @@ void	execute_command_single(char *cmd, int *status)
 	{
 		perror("fork");
 		*status = 1;
+		exit(1);
 	}
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);
@@ -515,6 +547,7 @@ void	run_ex(char **line, int *status)
 	char **arr;
 	char *clean_cmd;
 	char *new_line;
+	int	 i;
 
 	if (is_empty(*line))
 		return ;
@@ -525,8 +558,14 @@ void	run_ex(char **line, int *status)
 	// printf("after [check_quastion_sign] line: %s, len: %d\n", *line, ft_strlen(*line));
 	bridge_var(line);
 	// printf("after [bridge_var] line: %s, len: %d\n", *line, ft_strlen(*line));
-	if (!*line && **line != '\0' || ft_strlen(*line) == 0)
+	if (!*line)
 		return ;
+	i = 0;
+	while ((*line)[i] && ft_isspace((*line)[i]))
+		i++;
+	if ((*line)[i] == '\0')
+		return ;
+	// printf("[run_ex] line: %s\n", *line);
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
@@ -579,7 +618,7 @@ ctrl + \ after some stuff should do nothing
 если писать cat и затем нажимать ctrl+c появляется лишний > (иногда) +
 
 
-> export PATH=/usr/bin
+> export PATH=/usr/bin					+
 zsh: segmentation fault  ./minishell
 
 
@@ -602,6 +641,10 @@ echo hello \			+
 echo \			+
 echo -nnn hello			+
 
-$nonexist | wc -l
-$nonexist
+$nonexist | wc -l	+-
+$nonexist			+-
+
+> ./minishell
+> cat << EOF
+cat : Command not found
 */
