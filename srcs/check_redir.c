@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 20:02:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/10 20:05:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ void	handle_redirection(char *line, int *status)
 				// 	perror("fork");
 				// 	exit(1);
 				// }
-				i++;
+				// i++;
+				i+=2;
 			}
 			else if (line[i] == '>' && line[i + 1] == '>') // append >>
 			{
@@ -154,7 +155,8 @@ void	handle_redirection(char *line, int *status)
 				}
 				dup2(file_fd, STDOUT_FILENO);
 				close(file_fd);
-				i++;
+				// i++;
+				i+=2;
 			}
 			else if (line[i] == '>') // truncate >
 			{
