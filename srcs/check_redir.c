@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 13:38:21 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:50:36 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	handle_heredoc_child(int write_fd, const char *delimiter)
 		free(line);
 	}
 	close(write_fd);
+	fprintf(stderr, "finish heredoc\n");
 	exit(0);
 }
 
@@ -128,7 +129,7 @@ void	handle_redirection(char *line, int *status)
 		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
-			printf("filename: %s\n", filename);
+			// printf("filename: %s\n", filename);
 			if (!filename)
 			{
 				printf("Such name for file doesn't exist\n");
@@ -140,12 +141,13 @@ void	handle_redirection(char *line, int *status)
 				int	pipe_fd[2];
 				pid_t pid;
 
-				pid = fork();
 				if (pipe(pipe_fd) < 0)
 				{
 					perror("Failed to create pipe in handle redirection");
 					return ;
 				}
+				signal(SIGINT, SIG_IGN);
+				pid = fork();
 				if (pid == -1)
 				{
 					perror("Failed to create for for heredoc");
@@ -153,6 +155,7 @@ void	handle_redirection(char *line, int *status)
 				}
 				if (pid == 0)
 				{
+					signal(SIGINT, SIG_DFL);
 					close(pipe_fd[0]);
 					handle_heredoc_child(pipe_fd[1], filename);
 					// handle_heredoc(filename);
@@ -164,26 +167,30 @@ void	handle_redirection(char *line, int *status)
 					waitpid(pid, status, 0);
 					if (WIFSIGNALED(*status))
 					{
+						// write(pipe_fd[1], "EOF", 3);
 						write(STDOUT_FILENO, "\n", 1);
-						g_status = 130;
+						write(STDOUT_FILENO, "tamas\n", 6);
+						close(pipe_fd[1]);
 						close(pipe_fd[0]);
+						g_status = 130;
 						return ;
 					}
 					else if (WIFEXITED(*status))
 					{
 						int wstatus;
-						wstatus = WEXITSTATUS(status);
+						wstatus = WEXITSTATUS(*status);
 						if (wstatus != 0)
 						{
 							g_status = wstatus;
 							return ;
 						}
 					}
+					signal(SIGINT, sig_handler);
 					dup2(pipe_fd[0], STDIN_FILENO);
 					close(pipe_fd[0]);
 					return ;
 				}
-				i++;
+				i += 2;
 			}
 			else if (line[i] == '>' && line[i + 1] == '>') // append >>
 			{

@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 14:05:17 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:36:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ void	sig_handler(int sig)
 		g_status = 130;
 		write(STDOUT_FILENO, "\n", 1);
 		pid = waitpid(-1, &status, WNOHANG);
-		if (g_heredoc)
-		{
-			// printf("Caught a sig\n");
-			g_heredoc = 0;
-			// write(STDOUT_FILENO, "\n", 1);
-			// rl_on_new_line();
-			// rl_replace_line("", 0);
-			// rl_redisplay();
-			return ;
-		}
+		// if (g_heredoc)
+		// {
+		// 	// printf("Caught a sig\n");
+		// 	g_heredoc = 0;
+		// 	// write(STDOUT_FILENO, "\n", 1);
+		// 	// rl_on_new_line();
+		// 	// rl_replace_line("", 0);
+		// 	// rl_redisplay();
+		// 	return ;
+		// }
 		if (pid == 0)
 		{
 			return ;
@@ -540,12 +540,12 @@ int	main(void)
 	setup_signal_handlers();
 	while (1)
 	{
-		if (isatty(fileno(stdin)))
+		if (isatty(STDIN_FILENO))
 			line = readline("> ");
 		else
 		{
 			write(2, "here\n", 5);
-			line = get_next_line(fileno(stdin));
+			line = get_next_line(STDIN_FILENO);
 			line = ft_strtrim(line, "\n");
 		}
 		if (g_status == 130)
