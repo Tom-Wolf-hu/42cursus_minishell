@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 18:40:54 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:05:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ void	sig_handler(int sig)
 		pid = waitpid(-1, &status, WNOHANG);
 		if (g_heredoc)
 		{
-			printf("Caught a sig\n");
+			// printf("Caught a sig\n");
 			g_heredoc = 0;
-			write(STDOUT_FILENO, "\n", 1);
+			// write(STDOUT_FILENO, "\n", 1);
 			// rl_on_new_line();
 			// rl_replace_line("", 0);
 			// rl_redisplay();
@@ -427,6 +427,7 @@ void	execute_command_single(char *cmd, int *status)
 		line = get_next_line(STDIN_FILENO);
 		while (line)
 		{
+			fprintf(stderr, "In the execute_command_single get_next_line\n");
 			write(STDOUT_FILENO, line, ft_strlen(line));
 			free(line);
 			line = get_next_line(STDIN_FILENO);
@@ -543,6 +544,7 @@ int	main(void)
 			line = readline("> ");
 		else
 		{
+			write(2, "here\n", 5);
 			line = get_next_line(fileno(stdin));
 			line = ft_strtrim(line, "\n");
 		}
