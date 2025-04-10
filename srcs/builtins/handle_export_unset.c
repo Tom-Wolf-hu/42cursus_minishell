@@ -6,13 +6,14 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/03 14:35:02 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/10 10:55:59 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 extern char **environ; // Массив переменных окружения
+char **g_my_environ = NULL;
 
 int find_var_in_env(char *name)
 {
@@ -89,9 +90,6 @@ int	handle_export(char *line, int fd)
 		clean_line = remove_quotes(arr[1]);
 		if (!clean_line)
 			return (free_arr(arr), 1);
-		// printf("clean_line: %s\n", clean_line);
-		// printf("line + 7: %s\n", line + 7);
-		// arg = line + 7;
 		arg = clean_line;
 		equals_pos = ft_strchr(arg, '=');
 		if (equals_pos != NULL)

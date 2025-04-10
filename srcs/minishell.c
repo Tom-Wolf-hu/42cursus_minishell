@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 16:42:49 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:01:27 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,6 +494,7 @@ void	run_ex(char **line, int *status)
 	char **arr;
 	char *clean_cmd;
 	char *new_line;
+	int	 i;
 
 	if (is_empty(*line))
 		return ;
@@ -506,9 +507,12 @@ void	run_ex(char **line, int *status)
 	// printf("after [bridge_var] line: %s, len: %d\n", *line, ft_strlen(*line));
 	if (!*line && **line != '\0' || ft_strlen(*line) == 0)
 		return ;
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status));
-	execute_pipe_commands(*line, 1, status);
+	i = 0;
+	while ((*line)[i] && ft_isspace((*line)[i]))
+		i++;
+	if (!ft_strchr(*line + i, '|'))
+		return (execute_command_single(*line + i, status));
+	execute_pipe_commands(*line + i, 1, status);
 }
 
 int	main(void)
