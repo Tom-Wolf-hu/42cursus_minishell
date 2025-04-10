@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/09 15:08:58 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:04:14 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
+void	free_var_after_exit();
 int		find_var_in_env(char *name);
 int		mysetenv(char *name, char *value);
 int		handle_export(char *line, int fd);

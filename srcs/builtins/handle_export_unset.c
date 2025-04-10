@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 10:55:59 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/10 15:03:52 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 extern char **environ; // Массив переменных окружения
-char **g_my_environ = NULL;
+char **user_env_vars = NULL;
+int user_env_size = 0;
 
 int find_var_in_env(char *name)
 {
@@ -22,12 +23,44 @@ int find_var_in_env(char *name)
 	i = 0;
     while (environ[i])
 	{
-        // if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 && environ[i][ft_strlen(name)] == '=')
+		// if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 && environ[i][ft_strlen(name)] == '=')
 		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0)
             return (i);
         i++;
     }
     return (-1);
+}
+
+int add_user_env_var(char *name)
+{
+    int i = 0;
+    while (i < user_env_size)
+    {
+        if (strncmp(user_env_vars[i], name, strlen(name)) == 0 &&
+            user_env_vars[i][strlen(name)] == '\0')
+            return 0; // Уже добавлено
+        i++;
+    }
+
+    char **new_list = realloc(user_env_vars, sizeof(char *) * (user_env_size + 1));
+    if (!new_list)
+        return (perror("realloc user_env_vars"), 1);
+
+    user_env_vars = new_list;
+    user_env_vars[user_env_size] = strdup(name); // только имя, без значения
+    user_env_size++;
+    return 0;
+}
+
+int is_user_env_var(char *name)
+{
+    for (int i = 0; i < user_env_size; i++)
+    {
+        if (strncmp(user_env_vars[i], name, strlen(name)) == 0 &&
+            user_env_vars[i][strlen(name)] == '\0')
+            return 1;
+    }
+    return 0;
 }
 
 int mysetenv(char *name, char *value)
@@ -36,8 +69,8 @@ int mysetenv(char *name, char *value)
 	char	*new_var;
 
 	index = find_var_in_env(name);
-	if (index != -1)
-		free(environ[index]);
+	// if (index != -1)
+	// 	free(environ[index]);
 
 	// Если value == NULL, не добавляем '='
 	if (value)
@@ -45,7 +78,7 @@ int mysetenv(char *name, char *value)
 	else
 		new_var = malloc(ft_strlen(name) + 1);
 	if (!new_var)
-		return (1);
+		return (exit(1), 1);
 	if (new_var == NULL)
 		return (perror("malloc"), 1);
 	strcpy(new_var, name);
@@ -55,21 +88,40 @@ int mysetenv(char *name, char *value)
 		strcat(new_var, value);
 	}
 	if (index != -1)
+	{
+		if (is_user_env_var(name))
+			free(environ[index]);
 		environ[index] = new_var;
+	}
 	else
 	{
 		int count = 0;
 		while (environ[count])
 			count++;
 
-		environ = realloc(environ, sizeof(char*) * (count + 2));
-		if (environ == NULL)
-			return (perror("realloc"), 1);
-
+		// environ = realloc(environ, sizeof(char*) * (count + 2));
+		char **new_env = realloc(environ, sizeof(char *) * (count + 2));
+		if (!new_env)
+			return (perror("realloc"), free(new_var), 1);
+		environ = new_env;
 		environ[count] = new_var;
 		environ[count + 1] = NULL;
 	}
 	return (0);
+}
+
+void	free_var_after_exit()
+{
+	int	i;
+
+	i = 0;
+	while (environ[i])
+	{
+		if (is_user_env_var(environ[i]))
+			free(environ[i]);
+		i++;
+	}
+	free_arr(user_env_vars);
 }
 
 int	handle_export(char *line, int fd)
@@ -100,7 +152,7 @@ int	handle_export(char *line, int fd)
 		else
 			value = NULL;
 		if (mysetenv(arg, value) == 1)
-			return (free(clean_line), free_arr(arr), 1);
+			return (free(clean_line), free_arr(arr), exit(1), 1);
 		}
 	free(clean_line);
 	free_arr(arr);
@@ -114,18 +166,18 @@ int my_unsetenv(char *name)
 	index = find_var_in_env(name);
 	if (index != -1)
 	{
-		free(environ[index]);
+		// free(environ[index]);
+		if (is_user_env_var(name))
+			free(environ[index]);
 		while (environ[index])
 		{
 			environ[index] = environ[index + 1];
 			index++;
 		}
-		environ = realloc(environ, sizeof(char*) * (index)); 
-		if (environ == NULL && index > 0)
-		{
-			perror("realloc");
-			return (1);
-		}
+		char **new_env = realloc(environ, sizeof(char*) * (index));
+		if (!new_env && index > 0)
+			return (perror("realloc"), exit(1), 1);
+		environ = new_env;
 	}
 	return (0);
 }

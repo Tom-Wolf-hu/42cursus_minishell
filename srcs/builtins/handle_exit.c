@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 16:10:33 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/10 15:04:33 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ void	handle_exit(char *line, int *status)
 	free_arr(line_arr);
 	free(line);
 	rl_clear_history();
+	free_var_after_exit();
 	exit(*status);
 }
