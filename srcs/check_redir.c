@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 20:37:16 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 20:54:40 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	handle_heredoc_child(int write_fd, const char *delimiter)
 		line = readline("heredoc> ");
 		if (!line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
 		{
-			write(STDERR_FILENO, "\n", 1);
+			// write(STDERR_FILENO, "\n", 1);
 			free(line);
 			break ;
 		}
