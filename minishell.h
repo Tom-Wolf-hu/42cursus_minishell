@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 12:42:51 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:14:09 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,8 @@ int		check_quotes(char *line);
 The following file includes functions for checking 
 state of different aspect of minishell
 */
-//test_funcs.c
-// void	fds_state(void);
-// void	check_tty();
+// test_funcs.c
+void	fds_state(void);
+void	check_tty();
 
 #endif

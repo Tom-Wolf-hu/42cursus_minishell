@@ -20,6 +20,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/check_quastion_sign.c \
 		lib/get_next_line/get_next_line.c \
 		lib/get_next_line/get_next_line_utils.c \
+		srcs/test_funcs.c \
 		# srcs/msh_redirect.c \
 		# srcs/msh_operations.c \
 		# srcs/msh_parse.c \
@@ -29,7 +30,6 @@ SRCS =	srcs/builtins/echo.c \
 		# srcs/msh_redir_cmd_call.c \
 		# srcs/msh_pipe.c \
 		# srcs/msh_redir_cmd_utils.c \
-		# srcs/test_funcs.c \
 
 LIBFT_DIR = lib/libft
 LIBFT = libft.a

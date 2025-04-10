@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 16:50:36 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:30:47 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	handle_heredoc_child(int write_fd, const char *delimiter)
 		free(line);
 	}
 	close(write_fd);
-	fprintf(stderr, "finish heredoc\n");
+	// fprintf(stderr, "finish heredoc\n");
 	exit(0);
 }
 
@@ -167,10 +167,10 @@ void	handle_redirection(char *line, int *status)
 					waitpid(pid, status, 0);
 					if (WIFSIGNALED(*status))
 					{
-						// write(pipe_fd[1], "EOF", 3);
 						write(STDOUT_FILENO, "\n", 1);
-						write(STDOUT_FILENO, "tamas\n", 6);
+						// write(STDOUT_FILENO, "tamas\n", 6);
 						close(pipe_fd[1]);
+						dup2(pipe_fd[0], STDIN_FILENO);
 						close(pipe_fd[0]);
 						g_status = 130;
 						return ;

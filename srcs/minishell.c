@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 16:36:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:30:28 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,10 +424,11 @@ void	execute_command_single(char *cmd, int *status)
 			close(std.saved_stdout);
 			return ;
 		}
+		// check_tty();
 		line = get_next_line(STDIN_FILENO);
 		while (line)
 		{
-			fprintf(stderr, "In the execute_command_single get_next_line\n");
+			// fprintf(stderr, "In the execute_command_single get_next_line\n");
 			write(STDOUT_FILENO, line, ft_strlen(line));
 			free(line);
 			line = get_next_line(STDIN_FILENO);
