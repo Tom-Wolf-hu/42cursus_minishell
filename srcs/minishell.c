@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 16:54:16 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 19:27:40 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,7 +355,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				clean_cmd2 = remove_quotes(cmd_args[j]);
 				if (!clean_cmd2)
 				{
-					printf("!clean_cmd2: %s: Command not found\n", cmd_args[j]);
+					printf("%s: Command not found\n", cmd_args[j]);
 					exit(127);
 				}
 				free(cmd_args[j]);
@@ -366,7 +366,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 			char *path = get_command_path(cmd_args[0]);
 			if (!path)
 			{
-				printf("%s: Command not found1\n", cmd);
+				printf("%s: Command not found\n", cmd);
 				exit(127);
 			}
 			close(std.saved_stdin);
@@ -457,7 +457,6 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd2;
 	while (cmd_arr[i])
 	{
-		// improve split func, not to divide cmd in double quotes
 		clean_cmd2 = remove_quotes_first_word(cmd_arr[i]);
 		if (!clean_cmd2)
 		{
@@ -513,6 +512,7 @@ void	execute_command_single(char *cmd, int *status)
 	{
 		perror("fork");
 		*status = 1;
+		exit(1);
 	}
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);
@@ -619,6 +619,10 @@ echo hello \			+
 echo \			+
 echo -nnn hello			+
 
-$nonexist | wc -l
-$nonexist
+$nonexist | wc -l	+-
+$nonexist			+-
+
+> ./minishell
+> cat << EOF
+cat : Command not found
 */

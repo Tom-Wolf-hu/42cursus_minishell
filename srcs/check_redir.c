@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/09 15:44:29 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 19:38:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,28 @@ char	*get_filename(char *cmd)
 	// return filename;
 }
 
+void	sig_handler_heredoc(int sig)
+{
+	if (sig == SIGINT)
+		exit(130);
+}
+
+void	setup_signal_heredoc(void)
+{
+	struct sigaction sa;
+
+	sa.sa_handler = sig_handler_heredoc;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+}
+
 void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ НАДО!!!
 {
 	int pipe_fd[2];
 	char *line = NULL;
 
+	setup_signal_heredoc();
 	if (pipe(pipe_fd) == -1) // Создаём пайп
 	{
 		perror("pipe");
@@ -60,16 +77,10 @@ void	handle_heredoc(const char *delimiter) // ВЫОДИТЬ НИЧЕГО НЕ �
 	while (g_heredoc)
 	{
 		// write(STDOUT_FILENO, "> ", 2);
-		printf("g_heredoc: %d\n", g_heredoc);
-		if (g_heredoc == 0)
-		{
-			printf("cond 1\n");
-			free(line);
-			break ;
-		}
 		line = readline("heredoc> "); // НУЖНО ЗАПОМИНАТЬ LINE, ЧТОБЫ ЕГО ПОТОМ ВЫВЕСТИ
-		if (!g_heredoc || !line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
+		if (!line || (ft_strncmp(line, delimiter, ft_strlen((char *)delimiter)) == 0 && ft_strlen(line) == ft_strlen((char *)delimiter)))
 		{
+			write(STDERR_FILENO, "\n", 1);
 			free(line);
 			break ;
 		}
@@ -109,7 +120,28 @@ void	handle_redirection(char *line, int *status)
 			}
 			if (line[i] == '<' && line[i + 1] == '<') // heredoc
 			{
-				handle_heredoc(filename);
+				pid_t pid = fork();
+
+				if (pid == 0)
+				{
+					handle_heredoc(filename);
+					exit(EXIT_SUCCESS);
+				}
+				else if (pid > 0)
+				{
+					waitpid(pid, status, 0);
+					if (WIFEXITED(*status) && WEXITSTATUS(*status) == 130)
+					{
+						g_heredoc = 0;
+						free(filename);
+						return ;
+					}
+				}
+				else
+				{
+					perror("fork");
+					exit(1);
+				}
 				i++;
 			}
 			else if (line[i] == '>' && line[i + 1] == '>') // append >>
