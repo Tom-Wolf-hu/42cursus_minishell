@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 11:01:27 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/10 16:54:16 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,32 @@ int check_line_correct(char *str)
 	return (1);
 }
 
+char	**get_commands(char *cmd, char *temp)
+{
+	int i;
+	int j;
+
+	j = 0;
+	i = 0;
+	if (cmd[i] == '|')
+	{
+		temp = malloc(ft_strlen(cmd) + 2);
+		if (!temp)
+			return (exit(1), NULL);
+		temp[i] = ' ';
+		i++;
+		while (cmd[j])
+		{
+			temp[i] = cmd[j];
+			j++;
+			i++;
+		}
+		temp[i] = '\0';
+		return (ft_split(temp, '|'));
+	}
+	return (ft_split(cmd, '|'));
+}
+
 void execute_pipe_commands(char *cmd, int fd, int *status)
 {
 	char **commands; // {"ls -l", "wc -l"}
@@ -276,7 +302,12 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	// 	write_stderr("The string is not right\n");
 	// 	return ;
 	// }
-	commands = ft_split(cmd, '|');
+	char *temp;
+	temp = NULL;
+	commands = get_commands(cmd, temp);
+	if (temp)
+		free(temp);
+	// commands = ft_split(cmd, '|');
 	if (!commands)
 		return;
 	while (commands[num_commands])
@@ -285,6 +316,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	i = 0;
 	while (i < num_commands)
 	{
+		printf("commands[i]: %s; len: %d\n", commands[i], ft_strlen(commands[i]));
 		if (i < num_commands - 1 && pipe(pipefd) == -1)
 		{
 			perror("pipe");
@@ -505,14 +537,17 @@ void	run_ex(char **line, int *status)
 	// printf("after [check_quastion_sign] line: %s, len: %d\n", *line, ft_strlen(*line));
 	bridge_var(line);
 	// printf("after [bridge_var] line: %s, len: %d\n", *line, ft_strlen(*line));
-	if (!*line && **line != '\0' || ft_strlen(*line) == 0)
+	if (!*line)
 		return ;
 	i = 0;
 	while ((*line)[i] && ft_isspace((*line)[i]))
 		i++;
-	if (!ft_strchr(*line + i, '|'))
-		return (execute_command_single(*line + i, status));
-	execute_pipe_commands(*line + i, 1, status);
+	if ((*line)[i] == '\0')
+		return ;
+	// printf("[run_ex] line: %s\n", *line);
+	if (!ft_strchr(*line, '|'))
+		return (execute_command_single(*line, status));
+	execute_pipe_commands(*line, 1, status);
 }
 
 int	main(void)
@@ -561,7 +596,7 @@ ctrl + \ after some stuff should do nothing
 если писать cat и затем нажимать ctrl+c появляется лишний > (иногда) +
 
 
-> export PATH=/usr/bin
+> export PATH=/usr/bin					+
 zsh: segmentation fault  ./minishell
 
 

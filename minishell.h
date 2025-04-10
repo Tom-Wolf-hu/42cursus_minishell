@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 15:04:14 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:17:57 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ char	*find_var_value(char *var_name);
 void	change_str(char **str, char *name, char *value);
 void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
+void	expand_vars(char **str);
 
 //echo.c
 void	wr_stillquotes(char *line, int fd, int *i, char quotes);
