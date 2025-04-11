@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/11 17:28:21 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:40:16 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,24 @@ char	*get_filename(char *cmd)
 
 void	handle_heredoc_child(int write_fd, const char *delimiter)
 {
-	char *line;
+	char	*line;
+	int		std;
 
+	if (!isatty(STDIN_FILENO))
+	{
+		std = open("/dev/tty", O_RDWR);
+		if (!std)
+		{
+			perror("Failed restore STDIN for heredoc");
+			exit(EXIT_FAILURE);
+		}
+		if (dup2(std, STDIN_FILENO) < 0)
+		{
+			perror("Failed to duplicate STDIN for heredoc");
+			exit(EXIT_FAILURE);
+		}
+		close(std);
+	}
 	signal(SIGINT, SIG_DFL);
 	while (1)
 	{

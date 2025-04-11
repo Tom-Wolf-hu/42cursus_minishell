@@ -57,3 +57,5 @@ heredoc> $PATH -> will expand but if hello in "", then it won't expand
 Commands with heredoc pipe and quotes
 <<finish | awk '{print $2}' | tr '\n' ' '	-->heredoc part working but after finis it is printing the following error message: Error: Command not found
 yes "no" | HEAD -n 10
+<< hello << tamas cat
+< file << tamas cat | wc -l

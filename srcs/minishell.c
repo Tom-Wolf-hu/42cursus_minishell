@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 21:23:30 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/11 19:57:09 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,7 +334,7 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 	i = 0;
 	while (i < num_commands)
 	{
-		printf("commands[i]: %s; len: %d\n", commands[i], ft_strlen(commands[i]));
+		// printf("commands[i]: %s; len: %d\n", commands[i], ft_strlen(commands[i]));
 		if (i < num_commands - 1 && pipe(pipefd) == -1)
 		{
 			perror("pipe");
@@ -587,7 +587,7 @@ int	main(void)
 			line = readline("> ");
 		else
 		{
-			write(2, "here\n", 5);
+			// write(2, "here\n", 5);
 			line = get_next_line(STDIN_FILENO);
 			line = ft_strtrim(line, "\n");
 		}

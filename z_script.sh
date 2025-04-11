@@ -22,7 +22,7 @@ echo "Compilation succesfull."
 > $BASH_OUTPUT
 > $CHECK
 
-run_test() {
+run_stest() {
 	local input="$1"
 	local test_name="$2"
 
@@ -54,34 +54,64 @@ run_test() {
 	fi
 }
 
+run_ktest() {
+	local prepare_cmd="$1"
+	local check_cmd="$2"
+	local test_name="$3"
+
+	echo -e "$prepare_cmd" | $RUN_MINISHELL
+	echo -e "$check_cmd" | $RUN_MINISHELL | grep -v ">" > $MINISH_TEMP 2>&1
+
+	echo -e "$prepare_cmd" | $RUN_BASH
+	echo -e "$check_cmd" | $RUN_BASH > $BASH_TEMP 2>&1
+
+	if diff -q $MINISH_TEMP $BASH_TEMP > /dev/null; then
+		echo "[PASS] $test_name"
+		echo "[PASS] $test_name" >> $CHECK
+	else
+		echo "[FAIL] $test_name"
+		echo "[FAIL] $test_name" >> $CHECK
+		echo "Your Minishell output:"
+		echo -e "$test_name\n" >> $MINISH_OUTPUT
+		cat $MINISH_TEMP
+		cat $MINISH_TEMP >> $MINISH_OUTPUT
+		echo -e "\n--------------------------------\n" >> $MINISH_OUTPUT
+		echo "Expected bash output:"
+		echo -e "$test_name\n" >> $BASH_OUTPUT
+		cat $BASH_TEMP
+		cat $BASH_TEMP >> $BASH_OUTPUT
+		echo -e "\n--------------------------------\n" >> $BASH_OUTPUT
+	fi
+}
+
 echo "Test builtin commands" | tee -a $CHECK
-run_test "echo HELLO WORLD" "Echo Test"
-run_test "pwd" "Print working directory Test"
-run_test "env" "Environment Test"
-# run_test "cd" "Single cd Test"
-# run_test "cd /Users" "cd with path Test"
-# run_test "export TEST_VAR=hello" "Export variable test"
-# run_test "env" "Environment Test after export"
-# run_test "unset TEST_VAR" "Unset Test"
-# run_test "env" "Environment Test after unset"
-# run_test "exit" "Exit Test"
-# echo -e "\n"
+run_stest "echo HELLO WORLD" "Echo Test"
+run_stest "pwd" "Print working directory Test"
+run_ktest "env" "env | grep USER" "Environment Test"
+run_ktest "cd" "pwd" "Single cd Test"
+run_ktest "cd /Users" "pwd" "cd with path Test"
+run_ktest "export TEST_VAR=hello" "env | grep TEST_VAR" "Export variable test"
+# run_stest "env" "Environment Test after export"
+run_ktest "unset TEST_VAR" "env | grep TEST_VAR" "Unset Test"
+# run_ktest "env" "Environment Test after unset"
+run_stest "exit" "Exit Test"
+echo -e "\n"
 
 echo -e "\nTest external commands" | tee -a $CHECK
-run_test "ls -l" "List Files Test"
-run_test "whoami" "Whoami Test"
+run_ktest "ls -l" "ls -l | wc -l" "List Files Test"
+run_stest "whoami" "Whoami Test"
 echo -e "\n"
 
 echo -e "\nTest pipe commands" | tee -a $CHECK
-run_test "ls -l | wc -l" "ls -l line count Test"
-run_test "echo hello | wc -l" "echo line count Test"
-run_test "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
-# run_test "ps aux | grep \"zsh\"" "Grep with doublequotes Test"
+run_stest "ls -l | wc -l" "ls -l line count Test"
+run_stest "echo hello | wc -l" "echo line count Test"
+run_stest "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
+run_stest "ps aux | grep \"zsh\"" "Grep with doublequotes Test"
 
 echo -e "\nTest pipe with redirections commands" | tee -a $CHECK
-run_test "cat < check.txt | grep FAIL" "FAIL lines in check.txt Test"
-run_test "ls | sort > sorted_list.txt" "Sort ls result into txt file Test"
-run_test "grep FAIL < check.txt | sort > output.txt" "Sort from check FAIL lines into output.txt file"
+run_stest "cat < check.txt | grep FAIL" "FAIL lines in check.txt Test"
+run_stest "ls | sort > sorted_list.txt" "Sort ls result into txt file Test"
+run_stest "grep FAIL < check.txt | sort > output.txt" "Sort from check FAIL lines into output.txt file"
 
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
