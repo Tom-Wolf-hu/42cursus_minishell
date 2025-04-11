@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 20:54:40 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:28:21 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void	handle_heredoc_child(int write_fd, const char *delimiter)
 			free(line);
 			break ;
 		}
+		check_quastion_sign(&line, ft_itoa(g_status));
+		bridge_var(&line);
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);
