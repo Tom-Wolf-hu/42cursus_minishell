@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 19:27:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/11 12:38:49 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,8 @@ void	sig_handler(int sig)
 		g_status = 130;
 		write(STDOUT_FILENO, "\n", 1);
 		pid = waitpid(-1, &status, WNOHANG);
-		if (g_heredoc)
-		{
-			printf("Caught a sig\n");
-			g_heredoc = 0;
-			write(STDOUT_FILENO, "\n", 1);
-			// rl_on_new_line();
-			// rl_replace_line("", 0);
-			// rl_redisplay();
-			return ;
-		}
 		if (pid == 0)
-		{
 			return ;
-		}
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
