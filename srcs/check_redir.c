@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/11 19:40:16 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/12 14:15:21 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	handle_redirection(char *line, int *status)
 					signal(SIGINT, sig_handler);
 					dup2(pipe_fd[0], STDIN_FILENO);
 					close(pipe_fd[0]);
-					return ;
+					// return ;
 				}
 				i += 2;
 			}

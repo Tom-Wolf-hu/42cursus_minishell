@@ -1,5 +1,9 @@
 #!/bin/bash
 
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+DEFAULT='\033[0m'
+
 PATH_MINISHELL=./
 RUN_MINISHELL=./minishell
 RUN_BASH=/bin/bash
@@ -36,11 +40,11 @@ run_stest() {
 	echo -e "$input" | $RUN_BASH > $BASH_TEMP 2>&1
 
 	if diff -q $MINISH_TEMP $BASH_TEMP > /dev/null; then
-		echo "[PASS] $test_name"
-		echo "[PASS] $test_name" >> $CHECK
+		echo -e "${GREEN}[PASS]$DEFAULT $test_name"
+		echo -e "${GREEN}[PASS]$DEFAULT $test_name" >> $CHECK
 	else
-		echo "[FAIL] $test_name"
-		echo "[FAIL] $test_name" >> $CHECK
+		echo -e "${RED}[FAIL]$DEFAULT $test_name"
+		echo -e "${RED}[FAIL]$DEFAULT $test_name" >> $CHECK
 		echo "Your Minishell output:"
 		echo -e "$test_name\n" >> $MINISH_OUTPUT
 		cat $MINISH_TEMP
@@ -59,18 +63,20 @@ run_ktest() {
 	local check_cmd="$2"
 	local test_name="$3"
 
-	echo -e "$prepare_cmd" | $RUN_MINISHELL
-	echo -e "$check_cmd" | $RUN_MINISHELL | grep -v ">" > $MINISH_TEMP 2>&1
+	# echo -e "$prepare_cmd" | $RUN_MINISHELL | grep -v ">"
+	# echo -e "$check_cmd" | $RUN_MINISHELL | grep -v ">" > $MINISH_TEMP 2>&1
+	echo -e "$prepare_cmd" | $RUN_MINISHELL | grep -vE '^\s*(minishell)?\s*>'
+	echo -e "$check_cmd" | $RUN_MINISHELL | grep -vE '^\s*(minishell)?\s*>' > $MINISH_TEMP 2>&1
 
 	echo -e "$prepare_cmd" | $RUN_BASH
 	echo -e "$check_cmd" | $RUN_BASH > $BASH_TEMP 2>&1
 
 	if diff -q $MINISH_TEMP $BASH_TEMP > /dev/null; then
-		echo "[PASS] $test_name"
-		echo "[PASS] $test_name" >> $CHECK
+		echo -e "${GREEN}[PASS]$DEFAULT $test_name"
+		echo -e "${GREEN}[PASS]$DEFAULT $test_name" >> $CHECK
 	else
-		echo "[FAIL] $test_name"
-		echo "[FAIL] $test_name" >> $CHECK
+		echo "${RED}[FAIL]$DEFAULT $test_name"
+		echo "${RED}[FAIL]$DEFAULT $test_name" >> $CHECK
 		echo "Your Minishell output:"
 		echo -e "$test_name\n" >> $MINISH_OUTPUT
 		cat $MINISH_TEMP
@@ -91,9 +97,7 @@ run_ktest "env" "env | grep USER" "Environment Test"
 run_ktest "cd" "pwd" "Single cd Test"
 run_ktest "cd /Users" "pwd" "cd with path Test"
 run_ktest "export TEST_VAR=hello" "env | grep TEST_VAR" "Export variable test"
-# run_stest "env" "Environment Test after export"
 run_ktest "unset TEST_VAR" "env | grep TEST_VAR" "Unset Test"
-# run_ktest "env" "Environment Test after unset"
 run_stest "exit" "Exit Test"
 echo -e "\n"
 
@@ -105,17 +109,25 @@ echo -e "\n"
 echo -e "\nTest pipe commands" | tee -a $CHECK
 run_stest "ls -l | wc -l" "ls -l line count Test"
 run_stest "echo hello | wc -l" "echo line count Test"
-run_stest "ps aux | grep zsh | awk '{print $2}'" "Print zsh PIDs Test"
-run_stest "ps aux | grep \"zsh\"" "Grep with doublequotes Test"
+run_stest "ls -l | grep file | sort" "3 command in pipleine Test"
+run_stest "cat file3 | grep "helo1" | cut -d ':' -f 3 | sort" "4 command in pipeline Test with external command"
+# run_stest 'echo $PATH | tr ":" "\n" | grep "bin" | wc -l' "4 command in pipeline Test with builtin command"
+# run_stest "ps aux | grep zsh | awk '{print $5}'" "Print zsh PIDs Test"
+# run_stest "ps aux | grep \"zsh\"" "Grep with doublequotes Test" --> these commands not working right way through script
 
 echo -e "\nTest pipe with redirections commands" | tee -a $CHECK
 run_stest "cat < check.txt | grep FAIL" "FAIL lines in check.txt Test"
-run_stest "ls | sort > sorted_list.txt" "Sort ls result into txt file Test"
-run_stest "grep FAIL < check.txt | sort > output.txt" "Sort from check FAIL lines into output.txt file"
+run_ktest "ls | sort > sorted_list.txt" "cat sorted_list.txt" "Sort ls result into txt file Test"
+run_ktest "grep FAIL < check.txt | sort > output.txt" "cat output.txt" "Sort from check FAIL lines into output.txt file"
+run_ktest "cat file3 | grep day | awk '{print $2}' > file5" "cat file5" "Print second column of day lines from file3 to file5"
+run_ktest "sort < file3 | uniq > file5" "cat file5" "Sort file3 lines without duplicate from file3 to file5"
+
+echo -e "\nTest pipe with redirections and quotes" | tee -a $CHECK
+run_stest "env | grep -E '^(USER|HOME|PWD|SHELL)='" "Environment most common variable Test"
 
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
 
 # rm -f $MINISH_TEMP $BASH_TEMP
 # rm -f $MINISH_OUTPUT $BASH_OUTPUT $CHECK
-rm -f output.txt sorted_list.txt
+rm -f output.txt sorted_list.txt file5
