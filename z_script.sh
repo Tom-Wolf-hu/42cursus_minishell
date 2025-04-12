@@ -122,8 +122,28 @@ run_ktest "grep FAIL < check.txt | sort > output.txt" "cat output.txt" "Sort fro
 run_ktest "cat file3 | grep day | awk '{print $2}' > file5" "cat file5" "Print second column of day lines from file3 to file5"
 run_ktest "sort < file3 | uniq > file5" "cat file5" "Sort file3 lines without duplicate from file3 to file5"
 
+echo -e "\nTest Commands with single quotes" | tee -a $CHECK
+run_stest "echo 'hello alex' 'how are you'" "Echo Test with 2 single quoted arguments"
+run_stest "echo 'This is the exit status: $?'" "Exit status Test"
+
+echo -e "\nTest Commands with doublequotes" | tee -a $CHECK
+run_stest "echo \"hello alex\" \"how are you\"" "Echo Test with 2 doublequoted arguments"
+run_stest "grep \"day\" \"file3\"" "Grep Test with 2 doublequoted arguments"
+run_stest "echo \"hello alex\" 123 \"how are you\"" "Echo Test with doublequoted and simple argument"
+run_stest "echo \"This is the exit status: $?\"" "Exit status Test"
+run_stest "\"echo\" hello" "Command in doublequotes Test"
+
+echo -e "\nTest Commands with single and doublequotes" | tee -a $CHECK
+run_stest "echo \"Hello '$USER'\"" "Expand in singlequotes Test"
+run_stest "echo 'Hello \"$USER\"'" "Expand in doublequotes Test"
+run_stest "echo \"hello ' tak\"" "Double and single command Test"
+# run_stest "\"cat\" 'file3'" "Command in doublequotes file in singlequotes Test"
+
 echo -e "\nTest pipe with redirections and quotes" | tee -a $CHECK
 run_stest "env | grep -E '^(USER|HOME|PWD|SHELL)='" "Environment most common variable Test"
+run_stest "cat < file3 | grep 'day'" "Grep with singlequotes Test"
+run_stest "yes \"no\" | HEAD -n 10" "Print 10 no Test"
+run_stest "cat < file3 | grep \"day\"" "Grep from file with doublequotes"
 
 echo "Cleaning up..."
 make -C "$PATH_MINISHELL" fclean
