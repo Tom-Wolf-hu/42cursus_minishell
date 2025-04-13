@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/10 20:37:55 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:13:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ typedef	struct s_store
 	int		fd_exout;
 	int		pipefd[2];
 }	t_store;
+
+//builtins/get_pwd.c
+int		ft_getcwd(char *line, int fd);
+
+//builtin/handle_cd.c
+int		cd_arguments(char **arr, char **path);
+int		handle_cd(char *line);
 
 //check_redir.c
 char	*remove_redirects(char *cmd);

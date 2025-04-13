@@ -16,6 +16,7 @@ Commands with redirections
 
 Commands with pipe
 sleep 5 | sleep 3 | sleep 1		-->this pipeline now not working paralel. I don't know it can casue a truoble for us during the evaluation
+cat cd - | wc -l				-->the wc -l waiting for input, so it can closed by ctrl+c
 ls -l | wc -l
 ls -l | grep file | sort
 echo hello | wc -l
