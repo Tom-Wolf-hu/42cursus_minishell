@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:22:01 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/02/25 19:05:42 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:43:29 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,20 @@ char	*str_realloc(char *oldstr, size_t newsize)
 		return (NULL);
 	newstr[newsize - 1] = '\0';
 	return (newstr);
+}
+
+void	free_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+	arr = NULL;
 }

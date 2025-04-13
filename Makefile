@@ -15,6 +15,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/minishell.c \
 		srcs/check_line.c \
 		srcs/msh_cmd.c \
+		srcs/msh_utils.c \
 		srcs/msh_quotes.c \
 		srcs/check_var.c \
 		srcs/check_quastion_sign.c \
@@ -25,7 +26,6 @@ SRCS =	srcs/builtins/echo.c \
 		# srcs/msh_operations.c \
 		# srcs/msh_parse.c \
 		# srcs/msh_env.c \
-		# srcs/msh_utils.c \
 		# srcs/msh_line_analizer.c \
 		# srcs/msh_redir_cmd_call.c \
 		# srcs/msh_pipe.c \

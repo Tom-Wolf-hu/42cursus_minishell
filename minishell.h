@@ -6,39 +6,39 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/13 17:13:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:43:47 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/resource.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <termios.h>
-#include <stdbool.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/resource.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <termios.h>
+# include <stdbool.h>
 
-#include "lib/get_next_line/get_next_line.h"
-#include "lib/libft/libft.h"
+# include "lib/get_next_line/get_next_line.h"
+# include "lib/libft/libft.h"
 
 extern int g_heredoc;
 extern int g_status;
 
 typedef struct s_saved_std
 {
-	int saved_stdin;
-	int saved_stdout;
+	int	saved_stdin;
+	int	saved_stdout;
 }	t_saved_std;
 
 typedef enum e_token
@@ -81,9 +81,21 @@ typedef	struct s_store
 //builtins/get_pwd.c
 int		ft_getcwd(char *line, int fd);
 
-//builtin/handle_cd.c
+//builtins/handle_cd.c
 int		cd_arguments(char **arr, char **path);
 int		handle_cd(char *line);
+
+//builtins/handle_exit.c
+void	handle_exit(char *line, int *status);
+
+//builtins/handle_export_unset.c
+int		find_var_in_env(char *name);
+int		add_user_env_var(char *name);
+int		is_user_env_var(char *name);
+
+
+//builtins/print_env.c
+int		print_env(int fd);
 
 //check_redir.c
 char	*remove_redirects(char *cmd);
@@ -155,6 +167,12 @@ char	*remove_quotes(char *line);
 char	*get_temp_remove_quotes(char *line, int *i, char quotes);
 void	write_stderr(char *str);
 int		check_quotes(char *line);
+
+//msh_utils.c
+void	print_arr(char **strarr);
+void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
+char	*str_realloc(char *oldstr, size_t newsize);
+void	free_arr(char **arr);
 
 /*
 The following file includes functions for checking 

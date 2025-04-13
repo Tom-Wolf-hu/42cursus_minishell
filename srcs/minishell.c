@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/12 15:10:59 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:43:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 
 int	g_status = 0;
 int g_heredoc = 0;
-
-void	print_arr(char **strarr)
-{
-	int	i;
-
-	i = 0;
-	if (!strarr)
-	{
-		printf("The stringarray point to NULL.\n");
-		return ;
-	}
-	while (strarr[i])
-	{
-		printf("[%i] -> %s\n", i, strarr[i]);
-		i++;
-	}
-}
-
 
 void	ft_error(char *error, int exit_status)
 {
@@ -49,16 +31,6 @@ void	sig_handler(int sig)
 		g_status = 130;
 		write(STDOUT_FILENO, "\n", 1);
 		pid = waitpid(-1, &status, WNOHANG);
-		// if (g_heredoc)
-		// {
-		// 	// printf("Caught a sig\n");
-		// 	g_heredoc = 0;
-		// 	// write(STDOUT_FILENO, "\n", 1);
-		// 	// rl_on_new_line();
-		// 	// rl_replace_line("", 0);
-		// 	// rl_redisplay();
-		// 	return ;
-		// }
 		if (pid == 0)
 		{
 			return ;
@@ -66,29 +38,12 @@ void	sig_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		// rl_done = 1;
 	}
 	if (sig == SIGQUIT)
 	{
 		rl_on_new_line();
 		rl_redisplay();
 	}
-}
-
-void	free_arr(char **arr)
-{
-	int	i;
-
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-	arr = NULL;
 }
 
 int	check_line(char *line, int i)

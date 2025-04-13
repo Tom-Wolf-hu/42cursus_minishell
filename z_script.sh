@@ -93,6 +93,7 @@ run_ktest() {
 echo "Test builtin commands" | tee -a $CHECK
 run_stest "echo HELLO WORLD" "Echo Test"
 run_stest "pwd" "Print working directory Test"
+run_stest "pwd hello " "PWD Test with more arguments"
 run_ktest "env" "env | grep USER" "Environment Test"
 run_ktest "cd" "pwd" "Single cd Test"
 run_ktest "cd /Users" "pwd" "cd with path Test"

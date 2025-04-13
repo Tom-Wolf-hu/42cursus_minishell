@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/04/13 17:27:03 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:54:11 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cd_arguments(char **arr, char **path)
 		i++;
 	if (i > 2)
 	{
-		write_stderr("minishell: cd: too many arguments\n");
+		write_stderr("minishell: cd: too many arguments");
 		free_arr(arr);
 		return (1);
 	}
@@ -30,7 +30,7 @@ int	cd_arguments(char **arr, char **path)
 		*path = getenv("HOME");
 		if ((*path) == NULL)
 		{
-			write_stderr("minishell: cd: HOME not set\n");
+			write_stderr("minishell: cd: HOME not set");
 			free_arr(arr);
 			return (1);
 		}

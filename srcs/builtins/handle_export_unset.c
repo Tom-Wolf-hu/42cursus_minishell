@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 15:03:52 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/13 18:52:29 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 extern char **environ; // Массив переменных окружения
-char **user_env_vars = NULL;
-int user_env_size = 0;
+char 		**user_env_vars = NULL;
+int 		user_env_size = 0;
 
-int find_var_in_env(char *name)
+int	find_var_in_env(char *name)
 {
-    int i;
+    int	i;
 
 	i = 0;
     while (environ[i])
@@ -36,31 +36,33 @@ int add_user_env_var(char *name)
     int i = 0;
     while (i < user_env_size)
     {
-        if (strncmp(user_env_vars[i], name, strlen(name)) == 0 &&
-            user_env_vars[i][strlen(name)] == '\0')
+        if (ft_strncmp(user_env_vars[i], name, ft_strlen(name)) == 0 &&
+            user_env_vars[i][ft_strlen(name)] == '\0')
             return 0; // Уже добавлено
         i++;
     }
-
     char **new_list = realloc(user_env_vars, sizeof(char *) * (user_env_size + 1));
     if (!new_list)
         return (perror("realloc user_env_vars"), 1);
-
     user_env_vars = new_list;
-    user_env_vars[user_env_size] = strdup(name); // только имя, без значения
+    user_env_vars[user_env_size] = ft_strdup(name); // только имя, без значения
     user_env_size++;
     return 0;
 }
 
 int is_user_env_var(char *name)
 {
-    for (int i = 0; i < user_env_size; i++)
-    {
-        if (strncmp(user_env_vars[i], name, strlen(name)) == 0 &&
-            user_env_vars[i][strlen(name)] == '\0')
-            return 1;
-    }
-    return 0;
+    int	i;
+
+	i = 0;
+	while (i < user_env_size)
+	{
+		if (ft_strncmp(user_env_vars[i], name, ft_strlen(name)) == 0 &&
+			user_env_vars[i][ft_strlen(name)] == '\0')
+			return (1);
+		i++;
+	}
+    return (0);
 }
 
 int mysetenv(char *name, char *value)
@@ -78,9 +80,7 @@ int mysetenv(char *name, char *value)
 	else
 		new_var = malloc(ft_strlen(name) + 1);
 	if (!new_var)
-		return (exit(1), 1);
-	if (new_var == NULL)
-		return (perror("malloc"), 1);
+		return (perror("malloc"), exit(1), 1);
 	strcpy(new_var, name);
 	if (value)
 	{
@@ -98,7 +98,6 @@ int mysetenv(char *name, char *value)
 		int count = 0;
 		while (environ[count])
 			count++;
-
 		// environ = realloc(environ, sizeof(char*) * (count + 2));
 		char **new_env = realloc(environ, sizeof(char *) * (count + 2));
 		if (!new_env)
@@ -190,6 +189,6 @@ int	handle_unset(char *line, int fd)
 	if (arg && *arg != '\0')
 		return (my_unsetenv(arg));
 	// printf("unset: invalid syntax\n");
-	write(fd, "unset: invalid syntax\n", ft_strlen("unset: invalid syntax\n"));
+	write_stderr("unset: invalid syntax");
 	return (1);
 }
