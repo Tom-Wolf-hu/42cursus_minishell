@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/14 14:30:49 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:43:01 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
 void	run_ex(char **line, int *status);
-int 	main(void);
+int		main(void);
 
 //msh_cmd.c
 int		is_builtin_choose(char *clean_cmd);
@@ -166,20 +166,23 @@ int		my_unsetenv(char *name);
 int		handle_unset(char *line, int fd);
 
 //msh_quotes.c
-int		check_command_quotes(char *line);
-char	*remove_quotes_first_word(char *line);
 char	*remove_quotes_commands(char *line);
-char	*ft_join(char **arr);
 char	*remove_quotes(char *line);
 char	*get_temp_remove_quotes(char *line, int *i, char quotes);
-void	write_stderr(char *str);
 int		check_quotes(char *line);
+
+//msh_quotes_utils.c
+int		rqfw_copy(char *line, char *result, int i);
+char	*remove_quotes_first_word(char *line);
+int		check_command_quotes(char *line);
+char	*ft_join(char **arr);
 
 //msh_utils.c
 void	print_arr(char **strarr);
 void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
 char	*str_realloc(char *oldstr, size_t newsize);
 void	free_arr(char **arr);
+void	write_stderr(char *str);
 
 /*
 The following file includes functions for checking 

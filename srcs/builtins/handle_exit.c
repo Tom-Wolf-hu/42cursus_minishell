@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/14 14:33:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:48:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	check_exit_args(char **line_arr, int *status)
 	}
 	else if (line_arr[1])
 	{
+		// line_arr[1] = remove_quotes_first_word(line_arr[1]);
 		if (!is_nummeric(line_arr[1]))
 		{
 			printf("minishell: exit: %s: numeric "

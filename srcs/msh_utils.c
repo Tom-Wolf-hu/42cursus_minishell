@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:22:01 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/13 18:43:29 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:06:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ void	print_arr(char **strarr)
 		printf("[%i] -> %s\n", i, strarr[i]);
 		i++;
 	}
+}
+
+void	write_stderr(char *str)
+{
+	int	strlen;
+
+	if (!str)
+		str = "Error occured.\n";
+	strlen = ft_strlen(str);
+	write(2, str, strlen);
+	write(2, "\n", 1);
 }
 
 void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize)
