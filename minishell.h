@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/13 18:43:47 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:01:00 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ int		find_var_in_env(char *name);
 int		add_user_env_var(char *name);
 int		is_user_env_var(char *name);
 
-
 //builtins/print_env.c
 int		print_env(int fd);
 
@@ -102,6 +101,11 @@ char	*remove_redirects(char *cmd);
 char	*get_filename(char *cmd);
 void	handle_heredoc(const char *delimiter);
 void	handle_redirection(char *cmd, int *status);
+
+//check_question_sign.c
+void	copy_from_sign(char *result, char *line, char *status, int index);
+void	change_to_exit_status(int i, char **line, char *status);
+int		check_quastion_sign(char **line, char *status);
 
 //minishell.c
 void	print_arr(char **strarr);
