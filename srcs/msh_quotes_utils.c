@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:03:50 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/14 18:45:37 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 20:16:51 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,45 @@ char	*remove_quotes_first_word(char *line)
 	return (result);
 }
 
+int	check_quotes(char *line)
+{
+	int	i;
+	int	j;
+	int	end_q;
+
+	i = 0;
+	end_q = 1;
+	while (line[i])
+	{
+		if (line[i] == ';' || line[i] == '\\')
+			return (write_stderr("The character is not supported"), 1);
+		if (line[i] == '\'' || line[i] == '\"')
+		{
+			j = i;
+			i++;
+			end_q = 0;
+			while (line[i])
+			{
+				if (line[i] == '\\' && line[j] == '\"')
+					return (write_stderr("The character is not supported"), 1);
+				if (line[i] == line[j])
+				{
+					end_q = 1;
+					break ;
+				}
+				i++;
+			}
+		}
+		i++;
+	}
+	if (end_q == 0)
+	{
+		write_stderr("The quotes are not closed");
+		return (1);
+	}
+	return (0);
+}
+
 // char	*remove_quotes_first_word(char *line)
 // {
 // 	int		i;
@@ -99,6 +138,38 @@ char	*remove_quotes_first_word(char *line)
 // 	result[j] = '\0';
 // 	return (result);
 // }
+
+/*
+	check if we still need the following three function.
+	I think we don't need anymore.
+*/
+
+char	*remove_quotes_commands(char *line)
+{
+	char	**arr;
+	char	*clean_result;
+	char	*clean_str;
+	int		i;
+
+	i = 0;
+	arr = ft_split(line, '|');
+	while (arr[i])
+	{
+		clean_str = remove_redirects(arr[i]);
+		if (!clean_str)
+			return (free_arr(arr), NULL);
+		if (!check_command_quotes(clean_str))
+			return (free(clean_str), free_arr(arr), NULL);
+		clean_str = remove_quotes_first_word(clean_str);
+		if (!clean_str)
+			return (NULL);
+		free(arr[i]);
+		arr[i] = clean_str;
+		i++;
+	}
+	clean_result = ft_join(arr);
+	return (free_arr(arr), clean_result);
+}
 
 int	check_command_quotes(char *line)
 {
