@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/14 11:01:00 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:30:49 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		cd_arguments(char **arr, char **path);
 int		handle_cd(char *line);
 
 //builtins/handle_exit.c
+int		check_exit_args(char **line_arr, int *status);
 void	handle_exit(char *line, int *status);
 
 //builtins/handle_export_unset.c
@@ -128,7 +129,9 @@ void	run_ex(char **line, int *status);
 int 	main(void);
 
 //msh_cmd.c
+int		is_builtin_choose(char *clean_cmd);
 int		is_builtin(char *cmd);
+void	exec_builtin_choose(char *clean_cmd, int fd, int *status);
 void	execute_builtin(char *cmd, int fd, int *status);
 
 //check_line.c
