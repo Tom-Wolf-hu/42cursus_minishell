@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 14:13:21 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 17:10:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ char	*get_filename(char *cmd)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
 	clean_filename = remove_quotes_first_word(filename);
-	// printf("clean_filename: %s\n", clean_filename);
 	return (clean_filename);
-	// return filename;
 }
 
 void	sig_handler_heredoc(int sig)
@@ -254,13 +252,8 @@ char	*before_red(char *cmd, int *i)
 	j = 0;
 	while (cmd[*i] && cmd[*i] != '>' && cmd[*i] != '<')
 		(*i)++;
-	// printf("*i == %d\n", *i);
-	// printf("ch == %c\n", cmd[*i]);
 	if (start == *i)
 		return (NULL);
-	// if (start + 1 == *i || *i + 1 == start || start == *i)
-	// 	return NULL;
-	// printf("*i - start == %d\n", *i - start);
 	bef_red = malloc((*i - start + 1));
 	if (!bef_red)
 	{
@@ -285,109 +278,11 @@ char	*remove_redirects(char *cmd)
 
 	i = 0;
 	clean_cmd = NULL;
-	// write(1, "passed1\n", 8);
 	while (cmd[i])
 	{
-		// write(1, "passed2\n", 8);
 		temp = before_red(cmd, &i);
-		// if (!temp)
-		// {
-		// 	printf("clean_cmd is null\n");
-		// 	break ;
-		// }
-		// write(1, "passed3\n", 8);
 		join_part(&clean_cmd, temp);
-		// write(1, "passed4\n", 8);
 		redir_part(cmd, &i);
 	}
-	// printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
 	return (clean_cmd);
 }
-
-
-// void	handle_redirection(char *cmd, int *status)
-// {
-// 	int		file_fd;
-// 	char	*filename;
-
-// 	file_fd = -1;
-// 	filename = get_filename(cmd);
-// 	if (!filename)
-// 		return ;
-// 	if (strstr(cmd, "<<") && !strstr(cmd, "<<<"))
-// 	{
-// 		// printf("redirection for <<\n");
-// 		handle_heredoc(filename);
-// 	}
-// 	else if ((strstr(cmd, ">>")))
-// 	{
-// 		// printf("redirection for >>\n");
-// 		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 		if (file_fd == -1)
-// 			return (perror("open"), exit(1));
-// 		dup2(file_fd, STDOUT_FILENO);
-// 		close(file_fd);
-// 	}
-// 	else if ((strchr(cmd, '>')))
-// 	{
-// 		// printf("redirection for >\n");
-// 		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 		if (file_fd == -1)
-// 			return (perror("open"), exit(1));
-// 		dup2(file_fd, STDOUT_FILENO);
-// 		close(file_fd);
-// 	}
-// 	else if ((strchr(cmd, '<')))
-// 	{
-// 		file_fd = open(filename, O_RDONLY);
-// 		if (file_fd == -1)
-// 		{
-// 			perror("open");
-// 			*status = 1;
-// 			return ;
-// 		}
-// 		dup2(file_fd, STDIN_FILENO);
-// 		close(file_fd);
-// 	}
-// 	free(filename);
-// }
-
-// char	*remove_redirects(char *cmd)
-// {
-// 	char	*clean_cmd;
-// 	char	*temp;
-// 	int		start;
-// 	int		end;
-// 	int		i;
-// 	int		j;
-
-// 	j = 0;
-// 	start = 0;
-// 	while (cmd[start] && cmd[start] != '>' && cmd[start] != '<')
-// 		start++;     // Находим первый символ редиректа
-// 	if (!cmd[start]) // Если редиректов нет, просто копируем строку
-// 		return (strdup(cmd));
-// 	end = start;
-// 	while (cmd[end] && (cmd[end] == '>' || cmd[end] == '<'
-// 			|| isspace(cmd[end])))
-// 		end++;                             // Пропускаем пробелы и сам редирект
-// 	while (cmd[end] && !isspace(cmd[end])) // Пропускаем имя файла
-// 		end++;
-// 	i = 0;
-// 	while (cmd[i] && i < start) // Копируем всё до редиректа
-// 		i++;
-// 	while (cmd[end] && isspace(cmd[end])) // Пропускаем лишние пробелы после имени файла
-// 		end++;
-// 	clean_cmd = malloc(strlen(cmd) - (end - start) + 1);
-// 	if (!clean_cmd)
-// 		return (NULL);
-// 	j = 0;
-// 	i = 0;
-// 	while (cmd[i] && i < start) // Копируем всё до редиректа
-// 		clean_cmd[j++] = cmd[i++];
-// 	while (cmd[end] && cmd[end] != '>' && cmd[end] != '<')
-// 		clean_cmd[j++] = cmd[end++];
-// 	clean_cmd[j] = '\0';
-// 	// printf("clean_cmd in remove redirects: %s\n", clean_cmd);
-// 	return (clean_cmd);
-// }

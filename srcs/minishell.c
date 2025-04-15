@@ -6,14 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/11 13:32:12 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 16:42:08 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 int	g_status = 0;
-int g_heredoc = 0;
 
 void	ft_error(char *error, int exit_status)
 {
@@ -99,10 +98,19 @@ void	disable_ctrl_c_output(int *status)
 {
 	struct termios	term;
 
-	tcgetattr(STDIN_FILENO, &term);
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+	{
+		perror("tcgetattr");
+		*status = 1;
+		return ;
+	}
 	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	*status = 130;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+	{
+		perror("tcsetattr");
+		*status = 1;
+		return ;
+	}
 }
 
 void	setup_signal_handlers(void)

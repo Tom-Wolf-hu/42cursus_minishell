@@ -3,52 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/09 14:09:54 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:08:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int check_command_quotes(char *line)
+int	check_command_quotes(char *line)
 {
-    int in_quote = 0;
-    int i = 0;
+	int	in_quote;
+	int	i;
 
-    while (line[i] && (line[i] == ' ' || line[i] == '\t'))
-        i++;
-    if ((line[i] == '\'' || line[i] == '\"') && line[i + 1] == line[i])
-        return 0;
-    while (line[i]) 
-    {
-        if ((line[i] == '\'' || line[i] == '\"') && !in_quote) 
-        {
-            in_quote = 1;
-        }
-        else if ((line[i] == '\'' || line[i] == '\"') && in_quote) 
-        {
-            in_quote = 0;
-        }
-        if (isspace(line[i]) && in_quote)
-            return 0;
-        i++;
-    }
-    if (in_quote)
-        return 0;
-    return 1;
+	i = 0;
+	in_quote = 0;
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+		i++;
+	if ((line[i] == '\'' || line[i] == '\"') && line[i + 1] == line[i])
+		return (0);
+	while (line[i])
+	{
+		if ((line[i] == '\'' || line[i] == '\"') && !in_quote)
+			in_quote = 1;
+		else if ((line[i] == '\'' || line[i] == '\"') && in_quote)
+			in_quote = 0;
+		if (ft_isspace(line[i]) && in_quote)
+			return (0);
+		i++;
+	}
+	if (in_quote)
+		return (0);
+	return (1);
 }
 
-char *remove_quotes_first_word(char *line)
+char	*remove_quotes_first_word(char *line)
 {
-	int i = 0;
-	int j = 0;
-	char *result;
+	int		i;
+	int		j;
+	char	*result;
 
+	i = 0;
+	j = 0;
 	if (!line)
 		return (NULL);
-    while (line[i] && isspace(line[i]))
+	while (line[i] && isspace(line[i]))
 		i++;
 	if (line[i] != '\'' && line[i] != '\"')
 		return (strdup(line));
@@ -78,133 +78,68 @@ char *remove_quotes_first_word(char *line)
 	return (result);
 }
 
-char	*remove_quotes_commands(char *line)
+char	*get_temp_remove_quotes(char *line, int *i, char quotes)
 {
-	char **arr;
-	char *clean_result;
-	char *clean_str;
-	int i = 0;
+	int		len;
+	int		start;
+	int		end;
+	char	*result;
 
-	arr = ft_split(line, '|');
-	while (arr[i])
-	{
-		clean_str = remove_redirects(arr[i]);
-		if (!clean_str)
-		{
-			free_arr(arr);
-			return (NULL);
-		}
-		if (!check_command_quotes(clean_str))
-		{
-			free(clean_str);
-			free_arr(arr);
-			return (NULL);
-		}
-		clean_str = remove_quotes_first_word(clean_str);
-		if (!clean_str)
-			return (NULL);
-		// printf("%s\n", clean_str);
-		free(arr[i]);
-		arr[i] = clean_str;
-		i++;
-	}
-	clean_result = ft_join(arr);
-	return (free_arr(arr), clean_result);
-}
-
-char *ft_join(char **arr)
-{
-	int i = 0;
-	char *result;
-	char *temp;
-
-	if (!*arr)
-		return (NULL);
-	result = strdup(arr[i]);
-	if (!result)
-		return (NULL);
-	while (arr[i + 1])
-	{
-		temp = ft_strjoin(result, " ");
-		if (!temp)
-			return (free(result), NULL);
-		free(result);
-		result = temp;
-		temp = ft_strjoin(result, arr[i + 1]);
-		if (!temp)
-		{
-			free(result);
-			return (NULL);
-		}
-		free(result);
-		result = temp;
-		i++;
-	}
-	return (result);
-}
-
-char *get_temp_remove_quotes(char *line, int *i, char quotes)
-{
-    int len;
-    int start;
-    int end;
-	char *result;
-
-	len = strlen(line);
+	len = ft_strlen(line);
 	start = *i + 1;
 	end = start;
-    while (end < len)
+	while (end < len)
 	{
-        if (line[end] == '\\' && quotes == '\"' && end + 1 < len && (quotes == '\"' || quotes == '\''))
-            end += 2;
-        else if (line[end] == quotes)
-            break;
+		if (line[end] == '\\' && quotes == '\"' && end + 1 < len && (quotes == '\"' || quotes == '\''))
+			end += 2;
+		else if (line[end] == quotes)
+			break ;
 		else
-            end++;
-    }
-    result = (char *)malloc((end - start + 1) * sizeof(char));
-    if (!result)
-		return NULL;
-    memcpy(result, line + start, end - start);
-    result[end - start] = '\0';
-    if (end < len && line[end] == quotes)
+			end++;
+	}
+	result = (char *)malloc((end - start + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	ft_memcpy(result, line + start, end - start);
+	result[end - start] = '\0';
+	if (end < len && line[end] == quotes)
 		*i = end + 1;
 	else
 		*i = end;
-    return result;
+	return (result);
 }
 
-char *remove_quotes(char *line)
+char	*remove_quotes(char *line)
 {
-    int i;
-	int len;
-    char *result;
-	int pos;
-	char *tmp;
+	int		i;
+	int		len;
+	char	*result;
+	int		pos;
+	char	*tmp;
 
 	i = 0;
-	len = strlen(line);
+	len = ft_strlen(line);
 	result = (char *)malloc(len + 1);
-    if (!result)
-		return NULL;
-    pos = 0;
-    while (i < len)
+	if (!result)
+		return (NULL);
+	pos = 0;
+	while (i < len)
 	{
-        if (line[i] == '\'' || line[i] == '\"')
+		if (line[i] == '\'' || line[i] == '\"')
 		{
-            tmp = get_temp_remove_quotes(line, &i, line[i]);
-            if (tmp)
+			tmp = get_temp_remove_quotes(line, &i, line[i]);
+			if (tmp)
 			{
-                strcpy(result + pos, tmp);
-                pos += strlen(tmp);
-                free(tmp);
-            }
-        }
+				ft_strcpy(result + pos, tmp);
+				pos += ft_strlen(tmp);
+				free(tmp);
+			}
+		}
 		else
-            result[pos++] = line[i++];
-    }
-    result[pos] = '\0';
-    return result;
+			result[pos++] = line[i++];
+	}
+	result[pos] = '\0';
+	return (result);
 }
 
 void	write_stderr(char *str)

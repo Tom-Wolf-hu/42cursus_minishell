@@ -6,55 +6,64 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 15:45:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 16:39:24 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void change_to_exit_status(int i, char **line, char *status)
+int	copy_before_status(char *dst, char *src, int stop)
 {
-	char *result;
-	int	index;
+	int	i;
+
+	i = 0;
+	while (i < stop)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	return (i);
+}
+
+int	insert_status(char *dst, int index, char *status)
+{
 	int	j;
-	int	rest;
+
+	j = 0;
+	while (status[j])
+		dst[index++] = status[j++];
+	return (index);
+}
+
+void	change_to_exit_status(int i, char **line, char *status)
+{
+	char	*result;
+	int		index;
+	int		rest;
 
 	result = malloc(strlen(*line) - 2 + strlen(status) + 1);
 	if (!result)
 		return ;
-	index = 0;
-	j = 0;
-	while (index < i) // overwriting TILL status
-	{
-		result[index] = (*line)[index];
-		index++;
-	}
-	rest = index;
-	while (status[j]) // overwriting the status
-	{
-		result[index] = status[j];
-		j++;
-		index++;
-	}
-	rest += 2; // pass the $?
-	while ((*line)[rest]) // overwriting after the status
-	{
-		result[index] = (*line)[rest];
-		index++;
-		rest++;
-	}
+	index = copy_before_status(result, *line, i);
+	index = insert_status(result, index, status);
+	rest = i + 2;
+	while ((*line)[rest])
+		result[index++] = (*line)[rest++];
 	result[index] = '\0';
 	free(*line);
 	*line = result;
 }
 
-int check_quastion_sign(char **line, int wstatus)
+int	check_quastion_sign(char **line, int wstatus)
 {
-	int i = 0;
-	int flag_single = 0;
-	int flag_double = 0;
+	int		i;
+	int		flag_single;
+	int		flag_double;
 	char	*status;
 
+	i = 0;
+	flag_single = 0;
+	flag_double = 0;
 	status = ft_itoa(wstatus);
 	if (!status)
 		exit(1);
@@ -71,8 +80,7 @@ int check_quastion_sign(char **line, int wstatus)
 		}
 		i++;
 	}
-	free(status);
-	return (0);
+	return (free(status), 0);
 }
 
 // int	check_quastion_sign(char **line, char *status)

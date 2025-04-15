@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:45:12 by omalovic          #+#    #+#             */
-/*   Updated: 2025/03/03 14:51:00 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:28:50 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_isoperator(int c)
 		|| c == '$' || c == '\'' || c == '\"');
 }
 
-int ft_isspace(int c)
+int	ft_isspace(int c)
 {
 	return (c == ' ' || c == '\t' || c == '\n'
 		|| c == '\v' || c == '\f' || c == '\r');

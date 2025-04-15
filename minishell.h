@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:37:33 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 17:02:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ int		handle_unset(char *line, int fd);
 //msh_quotes.c
 int		check_command_quotes(char *line);
 char	*remove_quotes_first_word(char *line);
-char	*remove_quotes_commands(char *line);
-char	*ft_join(char **arr);
+// char	*remove_quotes_commands(char *line);
+// char	*ft_join(char **arr);
 char	*remove_quotes(char *line);
 char	*get_temp_remove_quotes(char *line, int *i, char quotes);
 void	write_stderr(char *str);
