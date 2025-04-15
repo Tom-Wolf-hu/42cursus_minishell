@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 20:05:25 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 14:13:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ void	handle_redirection(char *line, int *status)
 					if (WIFEXITED(*status) && WEXITSTATUS(*status) == 130)
 					{
 						*status = 130;
-						g_heredoc = 0;
 						free(filename);
 						return ;
 					}

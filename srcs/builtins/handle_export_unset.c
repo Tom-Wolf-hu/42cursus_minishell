@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/10 15:03:52 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:18:49 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-extern char **environ; // Массив переменных окружения
+extern char **environ;
 char **user_env_vars = NULL;
 int user_env_size = 0;
 

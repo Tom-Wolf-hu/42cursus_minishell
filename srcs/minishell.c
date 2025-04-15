@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/11 12:38:49 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/11 13:32:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,7 +400,6 @@ void	execute_command_single(char *cmd, int *status)
 	char *clean_cmd;
 	char *line;
 
-	// printf("[execute_command_single] starting\n");
 	if (is_builtin(cmd))
 	{
 		execute_builtin(cmd, 1, status);
@@ -488,13 +487,9 @@ void	execute_command_single(char *cmd, int *status)
 	{
 		waitpid(pid, &wstatus, 0);
 		if (WIFEXITED(wstatus))
-		{
 			*status = WEXITSTATUS(wstatus);
-		}
 		else if (WIFSIGNALED(wstatus))
-		{
 			*status = 128 + WTERMSIG(wstatus);
-		}
 	}
 	else
 	{
@@ -521,10 +516,8 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	if (check_quotes(*line) == 1)
 		return ;
-	check_quastion_sign(line, ft_itoa(*status));
-	// printf("after [check_quastion_sign] line: %s, len: %d\n", *line, ft_strlen(*line));
+	check_quastion_sign(line, *status);
 	bridge_var(line);
-	// printf("after [bridge_var] line: %s, len: %d\n", *line, ft_strlen(*line));
 	if (!*line)
 		return ;
 	i = 0;
@@ -532,7 +525,8 @@ void	run_ex(char **line, int *status)
 		i++;
 	if ((*line)[i] == '\0')
 		return ;
-	// printf("[run_ex] line: %s\n", *line);
+	if (ft_strcmp(*line + i, "clear") == 0 || ft_strncmp(*line + i, "clear ", 6) == 0)
+		return (rl_clear_history());
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
@@ -561,14 +555,11 @@ int	main(void)
 		}
 		if (!line)
 			break ;
-		else if (ft_strcmp(line, "clear") == 0 || ft_strncmp(line, "clear ", 6) == 0)
-			rl_clear_history();
 		else
 			run_ex(&line, &status);
 		free(line);
 	}
 	rl_clear_history();
-	free(line);
 }
 
 
