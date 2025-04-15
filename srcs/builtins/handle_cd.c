@@ -6,13 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 14:33:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 14:49:55 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void remember_path(void)
+void	remember_path(void)
 {
 	char	*cwd;
 
@@ -24,10 +24,10 @@ void remember_path(void)
 	}
 }
 
-char *choose_path_minus(void)
+char	*choose_path_minus(void)
 {
-	char *value;
-	char buffer[128];
+	char	*value;
+	char	buffer[128];
 
 	value = getenv("OLDPATH");
 	if (value)
@@ -40,11 +40,12 @@ char *choose_path_minus(void)
 	return (ft_strdup(buffer));
 }
 
-char *choose_path(char **arr, int i)
+char	*choose_path(char **arr, int i)
 {
-	char *path = NULL;
-	char *clean_path;
+	char	*path;
+	char	*clean_path;
 
+	path = NULL;
 	if (i == 2)
 	{
 		if (ft_strcmp(arr[1], "~") == 0)
@@ -53,7 +54,7 @@ char *choose_path(char **arr, int i)
 			i = -1;
 	}
 	if (i == -1)
-		return choose_path_minus();
+		return (choose_path_minus());
 	if (i == 1)
 	{
 		path = getenv("HOME");
@@ -64,34 +65,35 @@ char *choose_path(char **arr, int i)
 		}
 		return (ft_strdup(path));
 	}
-	else
-	{
-		clean_path = remove_quotes(arr[1]);
-		if (!clean_path)
-			return (NULL);
-		return (clean_path);
-	}
+	clean_path = remove_quotes(arr[1]);
+	return (clean_path);
 }
 
-int handle_cd(char *line)
+int	get_arr(char ***arr, int *i, char *line)
+{
+	*arr = ft_split(line, ' ');
+	if (!*arr)
+		return (free(line), exit(1), 1);
+	*i = 0;
+	while ((*arr)[*i])
+		(*i)++;
+	if (*i > 2)
+	{
+		printf("minishell: cd: too many arguments\n");
+		return (1);
+	}
+	return (0);
+}
+
+int	handle_cd(char *line)
 {
 	char	**arr;
 	char	*path;
 	char	*new_pwd;
 	int		i;
 
-	arr = ft_split(line, ' ');
-	if (!arr)
-		return (free(line), exit(1), 1);
-	i = 0;
-	while (arr[i])
-		i++;
-	if (i > 2)
-	{
-		printf("minishell: cd: too many arguments\n");
-		free_arr(arr);
-		return (1);
-	}
+	if (get_arr(&arr, &i, line))
+		return (free_arr(arr), 1);
 	path = choose_path(arr, i);
 	if (!path)
 		return (free_arr(arr), 1);
@@ -99,9 +101,7 @@ int handle_cd(char *line)
 	if (chdir(path) != 0)
 	{
 		perror("minishell: cd");
-		free(path);
-		free_arr(arr);
-		return 1;
+		return (free(path), free_arr(arr), 1);
 	}
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd)
