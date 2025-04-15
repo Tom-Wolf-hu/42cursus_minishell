@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 12:50:47 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 16:40:45 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,13 @@ typedef	struct s_store
 	int		pipefd[2];
 }	t_store;
 
+//builtins/echo.c
+void	wr_stillquotes(char *line, int fd, int *i, char quotes);
+void	mywrite(char *line, int fd);
+void	show_input(char **arr, int fd, int flag);
+int		only_contains_char(char *str, char ch);
+int		handle_echo(char *line, int fd);
+
 //builtins/get_pwd.c
 int		ft_getcwd(char *line, int fd);
 
@@ -98,10 +105,15 @@ int		is_user_env_var(char *name);
 int		print_env(int fd);
 
 //check_redir.c
-char	*remove_redirects(char *cmd);
+int		gf_name_length(char *cmd, int *i, int *start);
 char	*get_filename(char *cmd);
+char	*remove_redirects(char *cmd);
 void	handle_heredoc(const char *delimiter);
 void	handle_redirection(char *cmd, int *status);
+
+//check_redir_utils.c
+void	reset_stdin(void);
+
 
 //check_question_sign.c
 void	copy_from_sign(char *result, char *line, char *status, int index);
@@ -151,12 +163,6 @@ int		get_var_name_size(char *str);
 void	get_var_name(char *dest, char *str);
 void	change_str(char **str, char *name, char *value);
 void	remove_var_name(char **str, char *name);
-
-//echo.c
-void	wr_stillquotes(char *line, int fd, int *i, char quotes);
-void	mywrite(char *line, int fd);
-void	show_input(char **arr, int fd, int flag);
-int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
 void	free_var_after_exit();

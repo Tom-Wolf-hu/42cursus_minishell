@@ -12,6 +12,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/builtins/handle_export_unset.c \
 		srcs/builtins/print_env.c \
 		srcs/check_redir.c \
+		srcs/check_redir_utils.c \
 		srcs/minishell.c \
 		srcs/check_line.c \
 		srcs/msh_cmd.c \
