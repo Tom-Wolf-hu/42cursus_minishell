@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/11 13:09:28 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:45:34 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,29 +50,29 @@ void change_to_exit_status(int i, char **line, char *status)
 
 int check_quastion_sign(char **line, int wstatus)
 {
-    int i = 0;
-    int flag_single = 0;
-    int flag_double = 0;
+	int i = 0;
+	int flag_single = 0;
+	int flag_double = 0;
 	char	*status;
 
 	status = ft_itoa(wstatus);
 	if (!status)
 		exit(1);
-    while ((*line)[i])
-    {
-        if ((*line)[i] == '\'' && flag_double == 0)
-            flag_single = !flag_single;
-        else if ((*line)[i] == '\"' && flag_single == 0)
-            flag_double = !flag_double;
-        if ((*line)[i] == '$' && flag_single == 0)
-        {
-            if ((*line)[i + 1] == '?')
-                change_to_exit_status(i, line, status);
-        }
-        i++;
-    }
-    free(status);
-    return (0);
+	while ((*line)[i])
+	{
+		if ((*line)[i] == '\'' && flag_double == 0)
+			flag_single = !flag_single;
+		else if ((*line)[i] == '\"' && flag_single == 0)
+			flag_double = !flag_double;
+		if ((*line)[i] == '$' && flag_single == 0)
+		{
+			if ((*line)[i + 1] == '?')
+				change_to_exit_status(i, line, status);
+		}
+		i++;
+	}
+	free(status);
+	return (0);
 }
 
 // int	check_quastion_sign(char **line, char *status)

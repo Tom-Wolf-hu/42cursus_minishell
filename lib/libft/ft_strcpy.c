@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_env.c                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 16:10:44 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:35:22 by alex             ###   ########.fr       */
+/*   Created: 2025/04/15 15:08:08 by alex              #+#    #+#             */
+/*   Updated: 2025/04/15 15:21:53 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-int	print_env(int fd)
+char	*ft_strcpy(char *dest, const char *src)
 {
-	int				i;
-	extern char		**environ;
+	int	i;
 
 	i = 0;
-	while (environ[i])
+	if (!src)
+		return (NULL);
+	while (src[i])
 	{
-		write(fd, environ[i], ft_strlen(environ[i]));
-		write(fd, "\n", 1);
+		dest[i] = src[i];
 		i++;
 	}
-	return (0);
+	dest[i] = '\0';
+	return (dest);
 }

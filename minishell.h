@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 14:12:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:37:33 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,10 @@ int		is_empty(char *line);
 int		get_var_name_size(char *str);
 void	get_var_name(char *dest, char *str);
 int		cmp_names(char *name1, char *name2);
-char	*get_name(char *str);
 char	*find_var_value(char *var_name);
 void	change_str(char **str, char *name, char *value);
 void	remove_var_name(char **str, char *name);
 void	bridge_var(char **str);
-void	expand_vars(char **str);
 
 //echo.c
 void	wr_stillquotes(char *line, int fd, int *i, char quotes);

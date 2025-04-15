@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 14:54:15 by omalovic          #+#    #+#             */
-/*   Updated: 2024/12/31 15:38:17 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 15:27:27 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <ctype.h>
 # include <unistd.h>
 
+void			*ft_realloc(void *ptr, size_t size);
 int				ft_strcmp(char *s1, char *s2);
+char			*ft_strcat(char *dest, const char *src);
+char			*ft_strcpy(char *dest, const char *src);
 int				ft_atoi(const char *str);
 void			ft_bzero(void *s, size_t n);
 void			*ft_calloc(size_t count, size_t size);

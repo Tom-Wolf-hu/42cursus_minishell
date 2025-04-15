@@ -1,28 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_env.c                                        :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 16:10:44 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:35:22 by alex             ###   ########.fr       */
+/*   Created: 2025/04/15 15:20:15 by alex              #+#    #+#             */
+/*   Updated: 2025/04/15 15:21:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-int	print_env(int fd)
+void	*ft_realloc(void *ptr, size_t size)
 {
-	int				i;
-	extern char		**environ;
+	void	*new_ptr;
+	size_t	i;
+	char	*src;
+	char	*dst;
 
-	i = 0;
-	while (environ[i])
+	if (!ptr)
+		return (malloc(size));
+	if (size == 0)
 	{
-		write(fd, environ[i], ft_strlen(environ[i]));
-		write(fd, "\n", 1);
+		free(ptr);
+		return (NULL);
+	}
+	new_ptr = malloc(size);
+	if (!new_ptr)
+		return (NULL);
+	src = (char *)ptr;
+	dst = (char *)new_ptr;
+	i = 0;
+	while (i < size)
+	{
+		dst[i] = src[i];
 		i++;
 	}
-	return (0);
+	free(ptr);
+	return (new_ptr);
 }

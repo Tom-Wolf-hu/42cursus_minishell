@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_env.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 16:10:44 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:35:22 by alex             ###   ########.fr       */
+/*   Created: 2025/04/15 15:14:09 by alex              #+#    #+#             */
+/*   Updated: 2025/04/15 15:14:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-int	print_env(int fd)
+char	*ft_strcat(char *dest, const char *src)
 {
-	int				i;
-	extern char		**environ;
+	int	i;
+	int	j;
 
 	i = 0;
-	while (environ[i])
-	{
-		write(fd, environ[i], ft_strlen(environ[i]));
-		write(fd, "\n", 1);
+	while (dest[i])
 		i++;
+	j = 0;
+	while (src[j])
+	{
+		dest[i + j] = src[j];
+		j++;
 	}
-	return (0);
+	dest[i + j] = '\0';
+	return (dest);
 }

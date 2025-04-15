@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:31:27 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/08 18:40:33 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:24:07 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 int	count_words(const char *s, char c)
 {
-	int	count = 0;
-	int	in_word = 0;
-	int	in_single_quote = 0;
-	int	in_double_quote = 0;
+	int	count;
+	int	in_word;
+	int	in_single_quote;
+	int	in_double_quote;
 
+	count = 0;
+	in_word = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
 	while (*s)
 	{
 		if (*s == '\'' && !in_double_quote)
@@ -39,10 +43,13 @@ int	count_words(const char *s, char c)
 
 int	get_word_length(const char **s, char c)
 {
-	int	length = 0;
-	int	in_single_quote = 0;
-	int	in_double_quote = 0;
+	int	length;
+	int	in_single_quote;
+	int	in_double_quote;
 
+	length = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
 	while (**s && (**s != c || in_single_quote || in_double_quote))
 	{
 		if (**s == '\'' && !in_double_quote)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/09 14:06:29 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:55:20 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	mywrite(char *line, int fd)
 void	show_input(char **arr, int fd, int flag)
 {
 	int	i;
-	int len;
+	int	len;
 
 	if (flag)
 		i = 2;
@@ -95,7 +95,6 @@ int	handle_echo(char *line, int fd)
 	char	**arr;
 	int		i;
 
-	// printf("[handle_echo] line: %s\n", line);
 	i = 0;
 	arr = ft_split(line, ' ');
 	if (!arr)
@@ -103,9 +102,7 @@ int	handle_echo(char *line, int fd)
 	while (arr[i])
 		i++;
 	if (i == 1)
-	{
 		return (write(fd, "\n", 1), free_arr(arr), 0);
-	}
 	if (i == 2)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
@@ -114,12 +111,12 @@ int	handle_echo(char *line, int fd)
 	}
 	if (i > 2)
 	{
-		if (ft_strncmp(arr[1], "-n", 2) == 0 && only_contains_char(arr[1] + 1, 'n'))
+		if (ft_strncmp(arr[1], "-n", 2) == 0
+			&& only_contains_char(arr[1] + 1, 'n'))
 			return (show_input(arr, fd, 1), free_arr(arr), 0);
 		show_input(arr, fd, 0);
 	}
-	free_arr(arr);
-	return (0);
+	return (free_arr(arr), 0);
 }
 
 // int main()
