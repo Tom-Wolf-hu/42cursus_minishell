@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 17:57:55 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 18:41:13 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int		is_builtin(char *cmd);
 void	execute_builtin(char *cmd, int fd, int *status);
 
 //check_line.c
+void	write_stderr(char *str);
 int		ft_isoperator(int c);
 int		ft_isspace(int c);
 int		skip_whites(char *line, int	*i);
@@ -139,14 +140,15 @@ int		handle_export(char *line, int fd);
 int		allocate_var(char *name, char *value, char **new_var);
 
 //msh_quotes.c
-int		check_command_quotes(char *line);
-char	*remove_quotes_first_word(char *line);
-// char	*remove_quotes_commands(char *line);
-// char	*ft_join(char **arr);
 char	*remove_quotes(char *line);
 char	*get_temp_remove_quotes(char *line, int *i, char quotes);
-void	write_stderr(char *str);
 int		check_quotes(char *line);
+char	*get_temp_remove_quotes(char *line, int *i, char quotes);
+
+//msh_quotes_utils.c
+char	*remove_quotes_first_word(char *line);
+char	*copy_quoted_word(char *line, char *result, int i);
+int		check_command_quotes(char *line);
 
 /*
 The following file includes functions for checking 
