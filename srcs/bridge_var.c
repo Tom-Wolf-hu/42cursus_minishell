@@ -6,48 +6,56 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/15 12:08:04 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 13:13:23 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	bridge_var_at(char **str, int dollar_pos)
+int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix)
 {
 	char	*dollar;
-	int		size;
 	char	*var_name;
-	char	*var_value;
-	char	*prefix;
-	char 	*suffix;
-	int		new_str_len;
-	char	*new_str;
+	int		size;
 
-	dollar = *str + dollar_pos;
+	dollar = str + dollar_pos;
 	size = get_var_name_size(dollar);
-	// printf("size %d\n", size);
 	if (size < 1)
 		return (1);
 	var_name = malloc(size + 1);
 	if (!var_name)
 		return (exit(1), 0);
 	get_var_name(var_name, dollar);
-	var_value = find_var_value(var_name);
-	if (!var_value)
-		var_value = "";
+	*var_value = find_var_value(var_name);
+	if (!(*var_value))
+		*var_value = ft_strdup("");
+	*suffix = ft_strdup(dollar + size);
+	if (*suffix == NULL || (*var_value) == NULL)
+	{
+		perror("In bva_newstr function malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	free(var_name);
+	return (0);
+}
+
+int	bridge_var_at(char **str, int dollar_pos)
+{
+	char	*var_value;
+	char	*prefix;
+	char	*suffix;
+	int		new_str_len;
+	char	*new_str;
+
+	if (bva_newstr(*str, dollar_pos, &var_value, &suffix) == 1)
+		return (1);
 	prefix = ft_strndup(*str, dollar_pos);
-	suffix = ft_strdup(dollar + size); // Не добавляем +1, т.к. за символом переменной может быть пробел
 	new_str_len = ft_strlen(prefix) + ft_strlen(suffix) + 1;
 	if (var_value)
-		new_str_len += ft_strlen(var_value); // Учитываем длину значения переменной
+		new_str_len += ft_strlen(var_value);
 	new_str = malloc(new_str_len);
 	if (!new_str)
-	{
-		free(prefix);
-		free(suffix);
-		free(var_name);
-		return (exit(1), 0);
-	}
+		return (free(suffix), free(prefix), exit(1), 0);
 	ft_strlcpy(new_str, prefix, new_str_len);
 	if (var_value)
 		ft_strlcat(new_str, var_value, new_str_len);
@@ -56,7 +64,6 @@ int	bridge_var_at(char **str, int dollar_pos)
 	*str = new_str;
 	free(prefix);
 	free(suffix);
-	free(var_name);
 	return (1);
 }
 

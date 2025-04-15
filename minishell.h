@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 11:57:03 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 12:50:47 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
 
 //bridge_var.c
+int		bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix);
 int		bridge_var_at(char **str, int dollar_pos);
 void	bridge_var(char **str);
 
