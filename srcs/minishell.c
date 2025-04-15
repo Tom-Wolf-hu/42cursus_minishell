@@ -6,19 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 19:17:21 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 21:09:41 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 volatile int	g_status = 0;
-
-void	ft_error(char *error, int exit_status)
-{
-	perror(error);
-	exit(exit_status);
-}
 
 void	sig_handler(int sig)
 {
@@ -114,7 +108,7 @@ void	disable_ctrl_c_output(int *status)
 
 void	setup_signal_handlers(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_handler = sig_handler;
 	sa.sa_flags = SA_RESTART;
@@ -125,8 +119,9 @@ void	setup_signal_handlers(void)
 
 int	is_nummeric(char *line)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!line)
 		return (1);
 	while (line[i])
@@ -140,9 +135,9 @@ int	is_nummeric(char *line)
 
 int	finish_write_cmd_path(char **buffer, char *path, char *cmd)
 {
-	int i;
-	int j;
-	int len;
+	int	i;
+	int	j;
+	int	len;
 
 	i = 0;
 	j = 0;
@@ -152,29 +147,39 @@ int	finish_write_cmd_path(char **buffer, char *path, char *cmd)
 	*buffer = malloc(len + 2);
 	if (!*buffer)
 		return (0);
-	while (path[i])
-	{
-		(*buffer)[i] = path[i];
-		i++;
-	}
-	(*buffer)[i] = '/';
-	i++;
-	while (cmd[j])
-	{
-		(*buffer)[i] = cmd[j];
-		i++;
-		j++;
-	}
-	(*buffer)[i] = '\0';
+	ft_strcpy(*buffer, path);
+	ft_strcat(*buffer, "/");
+	ft_strcat(*buffer, cmd);
 	return (1);
 }
 
-char *get_command_path(char *cmd)
+char	*find_cmd_in_paths(char **path_arr, char *cmd)
 {
-	char **path_arr;
-	char *buffer;
-	char *path;
-	int i;
+	char	*buffer;
+	int		i;
+
+	i = 0;
+	while (path_arr[i])
+	{
+		if (!finish_write_cmd_path(&buffer, path_arr[i], cmd))
+			return (NULL);
+		if (access(buffer, X_OK) == 0)
+		{
+			free_arr(path_arr);
+			return (buffer);
+		}
+		free(buffer);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*get_command_path(char *cmd)
+{
+	char	**path_arr;
+	char	*buffer;
+	char	*path;
+	int		i;
 
 	if (!cmd)
 		return (NULL);
@@ -191,67 +196,13 @@ char *get_command_path(char *cmd)
 	path_arr = ft_split(path, ':');
 	if (!path_arr || !*path_arr)
 		return (NULL);
-	i = 0;
-	while (path_arr[i])
-	{
-		if (!finish_write_cmd_path(&buffer, path_arr[i], cmd))
-		{
-			free_arr(path_arr);
-			return (NULL);
-		}
-		if (access(buffer, X_OK) == 0)
-		{
-			free_arr(path_arr);
-			return (buffer);
-		}
-		free(buffer);
-		i++;
-	}
-	free_arr(path_arr);
-    return NULL;
-}
-
-int check_line_arr(char *str)
-{
-	int i;
-
-	i = 0;
-	// if (str[i] == '|' && str[i + 1])
-	// 	return (0);
-	while (str[i])
-	{
-		if (str[i] == '|' && str[i + 1] == '|')
-			return (0);
-		i++;
-	}
-	if (str[i - 1] == '|' || str[i - 1] == '\\')
-		return (0);
-	return (1);
-}
-
-int check_line_correct(char *str)
-{
-	int i;
-	char **arr;
-
-	arr = ft_split(str, ' ');
-	if (!arr)
-		return (exit(1), 0);
-	i = 0;
-	while (arr[i])
-	{
-		if (!check_line_arr(arr[i]))
-			return (free_arr(arr), 0);
-		i++;
-	}
-	free_arr(arr);
-	return (1);
+	return (find_cmd_in_paths(path_arr, cmd));
 }
 
 char	**get_commands(char *cmd, char *temp)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	j = 0;
 	i = 0;
@@ -274,114 +225,11 @@ char	**get_commands(char *cmd, char *temp)
 	return (ft_split(cmd, '|'));
 }
 
-void execute_pipe_commands(char *cmd, int fd, int *status)
+void	wait_for_last_pid(pid_t last_pid, int *status)
 {
-	char **commands; // {"ls -l", "wc -l"}
-	char **cmd_args; // {"ls", "-l"}
-	int num_commands = 0;
-	int i;
-	int pipefd[2];
-	pid_t pid;
-	int prev_fd;
-	struct s_saved_std std;
-	char *clean_cmd;
-	int wstatus;
-	char *clean_cmd2;
-	int last_pid;
-	// printf("[execute_pipe_commands] starting\n");
-
-	// if (!check_line_correct(cmd))
-	// {
-	// 	write_stderr("The string is not right\n");
-	// 	return ;
-	// }
-	char *temp;
-	temp = NULL;
-	commands = get_commands(cmd, temp);
-	if (temp)
-		free(temp);
-	// commands = ft_split(cmd, '|');
-	if (!commands)
-		return;
-	while (commands[num_commands])
-		num_commands++;
-	prev_fd = -1;
-	i = 0;
-	while (i < num_commands)
-	{
-		printf("commands[i]: %s; len: %d\n", commands[i], ft_strlen(commands[i]));
-		if (i < num_commands - 1 && pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		pid = fork();
-		if (pid == -1)
-			return (perror("fork"), exit(EXIT_FAILURE));
-		if (pid == 0)
-		{
-			if (prev_fd != 0)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);//
-			}
-			if (i < num_commands - 1)
-				dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[0]);
-			close(pipefd[1]);
-			if (is_builtin(commands[i]))
-			{
-				execute_builtin(commands[i], 1, status);
-				exit(*status);
-			}
-			clean_cmd = remove_redirects(commands[i]);
-			cmd_args = ft_split(clean_cmd, ' ');
-			// printf("clean_cmd: %s\n", clean_cmd);
-			std.saved_stdin = dup(STDIN_FILENO);
-			std.saved_stdout = dup(STDOUT_FILENO);
-			handle_redirection(commands[i], status);
-			int j = 0;
-			while (cmd_args[j])
-			{
-				// printf("cmd_args[j]: %s\n", cmd_args[j]);
-				// clean_cmd2 = remove_quotes_first_word(cmd_args[j]);
-				clean_cmd2 = remove_quotes(cmd_args[j]);
-				if (!clean_cmd2)
-				{
-					printf("%s: Command not found\n", cmd_args[j]);
-					exit(127);
-				}
-				free(cmd_args[j]);
-				cmd_args[j] = clean_cmd2;
-				// printf("clean_cmd2: %s\n",clean_cmd2);
-				j++;
-			}
-			char *path = get_command_path(cmd_args[0]);
-			if (!path)
-			{
-				printf("%s: Command not found\n", cmd);
-				exit(127);
-			}
-			close(std.saved_stdin);
-			close(std.saved_stdout);
-			execve(path, cmd_args, NULL);
-			perror("execve");
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (i < num_commands - 1)
-				close(pipefd[1]);
-			prev_fd = pipefd[0];
-			// сохраняем PID последнего
-			if (i == num_commands - 1)
-				last_pid = pid;
-		}
-		i++;
-	}
 	pid_t wpid;
+	int wstatus;
+
 	while ((wpid = waitpid(-1, &wstatus, 0)) > 0)
 	{
 		if (wpid == last_pid)
@@ -392,7 +240,120 @@ void execute_pipe_commands(char *cmd, int fd, int *status)
 				*status = 128 + WTERMSIG(wstatus);
 		}
 	}
-	free_arr(commands);
+}
+
+char	**process_command_args(char **cmd_args, char *cmd)
+{
+	int j = 0;
+    char *clean_cmd2;
+
+    while (cmd_args[j])
+    {
+        clean_cmd2 = remove_quotes(cmd_args[j]);
+        if (!clean_cmd2)
+        {
+            printf("%s: Command not found\n", cmd_args[j]);
+            exit(127);
+        }
+        free(cmd_args[j]);
+        cmd_args[j] = clean_cmd2;
+        j++;
+    }
+    return cmd_args;
+}
+
+void handle_child_process(t_pipe_data data, char *cmd, int i, int *status)
+{
+    char **cmd_args;
+    char *clean_cmd;
+    char *path;
+    struct s_saved_std std;
+
+    if (data.prev_fd != 0)
+    {
+        dup2(data.prev_fd, STDIN_FILENO);
+        close(data.prev_fd);
+    }
+    if (i < data.num_commands - 1)
+        dup2(data.pipefd[1], STDOUT_FILENO);
+    close(data.pipefd[0]);
+    close(data.pipefd[1]);
+    if (is_builtin(data.commands[i]))
+    {
+        execute_builtin(data.commands[i], 1, status);
+        exit(*status);
+    }
+    clean_cmd = remove_redirects(data.commands[i]);
+    cmd_args = ft_split(clean_cmd, ' ');
+    std.saved_stdin = dup(STDIN_FILENO);
+    std.saved_stdout = dup(STDOUT_FILENO);
+    handle_redirection(data.commands[i], status);
+    cmd_args = process_command_args(cmd_args, cmd);
+    path = get_command_path(cmd_args[0]);
+    if (!path)
+    {
+        printf("%s: Command not found\n", cmd);
+        exit(127);
+    }
+    close(std.saved_stdin);
+    close(std.saved_stdout);
+    execve(path, cmd_args, NULL);
+    perror("execve");
+    exit(EXIT_FAILURE);
+}
+
+void handle_parent_process(struct s_pipe_data *data, int i, pid_t pid, int *last_pid)
+{
+    if (data->prev_fd != -1)
+        close(data->prev_fd);
+    if (i < data->num_commands - 1)
+        close(data->pipefd[1]);
+    data->prev_fd = data->pipefd[0];
+    if (i == data->num_commands - 1)
+        *last_pid = pid;
+}
+
+void hanlde_pid(struct s_pipe_data *data, char *cmd, int *status, int *last_pid)
+{
+    pid_t pid;
+
+	pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    if (pid == 0)
+        handle_child_process(*data, cmd, data->i, status);
+    else
+        handle_parent_process(data, data->i, pid, last_pid);
+}
+
+void	execute_pipe_commands(char *cmd, int *status)
+{
+	int					last_pid;
+	char				*temp;
+	struct s_saved_std	std;
+	struct s_pipe_data	data = {0};
+
+	temp = NULL;
+	data.commands = get_commands(cmd, temp);
+	if (temp)
+		free(temp);
+	if (!data.commands)
+		return;
+	data.num_commands = ft_arrlen(data.commands);
+	data.prev_fd = -1;
+	data.i = 0;
+	while (data.i < data.num_commands)
+	{
+		if (data.i < data.num_commands - 1 && pipe(data.pipefd) == -1)
+			return (perror("pipe"), exit(EXIT_FAILURE));
+		hanlde_pid(&data, cmd, status, &last_pid);
+		data.i++;
+	}
+	wait_for_last_pid(last_pid, status);
+	free_arr(data.commands);
 }
 
 void	execute_command_single(char *cmd, int *status)
@@ -468,16 +429,14 @@ void	execute_command_single(char *cmd, int *status)
 	}
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
-	// printf("[execute_command_single] before handle_redirection status: %d\n", *status);
 	handle_redirection(cmd, status);
-	// printf("[execute_command_single] after handle_redirection status: %d\n", *status);
 	if (*status == 1)
 	{
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
 		close(std.saved_stdin);
 		close(std.saved_stdout);
-		return ;// caused some problems
+		return ;
 	}
 	pid = fork();
 	if (pid == 0)
@@ -525,7 +484,6 @@ void	run_ex(char **line, int *status)
 	bridge_var(line);
 	if (!*line)
 		return ;
-	printf("here1\n");
 	i = 0;
 	while ((*line)[i] && ft_isspace((*line)[i]))
 		i++;
@@ -533,10 +491,9 @@ void	run_ex(char **line, int *status)
 		return ;
 	if (ft_strcmp(*line + i, "clear") == 0 || ft_strncmp(*line + i, "clear ", 6) == 0)
 		return (rl_clear_history());
-	printf("here2\n");
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
-	execute_pipe_commands(*line, 1, status);
+	execute_pipe_commands(*line, status);
 }
 
 int	main(void)
@@ -561,7 +518,7 @@ int	main(void)
 			g_status = 0;
 		}
 		if (!line)
-			break ;
+			handle_exit(ft_strdup("exit"), &status);
 		else
 			run_ex(&line, &status);
 		free(line);

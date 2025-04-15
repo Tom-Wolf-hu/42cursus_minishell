@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 18:41:13 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 20:52:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ typedef struct s_saved_std
 	int saved_stdin;
 	int saved_stdout;
 }	t_saved_std;
+
+typedef struct s_pipe_data
+{
+	char				**commands;
+	int					num_commands;
+	int					prev_fd;
+	int					pipefd[2];
+	int					i;
+}	t_pipe_data;
 
 typedef enum e_token
 {
@@ -83,10 +92,9 @@ void	handle_redirection(char *cmd, int *status);
 
 //minishell.c
 void	remove_chars(char **str, char ch);
-void	execute_pipe_commands(char *cmd, int fd, int *status);
+void	execute_pipe_commands(char *cmd, int *status);
 int		is_nummeric(char *line);
 void	handle_exit(char *line, int *status);
-void	ft_error(char *error, int exit_status);
 void	sig_handler(int sig);
 int		ft_getcwd(char *line, int fd);
 void	free_arr(char **arr);

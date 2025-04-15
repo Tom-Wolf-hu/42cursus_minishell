@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 14:56:29 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 19:22:05 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ void	handle_exit(char *line, int *status)
 	free(line);
 	rl_clear_history();
 	free_var_after_exit();
+	printf("exit\n");
 	exit(*status);
 }
