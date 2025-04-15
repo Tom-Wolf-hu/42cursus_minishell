@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:03:50 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/14 20:16:51 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 09:20:15 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,30 @@ char	*remove_quotes_first_word(char *line)
 	return (result);
 }
 
+int	ch_quotes_part(char *line, int *i, int *end_q)
+{
+	int	j;
+
+	if (line[*i] == '\'' || line[*i] == '\"')
+	{
+		j = *i;
+		(*i)++;
+		*end_q = 0;
+		while (line[*i])
+		{
+			if (line[*i] == '\\' && line[j] == '\"')
+				return (write_stderr("The character is not supported"), 1);
+			if (line[*i] == line[j])
+			{
+				*end_q = 1;
+				break ;
+			}
+			(*i)++;
+		}
+	}
+	return (0);
+}
+
 int	check_quotes(char *line)
 {
 	int	i;
@@ -72,23 +96,8 @@ int	check_quotes(char *line)
 	{
 		if (line[i] == ';' || line[i] == '\\')
 			return (write_stderr("The character is not supported"), 1);
-		if (line[i] == '\'' || line[i] == '\"')
-		{
-			j = i;
-			i++;
-			end_q = 0;
-			while (line[i])
-			{
-				if (line[i] == '\\' && line[j] == '\"')
-					return (write_stderr("The character is not supported"), 1);
-				if (line[i] == line[j])
-				{
-					end_q = 1;
-					break ;
-				}
-				i++;
-			}
-		}
+		if (ch_quotes_part(line, &i, &end_q) == 1)
+			return (1);
 		i++;
 	}
 	if (end_q == 0)
@@ -98,6 +107,45 @@ int	check_quotes(char *line)
 	}
 	return (0);
 }
+
+// int	check_quotes(char *line)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	end_q;
+
+// 	i = 0;
+// 	end_q = 1;
+// 	while (line[i])
+// 	{
+// 		if (line[i] == ';' || line[i] == '\\')
+// 			return (write_stderr("The character is not supported"), 1);
+// 		if (line[i] == '\'' || line[i] == '\"')
+// 		{
+// 			j = i;
+// 			i++;
+// 			end_q = 0;
+// 			while (line[i])
+// 			{
+// 				if (line[i] == '\\' && line[j] == '\"')
+// 					return (write_stderr("The character is not supported"), 1);
+// 				if (line[i] == line[j])
+// 				{
+// 					end_q = 1;
+// 					break ;
+// 				}
+// 				i++;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	if (end_q == 0)
+// 	{
+// 		write_stderr("The quotes are not closed");
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 // char	*remove_quotes_first_word(char *line)
 // {

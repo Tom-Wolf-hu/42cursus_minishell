@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/14 14:48:19 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 09:33:00 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void	handle_exit(char *line, int *status)
 {
 	char	**line_arr;
 
+	if (!line)
+		return ;
+	line = remove_quotes(line);
 	if (!line)
 		return ;
 	line_arr = ft_split(line, ' ');

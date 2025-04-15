@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/14 20:50:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 09:21:59 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ char	*remove_quotes(char *line);
 //msh_quotes_utils.c
 int		rqfw_copy(char *line, char *result, int i);
 char	*remove_quotes_first_word(char *line);
+int		ch_quotes_part(char *line, int *i, int *end_q);
 int		check_quotes(char *line);
 char	*remove_quotes_commands(char *line);
 int		check_command_quotes(char *line);
