@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 10:22:51 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 11:57:03 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void	change_to_exit_status(int i, char **line, char *status);
 int		check_quastion_sign(char **line, char *status);
 
 //minishell.c
-void	print_arr(char **strarr);
 void	remove_chars(char **str, char ch);
 void	execute_pipe_commands(char *cmd, int fd, int *status);
 int		is_nummeric(char *line);
@@ -182,6 +181,7 @@ int		check_command_quotes(char *line);
 char	*ft_join(char **arr);
 
 //msh_utils.c
+char	*ft_strndup(const char *s1, size_t n);
 void	print_arr(char **strarr);
 void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
 char	*str_realloc(char *oldstr, size_t newsize);
