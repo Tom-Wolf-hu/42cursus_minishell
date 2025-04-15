@@ -10,6 +10,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/builtins/handle_cd.c \
 		srcs/builtins/handle_exit.c \
 		srcs/builtins/handle_export_unset.c \
+		srcs/builtins/handle_export_unset_utils.c \
 		srcs/builtins/print_env.c \
 		srcs/check_redir.c \
 		srcs/minishell.c \

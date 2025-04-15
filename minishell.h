@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 17:02:14 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 17:57:55 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
 void	run_ex(char **line, int *status);
-int 	main(void);
 
 //msh_cmd.c
 int		is_builtin(char *cmd);
@@ -126,12 +125,18 @@ void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
+int		is_user_env_var(char *name);
 void	free_var_after_exit();
 int		find_var_in_env(char *name);
 int		mysetenv(char *name, char *value);
-int		handle_export(char *line, int fd);
+// int		handle_export(char *line, int fd);
 int		my_unsetenv(char *name);
+// int		handle_unset(char *line, int fd);
+
+//handle_export_unset_utils.c
 int		handle_unset(char *line, int fd);
+int		handle_export(char *line, int fd);
+int		allocate_var(char *name, char *value, char **new_var);
 
 //msh_quotes.c
 int		check_command_quotes(char *line);

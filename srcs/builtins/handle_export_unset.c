@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 15:43:42 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 17:58:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,49 +67,6 @@ int	is_user_env_var(char *name)
 	return (0);
 }
 
-int	mysetenv(char *name, char *value)
-{
-	int		index;
-	char	*new_var;
-	int		count;
-	char	**new_env;
-
-	index = find_var_in_env(name);
-	if (value)
-		new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
-	else
-		new_var = malloc(ft_strlen(name) + 1);
-	if (!new_var)
-		return (exit(1), 1);
-	if (new_var == NULL)
-		return (perror("malloc"), 1);
-	ft_strcpy(new_var, name);
-	if (value)
-	{
-		ft_strcat(new_var, "=");
-		ft_strcat(new_var, value);
-	}
-	if (index != -1)
-	{
-		if (is_user_env_var(name))
-			free(environ[index]);
-		environ[index] = new_var;
-	}
-	else
-	{
-		count = 0;
-		while (environ[count])
-			count++;
-		new_env = ft_realloc(environ, sizeof(char *) * (count + 2));
-		if (!new_env)
-			return (perror("realloc"), free(new_var), 1);
-		environ = new_env;
-		environ[count] = new_var;
-		environ[count + 1] = NULL;
-	}
-	return (0);
-}
-
 void	free_var_after_exit(void)
 {
 	int	i;
@@ -122,39 +79,6 @@ void	free_var_after_exit(void)
 		i++;
 	}
 	free_arr(g_env_vars);
-}
-
-int	handle_export(char *line, int fd)
-{
-	char	*arg;
-	char	**arr;
-	char	*equals_pos;
-	char	*value;
-	char	*clean_line;
-
-	if (ft_strlen(line) == 6 || check_line(line, 7))
-		return (print_env(fd));
-	else
-	{
-		arr = ft_split(line, ' ');
-		if (!arr)
-			return (1);
-		clean_line = remove_quotes(arr[1]);
-		if (!clean_line)
-			return (free_arr(arr), 1);
-		arg = clean_line;
-		equals_pos = ft_strchr(arg, '=');
-		if (equals_pos != NULL)
-		{
-			*equals_pos = '\0';
-			value = equals_pos + 1;
-		}
-		else
-			value = NULL;
-		if (mysetenv(arg, value) == 1)
-			return (free(clean_line), free_arr(arr), exit(1), 1);
-	}
-	return (free(clean_line), free_arr(arr), 0);
 }
 
 int	my_unsetenv(char *name)
@@ -180,13 +104,45 @@ int	my_unsetenv(char *name)
 	return (0);
 }
 
-int	handle_unset(char *line, int fd)
-{
-	char	*arg;
+// int	mysetenv(char *name, char *value)
+// {
+// 	int		index;
+// 	char	*new_var;
+// 	int		count;
+// 	char	**new_env;
 
-	arg = line + 6;
-	if (arg && *arg != '\0')
-		return (my_unsetenv(arg));
-	write_stderr("unset: invalid syntax");
-	return (1);
-}
+// 	index = find_var_in_env(name);
+// 	if (value)
+// 		new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
+// 	else
+// 		new_var = malloc(ft_strlen(name) + 1);
+// 	if (!new_var)
+// 		return (exit(1), 1);
+// 	if (new_var == NULL)
+// 		return (perror("malloc"), 1);
+// 	ft_strcpy(new_var, name);
+// 	if (value)
+// 	{
+// 		ft_strcat(new_var, "=");
+// 		ft_strcat(new_var, value);
+// 	}
+// 	if (index != -1)
+// 	{
+// 		if (is_user_env_var(name))
+// 			free(environ[index]);
+// 		environ[index] = new_var;
+// 	}
+// 	else
+// 	{
+// 		count = 0;
+// 		while (environ[count])
+// 			count++;
+// 		new_env = ft_realloc(environ, sizeof(char *) * (count + 2));
+// 		if (!new_env)
+// 			return (perror("realloc"), free(new_var), 1);
+// 		environ = new_env;
+// 		environ[count] = new_var;
+// 		environ[count + 1] = NULL;
+// 	}
+// 	return (0);
+// }
