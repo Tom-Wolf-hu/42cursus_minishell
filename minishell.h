@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 18:56:21 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 20:14:20 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,8 @@ int		print_env(int fd);
 //check_redir.c
 int		gf_name_length(char *cmd, int *i, int *start);
 char	*get_filename(char *cmd);
-char	*remove_redirects(char *cmd);
-void	handle_heredoc(const char *delimiter);
-void	handle_redirection(char *cmd, int *status);
+void	handle_heredoc_child(int write_fd, const char *delimiter);
+// void	handle_heredoc(const char *delimiter);
 
 //check_redir_utils.c
 void	reset_stdin(void);
@@ -202,6 +201,10 @@ void	redir_part(char *cmd, int *i);
 char	*before_red(char *cmd, int *i);
 char	*remove_redirects(char *cmd);
 
+//handle_redirect.c
+int		in_redir(char *filename, int *status);
+int		out_redir(char *filename, int *status, int *i, char opt);
+void	handle_redirection(char *line, int *status);
 
 /*
 The following file includes functions for checking 
