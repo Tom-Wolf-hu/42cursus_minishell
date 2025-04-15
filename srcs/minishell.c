@@ -6,13 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 17:30:27 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/15 19:17:21 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	g_status = 0;
+volatile int	g_status = 0;
 
 void	ft_error(char *error, int exit_status)
 {
@@ -35,7 +35,6 @@ void	sig_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		// rl_done = 1;
 	}
 	if (sig == SIGQUIT)
 	{
@@ -86,7 +85,7 @@ char	*remove_first_spaces(char *line)
 	if (is_empty(line))
 		return (new_line);
 	while (line[i] && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n'
-		|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
+			|| line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
 	{
 		i++;
 	}
@@ -148,9 +147,7 @@ int	finish_write_cmd_path(char **buffer, char *path, char *cmd)
 	i = 0;
 	j = 0;
 	if (!path || !cmd)
-	{
 		return (0);
-	}
 	len = ft_strlen(path) + ft_strlen(cmd);
 	*buffer = malloc(len + 2);
 	if (!*buffer)
@@ -528,6 +525,7 @@ void	run_ex(char **line, int *status)
 	bridge_var(line);
 	if (!*line)
 		return ;
+	printf("here1\n");
 	i = 0;
 	while ((*line)[i] && ft_isspace((*line)[i]))
 		i++;
@@ -535,6 +533,7 @@ void	run_ex(char **line, int *status)
 		return ;
 	if (ft_strcmp(*line + i, "clear") == 0 || ft_strncmp(*line + i, "clear ", 6) == 0)
 		return (rl_clear_history());
+	printf("here2\n");
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, 1, status);
@@ -569,7 +568,6 @@ int	main(void)
 	}
 	rl_clear_history();
 }
-
 
 // ps aux | grep bash | awk '{print $2}'    снова не работает		+
 // Введите Ctrl+C внутри minishell (появляется лишний > в приглашении) +
