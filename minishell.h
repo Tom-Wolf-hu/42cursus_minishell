@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 16:40:45 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:56:21 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,14 @@ void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize);
 char	*str_realloc(char *oldstr, size_t newsize);
 void	free_arr(char **arr);
 void	write_stderr(char *str);
+
+//remove_redirects.c
+void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
+void	join_part(char **s1, char *s2);
+void	redir_part(char *cmd, int *i);
+char	*before_red(char *cmd, int *i);
+char	*remove_redirects(char *cmd);
+
 
 /*
 The following file includes functions for checking 

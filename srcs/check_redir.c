@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 16:49:29 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:48:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,121 +201,6 @@ void	handle_redirection(char *line, int *status)
 		}
 		i++;
 	}
-}
-
-void	join_part(char **s1, char *s2)
-{
-	int		lens1;
-	int		lens2;
-	char	*temp;
-	int		i;
-
-	lens1 = 0;
-	i = 0;
-	// fprintf(stderr, "s1: '%s'\ts2: '%s'\n", *s1, s2);
-	if (*s1 != NULL)
-		lens1 = ft_strlen(*s1);
-	if (s2 == NULL)
-		return ;
-	lens2 = ft_strlen(s2);
-	// fprintf(stderr, "lens1: %d\tlens2: %d\n", lens1, lens2);
-	temp = (char *)malloc((lens1 + lens2 + 1) * sizeof(char));
-	if (!temp)
-	{
-		perror("Failed to allocate memory for temp in join part");
-		exit(EXIT_FAILURE);
-	}
-	while (*s1 && i < lens1)
-	{
-		temp[i] = (*s1)[i];
-		// fprintf(stderr, "temp[%i] in while cycle: '%c'\n", i, temp[i]);
-		i++;
-	}
-	// write(1, "1passed1\n", 9);
-	// fprintf(stderr, "temp after s1 copy: %s\n", temp);
-	i = 0;
-	while (s2 && i < lens2)
-	{
-		temp[lens1 + i] = s2[i];
-		i++;
-	}
-	// write(1, "1passed2\n", 9);
-	// fprintf(stderr, "temp after s2 copy: %s\n", temp);
-	// fprintf(stderr, "lens1 + i: %d\t lens1 + lens2 + 1: %d\n", lens1 + i, lens1 + lens2 + 1);
-	temp[lens1 + i] = '\0';
-	free(*s1);
-	free(s2);
-	s2 = NULL;
-	*s1 = temp;
-	// fprintf(stderr, "s1 in join_part: %s\n", *s1);
-}
-
-void	redir_part(char *cmd, int *i)
-{
-	while (cmd[*i] && (cmd[*i] == '<' || cmd[*i] == '>' || ft_isspace(cmd[*i])))
-		(*i)++;
-	while (cmd[*i] && !ft_isspace(cmd[*i]))
-		(*i)++;
-}
-
-char	*before_red(char *cmd, int *i)
-{
-	int		start;
-	int		j;
-	char	*bef_red;
-
-	start = *i;
-	j = 0;
-	while (cmd[*i] && cmd[*i] != '>' && cmd[*i] != '<')
-		(*i)++;
-	// printf("*i == %d\n", *i);
-	// printf("ch == %c\n", cmd[*i]);
-	if (start == *i)
-		return (NULL);
-	// if (start + 1 == *i || *i + 1 == start || start == *i)
-	// 	return NULL;
-	// printf("*i - start == %d\n", *i - start);
-	bef_red = malloc((*i - start + 1));
-	if (!bef_red)
-	{
-		perror("Failed to allocate memory for bef_red");
-		exit(EXIT_FAILURE);
-	}
-	while (start < *i)
-	{
-		bef_red[j] = cmd[start];
-		start++;
-		j++;
-	}
-	bef_red[j] = '\0';
-	return (bef_red);
-}
-
-char	*remove_redirects(char *cmd)
-{
-	char	*clean_cmd;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	clean_cmd = NULL;
-	// write(1, "passed1\n", 8);
-	while (cmd[i])
-	{
-		// write(1, "passed2\n", 8);
-		temp = before_red(cmd, &i);
-		// if (!temp)
-		// {
-		// 	printf("clean_cmd is null\n");
-		// 	break ;
-		// }
-		// write(1, "passed3\n", 8);
-		join_part(&clean_cmd, temp);
-		// write(1, "passed4\n", 8);
-		redir_part(cmd, &i);
-	}
-	// printf("clean_cmd in remove redirects: %s, %d\n", clean_cmd, ft_strlen(clean_cmd));
-	return (clean_cmd);
 }
 
 

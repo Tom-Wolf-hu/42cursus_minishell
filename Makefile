@@ -24,6 +24,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/check_quastion_sign.c \
 		lib/get_next_line/get_next_line.c \
 		lib/get_next_line/get_next_line_utils.c \
+		srcs/remove_redirects.c \
 		srcs/test_funcs.c \
 		# srcs/msh_redirect.c \
 		# srcs/msh_operations.c \
