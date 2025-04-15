@@ -18,6 +18,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/msh_utils.c \
 		srcs/msh_quotes_utils.c \
 		srcs/msh_quotes.c \
+		srcs/bridge_var.c \
 		srcs/check_var.c \
 		srcs/check_quastion_sign.c \
 		lib/get_next_line/get_next_line.c \

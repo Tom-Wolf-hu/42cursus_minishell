@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 09:21:59 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/15 10:22:51 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,16 +140,17 @@ int		ft_isspace(int c);
 int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
 
+//bridge_var.c
+int		bridge_var_at(char **str, int dollar_pos);
+void	bridge_var(char **str);
+
 //check_var.c
+int		cmp_names(char *name1, char *name2);
+char	*find_var_value(char *var_name);
 int		get_var_name_size(char *str);
 void	get_var_name(char *dest, char *str);
-int		cmp_names(char *name1, char *name2);
-char	*get_name(char *str);
-char	*find_var_value(char *var_name);
 void	change_str(char **str, char *name, char *value);
 void	remove_var_name(char **str, char *name);
-void	bridge_var(char **str);
-void	expand_vars(char **str);
 
 //echo.c
 void	wr_stillquotes(char *line, int fd, int *i, char quotes);
