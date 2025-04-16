@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 17:23:29 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:53:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	execute_builtin(char *cmd, int fd, int *status)
 {
 	struct s_saved_std	std;
 	char				*clean_cmd;
+	char				*tmp;
 
 	*status = 1;
 	if (!cmd)
@@ -94,9 +95,11 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	clean_cmd = remove_redirects(cmd);
 	if (!clean_cmd)
 		return ;
+	tmp = clean_cmd;
 	clean_cmd = remove_quotes_first_word(clean_cmd);
 	if (!clean_cmd)
 		return ;
+	free(tmp);
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
 	handle_redirection(cmd, status);
