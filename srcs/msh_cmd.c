@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 14:45:52 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:50:13 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	is_builtin(char *cmd)
 	return (free(clean_cmd), 0);
 }
 
-void	exec_builtin_choose(char *clean_cmd, int fd, int *status, struct s_saved_std *std)
+void	exec_builtin_choose(char *clean_cmd, int fd,
+		int *status, struct s_saved_std *std)
 {
 	if (ft_strcmp(clean_cmd, "exit") == 0
 		|| ft_strncmp(clean_cmd, "exit ", 5) == 0)

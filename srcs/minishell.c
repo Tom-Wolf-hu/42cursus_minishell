@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:44:49 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:12:33 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,8 @@ void	execute_forked_process(char *path, char **cmd_arr, int *status)
 	pid_t	pid;
 	int		wstatus;
 
+	if (!path)
+		return ;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -276,6 +278,21 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 	return (cmd_arr);
 }
 
+char	*resolve_command_path(char *cmd_name, int *status, char *clean_cmd)
+{
+	char	*path;
+
+	if (!cmd_name)
+		return (NULL);
+	path = get_command_path(cmd_name);
+	if (!path)
+	{
+		write_stderr("Command not found");
+		*status = 127;
+	}
+	return (path);
+}
+
 void	execute_command_single(char *cmd, int *status)
 {
 	char				**cmd_arr;
@@ -297,25 +314,17 @@ void	execute_command_single(char *cmd, int *status)
 	cmd_arr = split_and_clean_args(clean_cmd, status);
 	if (!cmd_arr)
 		return ;
-	path = get_command_path(cmd_arr[0]);
-	if (!path)
-	{
-		printf("%s: Command not found\n", clean_cmd);
-		return (*status = 127, (void)0);
-	}
+	path = resolve_command_path(cmd_arr[0], status, clean_cmd);
 	save_and_redirect(&std, cmd, status);
 	if (*status == 1)
 		return (restore_std(&std));
 	execute_forked_process(path, cmd_arr, status);
-	restore_std(&std);
-	free_arr(cmd_arr);
+	return (restore_std(&std), free_arr(cmd_arr));
 }
 
 void	run_ex(char **line, int *status)
 {
 	char	**arr;
-	char	*clean_cmd;
-	char	*new_line;
 	int		i;
 
 	if (is_empty(*line))
@@ -323,13 +332,9 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	if (check_quotes(*line) == 1)
 		return ;
-	// printf("before check_quastion_sign\n");
 	if (check_quastion_sign(line, *status))
 		return ;
-	printf("after check_quastion_sign\n");
 	bridge_var(line);
-	printf("after bridge_var\n");
-
 	if (!*line)
 		return ;
 	i = 0;
@@ -343,6 +348,15 @@ void	run_ex(char **line, int *status)
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
 	execute_pipe_commands(*line, status);
+}
+
+void	change_status(int *status)
+{
+	if (g_status == 130)
+	{
+		*status = g_status;
+		g_status = 0;
+	}
 }
 
 int	main(void)
@@ -361,11 +375,7 @@ int	main(void)
 			line = get_next_line(fileno(stdin));
 			line = ft_strtrim(line, "\n");
 		}
-		if (g_status == 130)
-		{
-			status = g_status;
-			g_status = 0;
-		}
+		change_status(&status);
 		if (!line)
 			handle_exit(ft_strdup("exit"), &status, NULL);
 		else
