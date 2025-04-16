@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 16:07:55 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:45:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,5 +431,7 @@ $nonexist			+-
 > cat << EOF
 cat : Command not found
 
-echo "hello"$
+echo "hello"$ +
+
+echo $? $USER $PATH $$$
 */
