@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 19:32:51 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/15 20:20:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:20:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,60 @@ int	out_redir(char *filename, int *status, int *i, char opt)
 	return (0);
 }
 
+int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid)
+{
+	int	wstatus;
+
+	close(pipe_fd[1]);
+	waitpid(pid, status, 0);
+	if (WIFSIGNALED(*status))
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		close(pipe_fd[0]);
+		return (g_status = 130, 1);
+	}
+	else if (WIFEXITED(*status))
+	{
+		wstatus = WEXITSTATUS(*status);
+		if (wstatus != 0)
+			return (g_status = wstatus, 1);
+	}
+	signal(SIGINT, sig_handler);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
+	return (0);
+}
+
+int	heredoc_pipe_sign(char *filename, int *status)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+
+	if (pipe(pipe_fd) < 0)
+	{
+		perror("Failed to create pipe in handle redirection");
+		return (1);
+	}
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Failed to create for for heredoc");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		close(pipe_fd[0]);
+		handle_heredoc_child(pipe_fd[1], filename);
+	}
+	else
+		return (heredoc_parent(filename, status, pipe_fd, pid));
+	return (0);
+}
+
 void	handle_redirection(char *line, int *status)
 {
 	int		i = 0;
@@ -60,14 +114,11 @@ void	handle_redirection(char *line, int *status)
 	struct s_saved_std std;
 
 	*status = 0;
-	// printf("[handle_redirection] status: %d\n", *status);
 	while (line[i])
 	{
-		// printf("[handle_redirection] in cycle...\n");
 		if (line[i] == '<' || line[i] == '>')
 		{
 			filename = get_filename(line + i);
-			// printf("filename: %s\n", filename);
 			if (!filename)
 			{
 				printf("Such name for file doesn't exist\n");
@@ -76,58 +127,8 @@ void	handle_redirection(char *line, int *status)
 			}
 			if (line[i] == '<' && line[i + 1] == '<') // heredoc
 			{
-				int	pipe_fd[2];
-				pid_t pid;
-
-				if (pipe(pipe_fd) < 0)
-				{
-					perror("Failed to create pipe in handle redirection");
+				if (heredoc_pipe_sign(filename, status) == 1)
 					return ;
-				}
-				signal(SIGINT, SIG_IGN);
-				pid = fork();
-				if (pid == -1)
-				{
-					perror("Failed to create for for heredoc");
-					return;
-				}
-				if (pid == 0)
-				{
-					signal(SIGINT, SIG_DFL);
-					close(pipe_fd[0]);
-					handle_heredoc_child(pipe_fd[1], filename);
-					// handle_heredoc(filename);
-					// exit(0);
-				}
-				else
-				{
-					close(pipe_fd[1]);
-					waitpid(pid, status, 0);
-					if (WIFSIGNALED(*status))
-					{
-						write(STDOUT_FILENO, "\n", 1);
-						// write(STDOUT_FILENO, "tamas\n", 6);
-						close(pipe_fd[1]);
-						dup2(pipe_fd[0], STDIN_FILENO);
-						close(pipe_fd[0]);
-						g_status = 130;
-						return ;
-					}
-					else if (WIFEXITED(*status))
-					{
-						int wstatus;
-						wstatus = WEXITSTATUS(*status);
-						if (wstatus != 0)
-						{
-							g_status = wstatus;
-							return ;
-						}
-					}
-					signal(SIGINT, sig_handler);
-					dup2(pipe_fd[0], STDIN_FILENO);
-					close(pipe_fd[0]);
-					// return ;
-				}
 				i += 2;
 			}
 			else if (line[i] == '>' && line[i + 1] == '>')
