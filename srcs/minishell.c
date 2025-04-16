@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 12:48:15 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:07:38 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,55 +176,40 @@ void	execute_pipe_commands(char *cmd, int *status)
 	free_arr(data.commands);
 }
 
-void	execute_command_single(char *cmd, int *status)
+void	handle_empty_command(char *cmd, int *status)
 {
-	char **cmd_arr;
-	char *path;
-	int pid;
-	int wstatus;
-	struct s_saved_std std;
-	char *clean_cmd;
-	char *line;
-	int i;
-	char	*clean_cmd2;
+	struct s_saved_std	std;
+	char				*line;
 
-	if (is_builtin(cmd))
-		return (execute_builtin(cmd, 1, status));
-	clean_cmd = remove_redirects(cmd);
-	if (clean_cmd && is_empty(clean_cmd))
+	std.saved_stdout = dup(STDOUT_FILENO);
+	std.saved_stdin = dup(STDIN_FILENO);
+	handle_redirection(cmd, status);
+	if (*status == 1)
 	{
-		free(clean_cmd);
-		clean_cmd = NULL;
-	}
-	if (!clean_cmd)
-	{
-		std.saved_stdout = dup(STDOUT_FILENO);
-		std.saved_stdin = dup(STDIN_FILENO);
-		handle_redirection(cmd, status);
-		if (*status == 1)
-		{
-			dup2(std.saved_stdin, STDIN_FILENO);
-			dup2(std.saved_stdout, STDOUT_FILENO);
-			close(std.saved_stdin);
-			close(std.saved_stdout);
-			return ;
-		}
-		line = get_next_line(STDIN_FILENO);
-		while (line)
-		{
-			write(STDOUT_FILENO, line, ft_strlen(line));
-			free(line);
-			line = get_next_line(STDIN_FILENO);
-		}
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
 		close(std.saved_stdin);
 		close(std.saved_stdout);
 		return ;
 	}
-	cmd_arr = ft_split(clean_cmd, ' ');
-	if (!cmd_arr || !*cmd_arr)
-		exit(EXIT_FAILURE);
+	line = get_next_line(STDIN_FILENO);
+	while (line)
+	{
+		write(STDOUT_FILENO, line, ft_strlen(line));
+		free(line);
+		line = get_next_line(STDIN_FILENO);
+	}
+	dup2(std.saved_stdin, STDIN_FILENO);
+	dup2(std.saved_stdout, STDOUT_FILENO);
+	close(std.saved_stdin);
+	close(std.saved_stdout);
+}
+
+int	clean_command_args(char **cmd_arr)
+{
+	int		i;
+	char	*clean_cmd2;
+
 	i = 0;
 	while (cmd_arr[i])
 	{
@@ -232,26 +217,29 @@ void	execute_command_single(char *cmd, int *status)
 		if (!clean_cmd2)
 		{
 			printf("%s: The command not found\n", cmd_arr[i]);
-			return ;
+			free_arr(cmd_arr);
+			return (1);
 		}
 		free(cmd_arr[i]);
 		cmd_arr[i] = clean_cmd2;
 		i++;
 	}
-	path = get_command_path(cmd_arr[0]);
-	if (!path)
-	{
-		*status = 127;
-		printf("%s: Command not found\n", clean_cmd);
-		return ;
-	}
-	save_and_redirect(&std, cmd, status);
-	if (*status == 1)
-	{
-		dup2(std.saved_stdin, STDIN_FILENO);
-		dup2(std.saved_stdout, STDOUT_FILENO);
-		return (close_saved_std(&std));
-	}
+	return (0);
+}
+
+void	restore_std(struct s_saved_std *std)
+{
+	dup2(std->saved_stdin, STDIN_FILENO);
+	dup2(std->saved_stdout, STDOUT_FILENO);
+	close(std->saved_stdin);
+	close(std->saved_stdout);
+}
+
+void	execute_forked_process(char *path, char **cmd_arr, int *status)
+{
+	pid_t	pid;
+	int		wstatus;
+
 	pid = fork();
 	if (pid == 0)
 	{
@@ -271,18 +259,64 @@ void	execute_command_single(char *cmd, int *status)
 	}
 	else
 		return (perror("fork"), *status = 1, exit(1));
-	dup2(std.saved_stdin, STDIN_FILENO);
-	dup2(std.saved_stdout, STDOUT_FILENO);
-	close_saved_std(&std);
+}
+
+char	**split_and_clean_args(char *clean_cmd, int *status)
+{
+	char	**cmd_arr;
+
+	cmd_arr = ft_split(clean_cmd, ' ');
+	if (!cmd_arr || !*cmd_arr)
+		exit(EXIT_FAILURE);
+	if (clean_command_args(cmd_arr))
+	{
+		*status = 1;
+		return (NULL);
+	}
+	return (cmd_arr);
+}
+
+void	execute_command_single(char *cmd, int *status)
+{
+	char				**cmd_arr;
+	char				*path;
+	struct s_saved_std	std;
+	char				*clean_cmd;
+
+	cmd_arr = NULL;
+	if (is_builtin(cmd))
+		return (execute_builtin(cmd, 1, status));
+	clean_cmd = remove_redirects(cmd);
+	if (clean_cmd && is_empty(clean_cmd))
+	{
+		free(clean_cmd);
+		clean_cmd = NULL;
+	}
+	if (!clean_cmd)
+		return (handle_empty_command(cmd, status));
+	cmd_arr = split_and_clean_args(clean_cmd, status);
+	if (!cmd_arr)
+		return ;
+	path = get_command_path(cmd_arr[0]);
+	if (!path)
+	{
+		printf("%s: Command not found\n", clean_cmd);
+		return (*status = 127, (void)0);
+	}
+	save_and_redirect(&std, cmd, status);
+	if (*status == 1)
+		return (restore_std(&std));
+	execute_forked_process(path, cmd_arr, status);
+	restore_std(&std);
 	free_arr(cmd_arr);
 }
 
 void	run_ex(char **line, int *status)
 {
-	char **arr;
-	char *clean_cmd;
-	char *new_line;
-	int	 i;
+	char	**arr;
+	char	*clean_cmd;
+	char	*new_line;
+	int		i;
 
 	if (is_empty(*line))
 		return ;
@@ -290,7 +324,10 @@ void	run_ex(char **line, int *status)
 	if (check_quotes(*line) == 1)
 		return ;
 	check_quastion_sign(line, *status);
+	printf("after check_quastion_sign\n");
 	bridge_var(line);
+	printf("after bridge_var\n");
+
 	if (!*line)
 		return ;
 	i = 0;
@@ -298,7 +335,8 @@ void	run_ex(char **line, int *status)
 		i++;
 	if ((*line)[i] == '\0')
 		return ;
-	if (ft_strcmp(*line + i, "clear") == 0 || ft_strncmp(*line + i, "clear ", 6) == 0)
+	if (ft_strcmp(*line + i, "clear") == 0
+		|| ft_strncmp(*line + i, "clear ", 6) == 0)
 		return (rl_clear_history());
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
@@ -376,4 +414,6 @@ $nonexist			+-
 > ./minishell
 > cat << EOF
 cat : Command not found
+
+echo "hello"$
 */

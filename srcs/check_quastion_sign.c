@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_quastion_sign.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 13:02:47 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 16:39:24 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 14:06:43 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	check_quastion_sign(char **line, int wstatus)
 		{
 			if ((*line)[i + 1] == '?')
 				change_to_exit_status(i, line, status);
+			i = -1;
 		}
 		i++;
 	}
