@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:45:12 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 18:40:55 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 11:50:58 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,4 @@ int	is_empty(char *line)
 		i++;
 	}
 	return (1);
-}
-
-void	write_stderr(char *str)
-{
-	int	strlen;
-
-	if (!str)
-		str = "Error occured.\n";
-	strlen = ft_strlen(str);
-	write(2, str, strlen);
-	write(2, "\n", 1);
 }

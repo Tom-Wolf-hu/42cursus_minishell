@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 20:52:01 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 11:59:36 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ typedef	struct s_store
 }	t_store;
 
 //check_redir.c
-char	*remove_redirects(char *cmd);
-char	*get_filename(char *cmd);
+// char	*remove_redirects(char *cmd);
+// char	*get_filename(char *cmd);
 void	handle_heredoc(const char *delimiter, int pipe_fd[2]);
-void	handle_redirection(char *cmd, int *status);
+// void	handle_redirection(char *cmd, int *status);
 
 //minishell.c
 void	remove_chars(char **str, char ch);
@@ -106,6 +106,10 @@ void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
 int		print_env(int fd);
 void	run_ex(char **line, int *status);
+int	finish_write_cmd_path(char **buffer, char *path, char *cmd);
+char	*find_cmd_in_paths(char **path_arr, char *cmd);
+char	*get_command_path(char *cmd);
+char	**get_commands(char *cmd, char *temp);
 
 //msh_cmd.c
 int		is_builtin(char *cmd);
@@ -119,12 +123,28 @@ int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
 
 //check_var.c
-int		get_var_name_size(char *str);
-void	get_var_name(char *dest, char *str);
-int		cmp_names(char *name1, char *name2);
+// int		get_var_name_size(char *str);
+// void	get_var_name(char *dest, char *str);
+// int		cmp_names(char *name1, char *name2);
+// char	*find_var_value(char *var_name);
+// void	change_str(char **str, char *name, char *value);
+// void	remove_var_name(char **str, char *name);
+// void	bridge_var(char **str);
+int	cmp_names(char *name1, char *name2);
 char	*find_var_value(char *var_name);
-void	change_str(char **str, char *name, char *value);
-void	remove_var_name(char **str, char *name);
+int	get_var_name_size(char *str);
+void	get_var_name(char *dest, char *str);
+
+//msh_utils.c
+// void	write_stderr(char *str);
+void	*ft_realloc1(void *oldptr, size_t oldsize, size_t newsize);
+char	*str_realloc(char *oldstr, size_t newsize);
+char	*ft_strndup(const char *s1, size_t n);
+// void	free_arr(char **arr);
+
+//bridge_var.c
+int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix);
+int	bridge_var_at(char **str, int dollar_pos);
 void	bridge_var(char **str);
 
 //echo.c
@@ -158,6 +178,22 @@ char	*remove_quotes_first_word(char *line);
 char	*copy_quoted_word(char *line, char *result, int i);
 int		check_command_quotes(char *line);
 
+
+int	in_redir(char *filename, int *status);
+int	out_redir(char *filename, int *status, int *i, char opt);
+void	reset_stdin(void);
+int	gf_name_length(char *cmd, int *i, int *start);
+char	*get_filename(char *cmd);
+void	handle_heredoc_child(int write_fd, const char *delimiter, int *status);
+int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
+int	heredoc_pipe_sign(char *filename, int *status);
+int	ch_redirect(char *line, int *i, char *filename, int *status);
+void	handle_redirection(char *line, int *status);
+void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
+void	join_part(char **s1, char *s2);
+void	redir_part(char *cmd, int *i);
+char	*before_red(char *cmd, int *i);
+char	*remove_redirects(char *cmd);
 /*
 The following file includes functions for checking 
 state of different aspect of minishell

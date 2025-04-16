@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/15 18:40:45 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 11:50:34 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,35 +111,3 @@ int	check_quotes(char *line)
 	}
 	return (0);
 }
-
-// char	*get_temp_remove_quotes(char *line, int *i, char quotes)
-// {
-// 	int		len;
-// 	int		start;
-// 	int		end;
-// 	char	*result;
-
-// 	len = ft_strlen(line);
-// 	start = *i + 1;
-// 	end = start;
-// 	while (end < len)
-// 	{
-// 		if (line[end] == '\\' && quotes == '\"'
-// 			&& end + 1 < len && (quotes == '\"' || quotes == '\''))
-// 			end += 2;
-// 		else if (line[end] == quotes)
-// 			break ;
-// 		else
-// 			end++;
-// 	}
-// 	result = (char *)malloc((end - start + 1) * sizeof(char));
-// 	if (!result)
-// 		return (NULL);
-// 	ft_memcpy(result, line + start, end - start);
-// 	result[end - start] = '\0';
-// 	if (end < len && line[end] == quotes)
-// 		*i = end + 1;
-// 	else
-// 		*i = end;
-// 	return (result);
-// }
