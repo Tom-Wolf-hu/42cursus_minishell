@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_redirects.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 15:54:00 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:54:14 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	join_part(char **s1, char *s2)
 	temp[lens1 + i] = '\0';
 	free(*s1);
 	free(s2);
-	s2 = NULL;
 	*s1 = temp;
 }
 
@@ -104,7 +103,8 @@ char	*remove_redirects(char *cmd)
 	while (cmd[i])
 	{
 		temp = before_red(cmd, &i);
-		join_part(&clean_cmd, temp);
+		if (temp)
+			join_part(&clean_cmd, temp);
 		redir_part(cmd, &i);
 	}
 	return (clean_cmd);

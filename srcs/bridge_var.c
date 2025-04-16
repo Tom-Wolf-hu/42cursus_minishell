@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bridge_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 16:45:02 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:30:39 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,9 @@ int	bridge_var_at(char **str, int dollar_pos)
 	ft_strlcat(new_str, suffix, new_str_len);
 	free(*str);
 	*str = new_str;
-	free(prefix);
-	free(suffix);
 	if (var_data.is_alloc)
 		free(var_data.var_value);
-	return (1);
+	return (free(prefix), free(suffix), 1);
 }
 
 void	bridge_var(char **str)

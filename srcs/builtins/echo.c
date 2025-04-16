@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 14:55:20 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 18:44:59 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	handle_echo(char *line, int fd)
 	{
 		if (ft_strcmp(arr[1], "-n") == 0)
 			return (free_arr(arr), 0);
-		return (mywrite(arr[1], fd), write(1, "\n", 1), 0);
+		return (mywrite(arr[1], fd), write(1, "\n", 1), free_arr(arr), 0);
 	}
 	if (i > 2)
 	{

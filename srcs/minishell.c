@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 16:45:49 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:32:06 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ void	run_ex(char **line, int *status)
 		return (rl_clear_history());
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status));
-	execute_pipe_commands(*line, status);
+	// execute_pipe_commands(*line, status);
 }
 
 void	change_status(int *status)
