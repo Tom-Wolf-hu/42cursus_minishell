@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 14:45:52 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:08:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,15 @@ int	is_builtin_choose(char *clean_cmd)
 int	is_builtin(char *cmd)
 {
 	char	*clean_cmd;
+	char	*temp;
 
 	clean_cmd = remove_redirects(cmd);
+	// free(cmd);
 	if (!clean_cmd)
 		return (0);
+	temp = clean_cmd;
 	clean_cmd = remove_quotes_first_word(clean_cmd);
+	free(temp);
 	if (!clean_cmd)
 		return (0);
 	if (is_builtin_choose(clean_cmd) == 1)

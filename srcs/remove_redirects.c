@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_redirects.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 11:35:37 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:42:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,14 @@ char	*remove_redirects(char *cmd)
 	clean_cmd = NULL;
 	while (cmd[i])
 	{
+		if (i > 0)
+		{
+			free(temp);
+			printf("Freeing temp at %p\n", temp);
+			temp = NULL;
+		}
 		temp = before_red(cmd, &i);
+		printf("temp allocated at %p\n", temp);
 		join_part(&clean_cmd, temp);
 		redir_part(cmd, &i);
 	}

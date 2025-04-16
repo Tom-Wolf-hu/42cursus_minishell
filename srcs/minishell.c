@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:44:49 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:25:34 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,13 +323,9 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	if (check_quotes(*line) == 1)
 		return ;
-	// printf("before check_quastion_sign\n");
 	if (check_quastion_sign(line, *status))
 		return ;
-	printf("after check_quastion_sign\n");
 	bridge_var(line);
-	printf("after bridge_var\n");
-
 	if (!*line)
 		return ;
 	i = 0;
