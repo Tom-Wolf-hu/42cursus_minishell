@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 11:59:36 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:46:05 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef	struct s_store
 //check_redir.c
 // char	*remove_redirects(char *cmd);
 // char	*get_filename(char *cmd);
-void	handle_heredoc(const char *delimiter, int pipe_fd[2]);
+// void	handle_heredoc(const char *delimiter, int pipe_fd[2]);
 // void	handle_redirection(char *cmd, int *status);
 
 //minishell.c
