@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 10:30:45 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 11:07:46 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,15 @@ typedef struct s_saved_std
 	int	saved_stdin;
 	int	saved_stdout;
 }	t_saved_std;
+
+typedef struct s_pipe_data
+{
+	char				**commands;
+	int					num_commands;
+	int					prev_fd;
+	int					pipefd[2];
+	int					i;
+}	t_pipe_data;
 
 typedef enum e_token
 {
@@ -122,21 +131,26 @@ void	change_to_exit_status(int i, char **line, char *status);
 int		check_quastion_sign(char **line, char *status);
 
 //minishell.c
-void	remove_chars(char **str, char ch);
-void	execute_pipe_commands(char *cmd, int fd, int *status);
-int		is_nummeric(char *line);
-void	handle_exit(char *line, int *status);
-void	ft_error(char *error, int exit_status);
 void	sig_handler(int sig);
-int		ft_getcwd(char *line, int fd);
-void	free_arr(char **arr);
-int		handle_cd(char *line);
 int		check_line(char *line, int i);
-int		check_quastion_sign(char **line, char *status);
 char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
-int		print_env(int fd);
+int		is_nummeric(char *line);
+int		finish_write_cmd_path(char **buffer, char *path, char *cmd);
+char	*get_command_path(char *cmd);
+char	**get_commands(char *cmd, char *temp);
+void	wait_for_last_pid(pid_t last_pid, int *status);
+char	*find_cmd_in_paths(char **path_arr, char *cmd);
+char	**process_command_args(char **cmd_args, char *cmd);
+void	handle_child_process(t_pipe_data data, char *cmd, int i, int *status);
+void	handle_parent_process(struct s_pipe_data *data, int i, pid_t pid, int *last_pid);
+void	remove_chars(char **str, char ch);
+void	execute_pipe_commands(char *cmd, int *status);
+void	handle_exit(char *line, int *status);
+void	ft_error(char *error, int exit_status);
+int		handle_cd(char *line);
+int		check_quastion_sign(char **line, char *status);
 void	run_ex(char **line, int *status);
 int		main(void);
 
