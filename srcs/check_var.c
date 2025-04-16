@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 11:51:23 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:36:39 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	get_var_name_size(char *str)
 		|| str[i] == '\'' || str[i] == '"' || str[i] == '\t')
 		return (0);
 	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '='
-		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|')
+		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|'
+		&& str[i] != ',' && str[i] != '.')
 		i++;
 	return (i);
 }
@@ -77,7 +78,8 @@ void	get_var_name(char *dest, char *str)
 	i = 1;
 	j = 0;
 	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '='
-		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|')
+		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|'
+		&& str[i] != ',' && str[i] != '.')
 	{
 		dest[j++] = str[i++];
 	}

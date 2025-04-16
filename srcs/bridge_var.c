@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 11:41:04 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:37:10 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	bridge_var(char **str)
 		{
 			if (!bridge_var_at(str, i))
 				break ;
-			i = -1;
 			flag_single = 0;
 			flag_double = 0;
 		}

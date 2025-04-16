@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:12:09 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:31:22 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,8 +323,9 @@ void	run_ex(char **line, int *status)
 	add_history(*line);
 	if (check_quotes(*line) == 1)
 		return ;
-	printf("before check_quastion_sign\n");
-	check_quastion_sign(line, *status);
+	// printf("before check_quastion_sign\n");
+	if (check_quastion_sign(line, *status))
+		return ;
 	printf("after check_quastion_sign\n");
 	bridge_var(line);
 	printf("after bridge_var\n");

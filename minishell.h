@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 12:46:05 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:23:26 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		ft_getcwd(char *line, int fd);
 void	free_arr(char **arr);
 int		handle_cd(char *line);
 int		check_line(char *line, int i);
-int		check_quastion_sign(char **line, int wstatus);
+int		check_quastion_sign(char **line, int status);
 char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
