@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:56:59 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:59:26 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:23:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*find_cmd_in_paths(char **path_arr, char *cmd)
 		free(buffer);
 		i++;
 	}
+	free_arr(path_arr);
 	return (NULL);
 }
 

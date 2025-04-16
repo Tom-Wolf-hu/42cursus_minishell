@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 17:26:19 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 18:03:10 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,9 @@ char	*remove_redirects(char *cmd)
 		if (i > 0)
 		{
 			free(temp);
-			printf("Freeing temp at %p\n", temp);
 			temp = NULL;
 		}
 		temp = before_red(cmd, &i);
-		printf("temp allocated at %p\n", temp);
 		join_part(&clean_cmd, temp);
 		redir_part(cmd, &i);
 	}
