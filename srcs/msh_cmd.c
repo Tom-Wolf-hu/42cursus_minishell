@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 16:08:32 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:23:29 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	is_builtin(char *cmd)
 	return (free(clean_cmd), 0);
 }
 
-void	exec_builtin_choose(char *clean_cmd, int fd, int *status, struct s_saved_std *std)
+void	exec_builtin_choose(char *clean_cmd, int fd,
+		int *status, struct s_saved_std *std)
 {
 	if (ft_strcmp(clean_cmd, "exit") == 0
 		|| ft_strncmp(clean_cmd, "exit ", 5) == 0)
@@ -103,6 +104,5 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	free(clean_cmd);
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);
-	close(std.saved_stdin);
-	close(std.saved_stdout);
+	close_saved_std(&std);
 }

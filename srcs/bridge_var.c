@@ -6,13 +6,13 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 14:37:10 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:45:02 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix)
+int	bva_newstr(char *str, int dollar_pos, t_var_info *var, char **suffix)
 {
 	char	*dollar;
 	char	*var_name;
@@ -26,11 +26,15 @@ int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix)
 	if (!var_name)
 		return (exit(1), 0);
 	get_var_name(var_name, dollar);
-	*var_value = find_var_value(var_name);
-	if (!(*var_value))
-		*var_value = ft_strdup("");
+	var->var_value = find_var_value(var_name);
+	var->is_alloc = 0;
+	if (!var->var_value)
+	{
+		var->var_value = ft_strdup("");
+		var->is_alloc = 1;
+	}
 	*suffix = ft_strdup(dollar + size);
-	if (*suffix == NULL || (*var_value) == NULL)
+	if (*suffix == NULL || (var->var_value) == NULL)
 	{
 		perror("In bva_newstr function malloc failed");
 		exit(EXIT_FAILURE);
@@ -41,29 +45,33 @@ int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix)
 
 int	bridge_var_at(char **str, int dollar_pos)
 {
-	char	*var_value;
+	// char	*var_value;
+	t_var_info var_data;
 	char	*prefix;
 	char	*suffix;
 	int		new_str_len;
 	char	*new_str;
 
-	if (bva_newstr(*str, dollar_pos, &var_value, &suffix) == 1)
+	// var_value = NULL;
+	if (bva_newstr(*str, dollar_pos, &var_data, &suffix) == 1)
 		return (1);
 	prefix = ft_strndup(*str, dollar_pos);
 	new_str_len = ft_strlen(prefix) + ft_strlen(suffix) + 1;
-	if (var_value)
-		new_str_len += ft_strlen(var_value);
+	if (var_data.var_value)
+		new_str_len += ft_strlen(var_data.var_value);
 	new_str = malloc(new_str_len);
 	if (!new_str)
 		return (free(suffix), free(prefix), exit(1), 0);
 	ft_strlcpy(new_str, prefix, new_str_len);
-	if (var_value)
-		ft_strlcat(new_str, var_value, new_str_len);
+	if (var_data.var_value)
+		ft_strlcat(new_str, var_data.var_value, new_str_len);
 	ft_strlcat(new_str, suffix, new_str_len);
 	free(*str);
 	*str = new_str;
 	free(prefix);
 	free(suffix);
+	if (var_data.is_alloc)
+		free(var_data.var_value);
 	return (1);
 }
 

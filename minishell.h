@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:46:31 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:43:48 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@
 
 #include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
+
+typedef struct s_var_info
+{
+	char	*var_value;
+	int		is_alloc;
+}	t_var_info;
 
 typedef struct s_saved_std
 {
@@ -144,7 +150,6 @@ char	*ft_strndup(const char *s1, size_t n);
 // void	free_arr(char **arr);
 
 //bridge_var.c
-int	bva_newstr(char *str, int dollar_pos, char **var_value, char **suffix);
 int	bridge_var_at(char **str, int dollar_pos);
 void	bridge_var(char **str);
 

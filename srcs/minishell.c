@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 15:25:34 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:03:48 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,8 @@ void	execute_forked_process(char *path, char **cmd_arr, int *status)
 	pid_t	pid;
 	int		wstatus;
 
+	if (!path)
+		return ;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -266,6 +268,7 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 	char	**cmd_arr;
 
 	cmd_arr = ft_split(clean_cmd, ' ');
+	free(clean_cmd);/////////////////////
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
 	if (clean_command_args(cmd_arr))
@@ -274,6 +277,21 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 		return (NULL);
 	}
 	return (cmd_arr);
+}
+
+char	*resolve_command_path(char *cmd_name, int *status)
+{
+	char	*path;
+
+	if (!cmd_name)
+		return (NULL);
+	path = get_command_path(cmd_name);
+	if (!path)
+	{
+		write_stderr("Command not found");
+		*status = 127;
+	}
+	return (path);
 }
 
 void	execute_command_single(char *cmd, int *status)
@@ -297,25 +315,17 @@ void	execute_command_single(char *cmd, int *status)
 	cmd_arr = split_and_clean_args(clean_cmd, status);
 	if (!cmd_arr)
 		return ;
-	path = get_command_path(cmd_arr[0]);
-	if (!path)
-	{
-		printf("%s: Command not found\n", clean_cmd);
-		return (*status = 127, (void)0);
-	}
+	path = resolve_command_path(cmd_arr[0], status);
 	save_and_redirect(&std, cmd, status);
 	if (*status == 1)
 		return (restore_std(&std));
 	execute_forked_process(path, cmd_arr, status);
-	restore_std(&std);
-	free_arr(cmd_arr);
+	return (free(path), restore_std(&std), free_arr(cmd_arr));
 }
 
 void	run_ex(char **line, int *status)
 {
 	char	**arr;
-	char	*clean_cmd;
-	char	*new_line;
 	int		i;
 
 	if (is_empty(*line))
@@ -341,6 +351,15 @@ void	run_ex(char **line, int *status)
 	execute_pipe_commands(*line, status);
 }
 
+void	change_status(int *status)
+{
+	if (g_status == 130)
+	{
+		*status = g_status;
+		g_status = 0;
+	}
+}
+
 int	main(void)
 {
 	char			*line;
@@ -357,13 +376,12 @@ int	main(void)
 			line = get_next_line(fileno(stdin));
 			line = ft_strtrim(line, "\n");
 		}
-		if (g_status == 130)
-		{
-			status = g_status;
-			g_status = 0;
-		}
+		change_status(&status);
 		if (!line)
 			handle_exit(ft_strdup("exit"), &status, NULL);
+		if (ft_strcmp(line, "exit") == 0
+			|| ft_strncmp(line, "exit ", 5) == 0)
+			handle_exit(line, &status, NULL);
 		else
 			run_ex(&line, &status);
 		free(line);
@@ -413,5 +431,7 @@ $nonexist			+-
 > cat << EOF
 cat : Command not found
 
-echo "hello"$
+echo "hello"$ +
+
+echo $? $USER $PATH $$$
 */
