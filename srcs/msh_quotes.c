@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 11:50:34 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:08:20 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ int	check_quotes(char *line)
 	end_q = 1;
 	while (line[i])
 	{
-		if (line[i] == ';' || line[i] == '\\')
-			return (write_stderr("The character is not supported"), 1);
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			j = i;

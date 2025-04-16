@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 11:35:37 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:54:00 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	join_part(char **s1, char *s2)
 	int		i;
 
 	i = 0;
-	if (s2 == NULL)
+	if (!s2)
 		return ;
 	lens2 = ft_strlen(s2);
 	jp_temp_s1(*s1, &temp, &lens1, lens2);

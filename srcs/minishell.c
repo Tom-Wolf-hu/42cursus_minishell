@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 15:12:33 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:07:55 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,7 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 	char	**cmd_arr;
 
 	cmd_arr = ft_split(clean_cmd, ' ');
+	free(clean_cmd);/////////////////////
 	if (!cmd_arr || !*cmd_arr)
 		exit(EXIT_FAILURE);
 	if (clean_command_args(cmd_arr))
@@ -278,7 +279,7 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 	return (cmd_arr);
 }
 
-char	*resolve_command_path(char *cmd_name, int *status, char *clean_cmd)
+char	*resolve_command_path(char *cmd_name, int *status)
 {
 	char	*path;
 
@@ -314,12 +315,12 @@ void	execute_command_single(char *cmd, int *status)
 	cmd_arr = split_and_clean_args(clean_cmd, status);
 	if (!cmd_arr)
 		return ;
-	path = resolve_command_path(cmd_arr[0], status, clean_cmd);
+	path = resolve_command_path(cmd_arr[0], status);
 	save_and_redirect(&std, cmd, status);
 	if (*status == 1)
 		return (restore_std(&std));
 	execute_forked_process(path, cmd_arr, status);
-	return (restore_std(&std), free_arr(cmd_arr));
+	return (free(path), restore_std(&std), free_arr(cmd_arr));
 }
 
 void	run_ex(char **line, int *status)
@@ -378,6 +379,9 @@ int	main(void)
 		change_status(&status);
 		if (!line)
 			handle_exit(ft_strdup("exit"), &status, NULL);
+		if (ft_strcmp(line, "exit") == 0
+			|| ft_strncmp(line, "exit ", 5) == 0)
+			handle_exit(line, &status, NULL);
 		else
 			run_ex(&line, &status);
 		free(line);

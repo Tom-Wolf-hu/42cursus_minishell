@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 14:50:13 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:34:20 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,5 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	free(clean_cmd);
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);
-	close(std.saved_stdin);
-	close(std.saved_stdout);
+	close_saved_std(&std);
 }
