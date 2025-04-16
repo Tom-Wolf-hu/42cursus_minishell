@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:23:26 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:46:31 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,11 @@ typedef	struct s_store
 // void	handle_redirection(char *cmd, int *status);
 
 //minishell.c
+void	close_saved_std(struct s_saved_std *std);
 void	remove_chars(char **str, char ch);
 void	execute_pipe_commands(char *cmd, int *status);
 int		is_nummeric(char *line);
-void	handle_exit(char *line, int *status);
+void	handle_exit(char *line, int *status, struct s_saved_std *std);
 void	sig_handler(int sig);
 int		ft_getcwd(char *line, int fd);
 void	free_arr(char **arr);

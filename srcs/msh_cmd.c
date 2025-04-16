@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 12:01:32 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:45:52 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	is_builtin(char *cmd)
 	return (free(clean_cmd), 0);
 }
 
-void	exec_builtin_choose(char *clean_cmd, int fd, int *status)
+void	exec_builtin_choose(char *clean_cmd, int fd, int *status, struct s_saved_std *std)
 {
 	if (ft_strcmp(clean_cmd, "exit") == 0
 		|| ft_strncmp(clean_cmd, "exit ", 5) == 0)
-		handle_exit(clean_cmd, status);
+		handle_exit(clean_cmd, status, std);
 	if (ft_strcmp(clean_cmd, "pwd") == 0
 		|| ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(clean_cmd, fd);
@@ -95,7 +95,7 @@ void	execute_builtin(char *cmd, int fd, int *status)
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
 	handle_redirection(cmd, status);
-	exec_builtin_choose(clean_cmd, fd, status);
+	exec_builtin_choose(clean_cmd, fd, status, &std);
 	free(clean_cmd);
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);

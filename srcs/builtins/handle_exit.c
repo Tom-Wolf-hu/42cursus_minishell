@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 19:22:05 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 14:44:26 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	handle_exit(char *line, int *status)
+void	handle_exit(char *line, int *status, struct s_saved_std *std)
 {
 	char	**line_arr;
 
@@ -35,5 +35,7 @@ void	handle_exit(char *line, int *status)
 	rl_clear_history();
 	free_var_after_exit();
 	printf("exit\n");
+	if (std)
+		close_saved_std(std);
 	exit(*status);
 }

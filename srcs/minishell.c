@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:31:22 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:44:49 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,7 +367,7 @@ int	main(void)
 			g_status = 0;
 		}
 		if (!line)
-			handle_exit(ft_strdup("exit"), &status);
+			handle_exit(ft_strdup("exit"), &status, NULL);
 		else
 			run_ex(&line, &status);
 		free(line);
