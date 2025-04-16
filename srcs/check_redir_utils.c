@@ -6,11 +6,51 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 16:35:43 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/15 16:41:20 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:31:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	in_redir(char *filename, int *status)
+{
+	int	file_fd;	
+
+	file_fd = open(filename, O_RDONLY);
+	if (file_fd == -1)
+	{
+		perror("open");
+		*status = 1;
+		free(filename);
+		return (1);
+	}
+	dup2(file_fd, STDIN_FILENO);
+	close(file_fd);
+	return (0);
+}
+
+int	out_redir(char *filename, int *status, int *i, char opt)
+{
+	int	file_fd;
+
+	if (opt == 'a')
+	{
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		(*i)++;
+	}
+	else
+		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (file_fd == -1)
+	{
+		perror("open");
+		*status = 1;
+		free(filename);
+		return (1);
+	}
+	dup2(file_fd, STDOUT_FILENO);
+	close(file_fd);
+	return (0);
+}
 
 void	reset_stdin(void)
 {

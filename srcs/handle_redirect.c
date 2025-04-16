@@ -6,51 +6,11 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 19:32:51 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 10:20:37 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:34:39 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	in_redir(char *filename, int *status)
-{
-	int	file_fd;	
-
-	file_fd = open(filename, O_RDONLY);
-	if (file_fd == -1)
-	{
-		perror("open");
-		*status = 1;
-		free(filename);
-		return (1);
-	}
-	dup2(file_fd, STDIN_FILENO);
-	close(file_fd);
-	return (0);
-}
-
-int	out_redir(char *filename, int *status, int *i, char opt)
-{
-	int	file_fd;
-
-	if (opt == 'a')
-	{
-		file_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		(*i)++;
-	}
-	else
-		file_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fd == -1)
-	{
-		perror("open");
-		*status = 1;
-		free(filename);
-		return (1);
-	}
-	dup2(file_fd, STDOUT_FILENO);
-	close(file_fd);
-	return (0);
-}
 
 int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid)
 {
@@ -106,14 +66,39 @@ int	heredoc_pipe_sign(char *filename, int *status)
 	return (0);
 }
 
+int	ch_redirect(char *line, int *i, char *filename, int *status)
+{
+	if (line[*i] == '<' && line[*i + 1] == '<')
+	{
+		if (heredoc_pipe_sign(filename, status) == 1)
+			return (1);
+		*i += 2;
+	}
+	else if (line[*i] == '>' && line[*i + 1] == '>')
+	{
+		if (out_redir(filename, status, i, 'a') == 1)
+			return (1);
+	}
+	else if (line[*i] == '>')
+	{
+		if (out_redir(filename, status, i, 't') == 1)
+			return (1);
+	}
+	else if (line[*i] == '<')
+	{
+		if (in_redir(filename, status) == 1)
+			return (1);
+	}
+	return (0);
+}
+
 void	handle_redirection(char *line, int *status)
 {
-	int		i = 0;
-	int		file_fd;
-	char	*filename;
-	struct s_saved_std std;
+	int					i;
+	char				*filename;
 
 	*status = 0;
+	i = 0;
 	while (line[i])
 	{
 		if (line[i] == '<' || line[i] == '>')
@@ -125,27 +110,8 @@ void	handle_redirection(char *line, int *status)
 				*status = 1;
 				return ;
 			}
-			if (line[i] == '<' && line[i + 1] == '<') // heredoc
-			{
-				if (heredoc_pipe_sign(filename, status) == 1)
-					return ;
-				i += 2;
-			}
-			else if (line[i] == '>' && line[i + 1] == '>')
-			{
-				if (out_redir(filename, status, &i, 'a') == 1)
-					return ;
-			}
-			else if (line[i] == '>')
-			{
-				if (out_redir(filename, status, &i, 't') == 1)
-					return ;
-			}
-			else if (line[i] == '<')
-			{
-				if (in_redir(filename, status) == 1)
-					return;
-			}
+			if (ch_redirect(line, &i, filename, status) == 1)
+				return ;
 			free(filename);
 		}
 		i++;

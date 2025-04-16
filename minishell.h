@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 10:18:36 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:30:45 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void	handle_heredoc_child(int write_fd, const char *delimiter);
 // void	handle_heredoc(const char *delimiter);
 
 //check_redir_utils.c
+int		in_redir(char *filename, int *status);
+int		out_redir(char *filename, int *status, int *i, char opt);
 void	reset_stdin(void);
 
 
@@ -202,10 +204,9 @@ char	*before_red(char *cmd, int *i);
 char	*remove_redirects(char *cmd);
 
 //handle_redirect.c
-int		in_redir(char *filename, int *status);
-int		out_redir(char *filename, int *status, int *i, char opt);
 int		heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
 int		heredoc_pipe_sign(char *filename, int *status);
+int		ch_redirect(char *line, int *i, char *filename, int *status);
 void	handle_redirection(char *line, int *status);
 
 /*
