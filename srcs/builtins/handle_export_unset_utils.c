@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 17:57:27 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 18:53:12 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	mysetenv(char *name, char *value)
 	{
 		count = ft_arrlen(environ);
 		new_env = ft_realloc(environ, sizeof(char *) * (count + 2));
+		printf("new_env: allocated at %p\n", new_env);
 		if (!new_env)
 			return (perror("realloc"), free(new_var), 1);
 		environ = new_env;

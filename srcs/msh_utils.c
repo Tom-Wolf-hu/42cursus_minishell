@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:44:21 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:52:46 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:42:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,12 @@ void	free_arr(char **arr)
 		return ;
 	while (arr[i])
 	{
+		write(2, "passed1\n", 8);
 		free(arr[i]);
+		printf("free_ing arr[i] at %p\n", arr[i]);
 		i++;
 	}
 	free(arr);
+	printf("free_ing new_env at %p\n", arr);
 	arr = NULL;
 }

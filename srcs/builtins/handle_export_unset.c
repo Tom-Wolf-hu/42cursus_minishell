@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 17:58:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/16 19:16:04 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ void	free_var_after_exit(void)
 		i++;
 	}
 	free_arr(g_env_vars);
+	free(environ);
+	// printf("free_ing new_env at %p\n", g_env_vars);
+	// printf("free_ing new_env at %p\n", environ);
 }
 
 int	my_unsetenv(char *name)
