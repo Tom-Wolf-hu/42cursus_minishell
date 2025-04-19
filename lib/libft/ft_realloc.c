@@ -6,37 +6,37 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 15:20:15 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:21:26 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/17 10:51:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*ft_realloc(void *oldptr, size_t oldsize, size_t newsize)
 {
-	void	*new_ptr;
-	size_t	i;
-	char	*src;
-	char	*dst;
+	void			*newptr;
+	unsigned char	*bytenew;
+	unsigned char	*byteold;
+	size_t			i;
 
-	if (!ptr)
-		return (malloc(size));
-	if (size == 0)
+	i = 0;
+	if (newsize == 0)
 	{
-		free(ptr);
+		free(oldptr);
 		return (NULL);
 	}
-	new_ptr = malloc(size);
-	if (!new_ptr)
+	newptr = (void *)malloc(newsize);
+	if (!newptr)
 		return (NULL);
-	src = (char *)ptr;
-	dst = (char *)new_ptr;
-	i = 0;
-	while (i < size)
+	if (!oldptr)
+		return (newptr);
+	byteold = (unsigned char *)oldptr;
+	bytenew = (unsigned char *)newptr;
+	while (i < newsize && i < oldsize)
 	{
-		dst[i] = src[i];
+		bytenew[i] = byteold[i];
 		i++;
 	}
-	free(ptr);
-	return (new_ptr);
+	free(oldptr);
+	return (newptr);
 }

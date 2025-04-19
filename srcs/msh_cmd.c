@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 18:59:07 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/18 20:21:15 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int	is_builtin_choose(char *clean_cmd)
 {
-	if (ft_strcmp(clean_cmd, "exit") == 0
-		|| ft_strncmp(clean_cmd, "exit ", 5) == 0)
-		return (1);
 	if (ft_strncmp(clean_cmd, "pwd", 3) == 0
 		|| ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		return (1);
@@ -55,32 +52,29 @@ int	is_builtin(char *cmd)
 }
 
 void	exec_builtin_choose(char *clean_cmd, int fd,
-		int *status, struct s_saved_std *std)
+		int *status, char ***myenvp)
 {
-	if (ft_strcmp(clean_cmd, "exit") == 0
-		|| ft_strncmp(clean_cmd, "exit ", 5) == 0)
-		handle_exit(clean_cmd, status, std);
 	if (ft_strcmp(clean_cmd, "pwd") == 0
 		|| ft_strncmp(clean_cmd, "pwd ", 4) == 0)
 		*status = ft_getcwd(clean_cmd, fd);
 	else if (ft_strncmp(clean_cmd, "cd ", 3) == 0
 		|| ft_strcmp(clean_cmd, "cd") == 0)
-		*status = handle_cd(clean_cmd);
+		*status = handle_cd(clean_cmd, myenvp);
 	else if (ft_strncmp(clean_cmd, "echo ", 5) == 0
 		|| ft_strcmp(clean_cmd, "echo") == 0)
 		*status = handle_echo(clean_cmd, fd);
 	else if (ft_strcmp(clean_cmd, "env") == 0
 		|| ft_strcmp(clean_cmd, "env ") == 0)
-		*status = print_env(fd);
+		*status = print_env(myenvp);
 	else if (ft_strncmp(clean_cmd, "export ", 7) == 0
 		|| ft_strcmp(clean_cmd, "export") == 0)
-		*status = handle_export(clean_cmd, fd);
+		*status = handle_export(clean_cmd, myenvp);
 	else if (ft_strncmp(clean_cmd, "unset ", 6) == 0
 		|| ft_strcmp(clean_cmd, "unset") == 0)
-		*status = handle_unset(clean_cmd, fd);
+		*status = handle_unset(clean_cmd, myenvp);
 }
 
-void	execute_builtin(char *cmd, int fd, int *status)
+void	execute_builtin(char *cmd, int fd, int *status, char ***myenvp)
 {
 	struct s_saved_std	std;
 	char				*clean_cmd;
@@ -98,8 +92,8 @@ void	execute_builtin(char *cmd, int fd, int *status)
 		return ;
 	std.saved_stdin = dup(STDIN_FILENO);
 	std.saved_stdout = dup(STDOUT_FILENO);
-	handle_redirection(cmd, status);
-	exec_builtin_choose(temp, fd, status, &std);
+	handle_redirection(cmd, status, *myenvp);
+	exec_builtin_choose(temp, fd, status, myenvp);
 	free(temp);
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);

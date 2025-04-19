@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:26:52 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:18:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid)
 	return (0);
 }
 
-int	heredoc_pipe_sign(char *filename, int *status)
+int	heredoc_pipe_sign(char *filename, int *status, char **envp)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -59,18 +59,18 @@ int	heredoc_pipe_sign(char *filename, int *status)
 	{
 		signal(SIGINT, SIG_DFL);
 		close(pipe_fd[0]);
-		handle_heredoc_child(pipe_fd[1], filename, status);
+		handle_heredoc_child(pipe_fd[1], filename, status, envp);
 	}
 	else
 		return (heredoc_parent(filename, status, pipe_fd, pid));
 	return (0);
 }
 
-int	ch_redirect(char *line, int *i, char *filename, int *status)
+int	ch_redirect(char *line, int *i, char *filename, int *status, char **envp)
 {
 	if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		if (heredoc_pipe_sign(filename, status) == 1)
+		if (heredoc_pipe_sign(filename, status, envp) == 1)
 			return (1);
 		*i += 2;
 	}
@@ -92,7 +92,7 @@ int	ch_redirect(char *line, int *i, char *filename, int *status)
 	return (0);
 }
 
-void	handle_redirection(char *line, int *status)
+void	handle_redirection(char *line, int *status, char **envp)
 {
 	int					i;
 	char				*filename;
@@ -110,7 +110,7 @@ void	handle_redirection(char *line, int *status)
 				*status = 1;
 				return ;
 			}
-			if (ch_redirect(line, &i, filename, status) == 1)
+			if (ch_redirect(line, &i, filename, status, envp) == 1)
 				return ;
 			free(filename);
 		}

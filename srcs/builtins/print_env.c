@@ -6,22 +6,23 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:44 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 15:35:22 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/18 19:41:50 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	print_env(int fd)
+int	print_env(char ***myenvp)
 {
-	int				i;
-	extern char		**environ;
+	int	i;
 
 	i = 0;
-	while (environ[i])
+	if (!*myenvp)
+		return (1);
+	while ((*myenvp)[i])
 	{
-		write(fd, environ[i], ft_strlen(environ[i]));
-		write(fd, "\n", 1);
+		write(1, (*myenvp)[i], ft_strlen((*myenvp)[i]));
+		write(1, "\n", 1);
 		i++;
 	}
 	return (0);

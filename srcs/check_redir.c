@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:39:50 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:16:37 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*get_filename(char *cmd)
 	return (clean_filename);
 }
 
-void	handle_heredoc_child(int write_fd, const char *delimiter, int *status)
+void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp)
 {
 	char	*line;
 
@@ -70,7 +70,7 @@ void	handle_heredoc_child(int write_fd, const char *delimiter, int *status)
 			break ;
 		}
 		check_quastion_sign(&line, *status);
-		bridge_var(&line);
+		bridge_var(&line, envp);
 		write(write_fd, line, ft_strlen(line));
 		write(write_fd, "\n", 1);
 		free(line);

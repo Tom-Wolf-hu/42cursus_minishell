@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/16 14:36:39 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:28:39 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern char	**environ;
 
 int	cmp_names(char *name1, char *name2)
 {
@@ -31,17 +29,17 @@ int	cmp_names(char *name1, char *name2)
 	return (0);
 }
 
-char	*find_var_value(char *var_name)
+char	*find_var_value(char *var_name, char **myenvp)
 {
 	int		i;
 	char	*value;
 
 	i = 0;
-	while (environ[i])
+	while (myenvp[i])
 	{
-		if (cmp_names(environ[i], var_name))
+		if (cmp_names(myenvp[i], var_name))
 		{
-			value = environ[i];
+			value = myenvp[i];
 			while (*value && *value != '=')
 				value++;
 			if (*value == '=')

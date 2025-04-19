@@ -6,143 +6,98 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/15 17:58:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/19 12:30:54 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-extern char	**environ;
-char		**g_env_vars = NULL;
-int			g_env_size = 0;
-
-int	find_var_in_env(char *name)
+void	full_arr(int dlt_num, int size, char **result, char ***myenvp)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (environ[i])
+	j = 0;
+	while (i < size)
 	{
-		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-int	add_user_env_var(char *name)
-{
-	int		i;
-	char	**new_list;
-
-	i = 0;
-	while (i < g_env_size)
-	{
-		if (ft_strncmp(g_env_vars[i], name, ft_strlen(name)) == 0
-			&& g_env_vars[i][ft_strlen(name)] == '\0')
-			return (0);
-		i++;
-	}
-	new_list = ft_realloc(g_env_vars, sizeof(char *) * (g_env_size + 1));
-	if (!new_list)
-		return (perror("realloc g_env_vars"), 1);
-	g_env_vars = new_list;
-	g_env_vars[g_env_size] = ft_strdup(name);
-	g_env_size++;
-	return (0);
-}
-
-int	is_user_env_var(char *name)
-{
-	int	i;
-
-	i = 0;
-	while (i < g_env_size)
-	{
-		if (ft_strncmp(g_env_vars[i], name, ft_strlen(name)) == 0
-			&& g_env_vars[i][ft_strlen(name)] == '\0')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void	free_var_after_exit(void)
-{
-	int	i;
-
-	i = 0;
-	while (environ[i])
-	{
-		if (is_user_env_var(environ[i]))
-			free(environ[i]);
-		i++;
-	}
-	free_arr(g_env_vars);
-}
-
-int	my_unsetenv(char *name)
-{
-	int		index;
-	char	**new_env;
-
-	index = find_var_in_env(name);
-	if (index != -1)
-	{
-		if (is_user_env_var(name))
-			free(environ[index]);
-		while (environ[index])
+		if (i == dlt_num)
 		{
-			environ[index] = environ[index + 1];
-			index++;
+			i++;
+			continue ;
 		}
-		new_env = ft_realloc(environ, sizeof(char *) * (index));
-		if (!new_env && index > 0)
-			return (perror("realloc"), exit(1), 1);
-		environ = new_env;
+		result[j] = ft_strdup((*myenvp)[i++]);
+		if (!result[j])
+			return (free_arr(result));
+		j++;
 	}
-	return (0);
+	result[j] = NULL;
 }
 
-// int	mysetenv(char *name, char *value)
-// {
-// 	int		index;
-// 	char	*new_var;
-// 	int		count;
-// 	char	**new_env;
+char	**my_unsetenv(char *name, char ***myenvp)
+{
+	int		size;
+	char	**result;
+	int		dlt_num;
 
-// 	index = find_var_in_env(name);
-// 	if (value)
-// 		new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
-// 	else
-// 		new_var = malloc(ft_strlen(name) + 1);
-// 	if (!new_var)
-// 		return (exit(1), 1);
-// 	if (new_var == NULL)
-// 		return (perror("malloc"), 1);
-// 	ft_strcpy(new_var, name);
-// 	if (value)
-// 	{
-// 		ft_strcat(new_var, "=");
-// 		ft_strcat(new_var, value);
-// 	}
-// 	if (index != -1)
-// 	{
-// 		if (is_user_env_var(name))
-// 			free(environ[index]);
-// 		environ[index] = new_var;
-// 	}
-// 	else
-// 	{
-// 		count = 0;
-// 		while (environ[count])
-// 			count++;
-// 		new_env = ft_realloc(environ, sizeof(char *) * (count + 2));
-// 		if (!new_env)
-// 			return (perror("realloc"), free(new_var), 1);
-// 		environ = new_env;
-// 		environ[count] = new_var;
-// 		environ[count + 1] = NULL;
-// 	}
-// 	return (0);
-// }
+	dlt_num = find_var_in_env(name, *myenvp);
+	if (dlt_num == -1)
+		return (NULL);
+	size = ft_arrlen(*myenvp);
+	result = malloc(sizeof(char *) * size);
+	if (!result)
+		return (NULL);
+	full_arr(dlt_num, size, result, myenvp);
+	return (result);
+}
+
+char	**create_new_arr(char *str, char **myenvp)
+{
+	char	**new_env;
+	int		i;
+
+	new_env = malloc(sizeof(char *) * (ft_arrlen(myenvp) + 2));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (myenvp[i])
+	{
+		new_env[i] = ft_strdup(myenvp[i]);
+		if (!new_env[i])
+			return (free_arr(new_env), NULL);
+		i++;
+	}
+	new_env[i] = ft_strdup(str);
+	i++;
+	new_env[i] = NULL;
+	return (new_env);
+}
+
+int	mysetenv(char *name, char *value, char ***myenvp)
+{
+	char	**new_env;
+	int		i;
+	char	*new_str;
+	int		index;
+
+	index = find_var_in_env(name, *myenvp);
+	if (value)
+		new_str = malloc(ft_strlen(name) + ft_strlen(value) + 2);
+	else
+		new_str = malloc(ft_strlen(name) + 1);
+	if (!new_str)
+		return (1);
+	new_str[0] = '\0';
+	ft_strcat(new_str, name);
+	if (value)
+	{
+		ft_strcat(new_str, "=");
+		ft_strcat(new_str, value);
+	}
+	if (index != -1)
+		return (free((*myenvp)[index]), (*myenvp)[index] = new_str, 0);
+	new_env = create_new_arr(new_str, *myenvp);
+	if (!new_env)
+		return (free(new_str), 1);
+	return (free_arr(*myenvp), *myenvp = new_env, free(new_str), 0);
+}

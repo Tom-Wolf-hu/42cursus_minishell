@@ -6,20 +6,20 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 14:49:55 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/17 12:28:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	remember_path(void)
+void	remember_path(char ***myenvp)
 {
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
-		mysetenv("OLDPATH", cwd);
+		mysetenv("OLDPATH", cwd, myenvp);
 		free(cwd);
 	}
 }
@@ -85,7 +85,7 @@ int	get_arr(char ***arr, int *i, char *line)
 	return (0);
 }
 
-int	handle_cd(char *line)
+int	handle_cd(char *line, char ***myenvp)
 {
 	char	**arr;
 	char	*path;
@@ -97,7 +97,7 @@ int	handle_cd(char *line)
 	path = choose_path(arr, i);
 	if (!path)
 		return (free_arr(arr), 1);
-	remember_path();
+	remember_path(myenvp);
 	if (chdir(path) != 0)
 	{
 		perror("minishell: cd");
@@ -106,7 +106,7 @@ int	handle_cd(char *line)
 	new_pwd = getcwd(NULL, 0);
 	if (new_pwd)
 	{
-		mysetenv("PWD", new_pwd);
+		mysetenv("PWD", new_pwd, myenvp);
 		free(new_pwd);
 	}
 	free(path);

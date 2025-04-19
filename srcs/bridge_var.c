@@ -6,13 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 18:30:39 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/19 12:33:56 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	bva_newstr(char *str, int dollar_pos, t_var_info *var, char **suffix)
+int	bva_newstr(char *str, int dollar_pos, t_var_info *var, char **suffix, char **myenvp)
 {
 	char	*dollar;
 	char	*var_name;
@@ -26,7 +26,7 @@ int	bva_newstr(char *str, int dollar_pos, t_var_info *var, char **suffix)
 	if (!var_name)
 		return (exit(1), 0);
 	get_var_name(var_name, dollar);
-	var->var_value = find_var_value(var_name);
+	var->var_value = find_var_value(var_name, myenvp);
 	var->is_alloc = 0;
 	if (!var->var_value)
 	{
@@ -43,17 +43,15 @@ int	bva_newstr(char *str, int dollar_pos, t_var_info *var, char **suffix)
 	return (0);
 }
 
-int	bridge_var_at(char **str, int dollar_pos)
+int	bridge_var_at(char **str, int dollar_pos, char **myenvp)
 {
-	// char	*var_value;
 	t_var_info var_data;
 	char	*prefix;
 	char	*suffix;
 	int		new_str_len;
 	char	*new_str;
 
-	// var_value = NULL;
-	if (bva_newstr(*str, dollar_pos, &var_data, &suffix) == 1)
+	if (bva_newstr(*str, dollar_pos, &var_data, &suffix, myenvp) == 1)
 		return (1);
 	prefix = ft_strndup(*str, dollar_pos);
 	new_str_len = ft_strlen(prefix) + ft_strlen(suffix) + 1;
@@ -73,7 +71,7 @@ int	bridge_var_at(char **str, int dollar_pos)
 	return (free(prefix), free(suffix), 1);
 }
 
-void	bridge_var(char **str)
+void	bridge_var(char **str, char **myenvp)
 {
 	int	i;
 	int	flag_single;
@@ -90,7 +88,7 @@ void	bridge_var(char **str)
 			flag_double = !flag_double;
 		if ((*str)[i] == '$' && flag_single == 0)
 		{
-			if (!bridge_var_at(str, i))
+			if (!bridge_var_at(str, i, myenvp))
 				break ;
 			flag_single = 0;
 			flag_double = 0;

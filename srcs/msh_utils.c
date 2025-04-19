@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:44:21 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:52:46 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/18 21:12:28 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,6 @@ void	write_stderr(char *str)
 	write(2, "\n", 1);
 }
 
-void	*ft_realloc1(void *oldptr, size_t oldsize, size_t newsize)
-{
-	void			*newptr;
-	unsigned char	*bytenew;
-	unsigned char	*byteold;
-	size_t			i;
-
-	i = 0;
-	if (newsize == 0)
-	{
-		free(oldptr);
-		return (NULL);
-	}
-	newptr = (void *)malloc(newsize);
-	if (!newptr)
-		return (NULL);
-	if (!oldptr)
-		return (newptr);
-	byteold = (unsigned char *)oldptr;
-	bytenew = (unsigned char *)newptr;
-	while (i < newsize && i < oldsize)
-	{
-		bytenew[i] = byteold[i];
-		i++;
-	}
-	free(oldptr);
-	return (newptr);
-}
-
 char	*str_realloc(char *oldstr, size_t newsize)
 {
 	char	*newstr;
@@ -61,7 +32,7 @@ char	*str_realloc(char *oldstr, size_t newsize)
 		oldsize = (size_t)ft_strlen(oldstr);
 	else
 		oldsize = 0;
-	newstr = (char *)ft_realloc1(oldstr, oldsize, newsize);
+	newstr = (char *)ft_realloc(oldstr, oldsize, newsize);
 	if (!newstr || newsize < 1)
 		return (NULL);
 	newstr[newsize - 1] = '\0';
@@ -100,13 +71,10 @@ void	free_arr(char **arr)
 	int	i;
 
 	i = 0;
-	if (!arr)
-		return ;
 	while (arr[i])
 	{
 		free(arr[i]);
 		i++;
 	}
 	free(arr);
-	arr = NULL;
 }
