@@ -6,32 +6,30 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/18 21:28:39 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/20 16:25:07 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	cmp_names(char *name1, char *name2)
+int	cmp_names(char *env_str, char *name)
 {
 	int	i;
 
 	i = 0;
-	while (name1[i] && name2[i] && name1[i] != '=' && name2[i] != '=')
+	while (env_str[i] && name[i] && env_str[i] != '=' && name[i] != '=')
 	{
-		if (name1[i] != name2[i])
+		if (env_str[i] != name[i])
 			return (0);
 		i++;
 	}
-	if ((name1[i] == '=' && name2[i] == '\0') || (name1[i] == '\0'
-			&& name2[i] == '\0'))
-		return (1);
-	return (0);
+	return (env_str[i] == '=' && name[i] == '\0');
 }
 
 char	*find_var_value(char *var_name, char **myenvp)
 {
 	int		i;
+	int		j;
 	char	*value;
 
 	i = 0;
@@ -39,11 +37,10 @@ char	*find_var_value(char *var_name, char **myenvp)
 	{
 		if (cmp_names(myenvp[i], var_name))
 		{
-			value = myenvp[i];
-			while (*value && *value != '=')
-				value++;
-			if (*value == '=')
-				return (value + 1);
+			j = 0;
+			while (myenvp[i][j] && myenvp[i][j] != '=')
+				j++;
+			return (ft_strdup(myenvp[i] + j + 1));
 		}
 		i++;
 	}
@@ -54,16 +51,12 @@ int	get_var_name_size(char *str)
 {
 	int	i;
 
-	i = 0;
 	if (!str || str[0] != '$')
 		return (0);
 	i = 1;
-	if (str[i] == '\0' || str[i] == ' ' || str[i] == '$' || str[i] == '='
-		|| str[i] == '\'' || str[i] == '"' || str[i] == '\t')
+	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (0);
-	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '='
-		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|'
-		&& str[i] != ',' && str[i] != '.')
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	return (i);
 }
@@ -75,11 +68,35 @@ void	get_var_name(char *dest, char *str)
 
 	i = 1;
 	j = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '='
-		&& str[i] != '\'' && str[i] != '"' && str[i] != '\t' && str[i] != '|'
-		&& str[i] != ',' && str[i] != '.')
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 	{
 		dest[j++] = str[i++];
 	}
 	dest[j] = '\0';
+}
+
+int	handle_dollar(char **str, t_var_info *var_data,
+	int dollar_pos, char *dollar)
+{
+	char	*pid_str;
+	int		new_str_len;
+	char	*new_str;
+
+	pid_str = ft_itoa(getpid());
+	if (!pid_str)
+		return (0);
+	var_data->prefix = ft_strndup(*str, dollar_pos);
+	var_data->suffix = ft_strdup(dollar + 2);
+	new_str_len = ft_strlen(var_data->prefix)
+		+ ft_strlen(pid_str) + ft_strlen(var_data->suffix) + 1;
+	new_str = malloc(new_str_len);
+	if (!new_str)
+		return (free(var_data->prefix), free(var_data->suffix),
+			free(pid_str), exit(1), 0);
+	ft_strlcpy(new_str, var_data->prefix, new_str_len);
+	ft_strlcat(new_str, pid_str, new_str_len);
+	ft_strlcat(new_str, var_data->suffix, new_str_len);
+	free(*str);
+	*str = new_str;
+	return (free(var_data->prefix), free(var_data->suffix), free(pid_str), 1);
 }

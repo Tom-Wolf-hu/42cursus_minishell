@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/19 12:30:54 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/20 16:28:50 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,18 @@ int	mysetenv(char *name, char *value, char ***myenvp)
 	if (!new_env)
 		return (free(new_str), 1);
 	return (free_arr(*myenvp), *myenvp = new_env, free(new_str), 0);
+}
+
+int	is_alnum_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '=')
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/19 12:32:14 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/20 16:23:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@
 typedef struct s_var_info
 {
 	char	*var_value;
-	int		is_alloc;
+	char	*prefix;
+	char	*suffix;
 }	t_var_info;
 
 typedef struct s_shell
@@ -135,13 +136,7 @@ int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
 
 //check_var.c
-// int		get_var_name_size(char *str);
-// void	get_var_name(char *dest, char *str);
-// int		cmp_names(char *name1, char *name2);
-// char	*find_var_value(char *var_name);
-// void	change_str(char **str, char *name, char *value);
-// void	remove_var_name(char **str, char *name);
-// void	bridge_var(char **str);
+int	handle_dollar(char **str, t_var_info *var_data, int dollar_pos, char *dollar);
 int	cmp_names(char *name1, char *name2);
 char	*find_var_value(char *var_name, char **myenvp);
 int	get_var_name_size(char *str);
@@ -164,6 +159,7 @@ void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
+int		is_alnum_str(char *str);
 void	full_arr(int dlt_num, int size, char **result, char ***myenvp);
 char	**my_unsetenv(char *name, char ***myenvp);
 char	**create_new_arr(char *str, char **myenvp);

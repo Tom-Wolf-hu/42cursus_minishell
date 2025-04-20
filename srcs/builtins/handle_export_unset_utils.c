@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/04/19 12:30:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/20 16:35:32 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ int	find_var_in_env(char *name, char **myenvp)
 	{
 		if (ft_strncmp(myenvp[i], name, name_len) == 0
 			&& (myenvp[i][name_len] == '=' || myenvp[i][name_len] == '\0'))
-			return (i);
+			{
+				return (i);
+			}
 		i++;
 	}
 	return (-1);
@@ -37,9 +39,11 @@ int	cycle_for_unsetenv(char **arr, char *clean_line,
 	i = 1;
 	while (arr[i])
 	{
+		if (!is_alnum_str(arr[i]))
+			return (write_stderr("minishell: invalid parameter name"), 1);
 		clean_line = remove_quotes(arr[i]);
 		if (!clean_line)
-			return (free_arr(arr), 1);
+			return (1);
 		new_env = my_unsetenv(clean_line, myenvp);
 		free(clean_line);
 		if (!new_env)
@@ -80,6 +84,8 @@ int	process_string_env(char *clean_line, char ***myenvp)
 	char	*value;
 
 	value = NULL;
+	if (find_var_in_env(clean_line, *myenvp) != -1 && !ft_strchr(clean_line, '='))
+		return (0);
 	equals_pos = ft_strchr(clean_line, '=');
 	if (equals_pos && equals_pos + 1)
 	{
@@ -117,7 +123,7 @@ int	handle_export(char *line, char ***myenvp)
 	i = 1;
 	while (arr[i])
 	{
-		if (ft_strchr(arr[i], ' '))
+		if (!is_alnum_str(arr[i]))
 			return (write_stderr("minishell: bad assignment"),
 				free_arr(arr), 1);
 		clean_line = remove_quotes(arr[i]);

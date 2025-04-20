@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:43 by omalovic          #+#    #+#             */
-/*   Updated: 2024/10/09 15:03:39 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/19 13:00:29 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	ft_isalnum(int c)
 	return (0);
 }
 
-/* int main(void)
-{
-    printf("%d\n", ft_isalnum(':'));
-    printf("%d\n", isalnum(':'));
-} */
+// int main(void)
+// {
+//     printf("%d\n", ft_isalnum(':'));
+//     printf("%d\n", isalnum('a'));
+// }
