@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/18 20:18:01 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 20:21:51 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,27 +66,27 @@ int	heredoc_pipe_sign(char *filename, int *status, char **envp)
 	return (0);
 }
 
-int	ch_redirect(char *line, int *i, char *filename, int *status, char **envp)
+int	ch_redirect(t_redirect_args *args, int *i, int *status, char **envp)
 {
-	if (line[*i] == '<' && line[*i + 1] == '<')
+	if (args->line[*i] == '<' && args->line[*i + 1] == '<')
 	{
-		if (heredoc_pipe_sign(filename, status, envp) == 1)
+		if (heredoc_pipe_sign(args->filename, status, envp) == 1)
 			return (1);
 		*i += 2;
 	}
-	else if (line[*i] == '>' && line[*i + 1] == '>')
+	else if (args->line[*i] == '>' && args->line[*i + 1] == '>')
 	{
-		if (out_redir(filename, status, i, 'a') == 1)
+		if (out_redir(args->filename, status, i, 'a') == 1)
 			return (1);
 	}
-	else if (line[*i] == '>')
+	else if (args->line[*i] == '>')
 	{
-		if (out_redir(filename, status, i, 't') == 1)
+		if (out_redir(args->filename, status, i, 't') == 1)
 			return (1);
 	}
-	else if (line[*i] == '<')
+	else if (args->line[*i] == '<')
 	{
-		if (in_redir(filename, status) == 1)
+		if (in_redir(args->filename, status) == 1)
 			return (1);
 	}
 	return (0);
@@ -94,25 +94,26 @@ int	ch_redirect(char *line, int *i, char *filename, int *status, char **envp)
 
 void	handle_redirection(char *line, int *status, char **envp)
 {
-	int					i;
-	char				*filename;
+	struct s_redirect_args	args;
+	int						i;
 
 	*status = 0;
 	i = 0;
-	while (line[i])
+	args.line = line;
+	while (args.line[i])
 	{
-		if (line[i] == '<' || line[i] == '>')
+		if (args.line[i] == '<' || args.line[i] == '>')
 		{
-			filename = get_filename(line + i);
-			if (!filename)
+			args.filename = get_filename(args.line + i);
+			if (!args.filename)
 			{
-				printf("Such name for file doesn't exist\n");
+				write_stderr("No such file or directory");
 				*status = 1;
 				return ;
 			}
-			if (ch_redirect(line, &i, filename, status, envp) == 1)
-				return ;
-			free(filename);
+			if (ch_redirect(&args, &i, status, envp) == 1)
+				return (free(args.filename));
+			free(args.filename);
 		}
 		i++;
 	}

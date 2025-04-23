@@ -6,13 +6,14 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/18 21:04:11 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 19:45:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_all(char **line_arr, char *line, char **myenvp, struct s_saved_std *std)
+void	free_all(char **line_arr, char *line,
+			char **myenvp, struct s_saved_std *std)
 {
 	free_arr(line_arr);
 	free(line);
@@ -23,7 +24,8 @@ void	free_all(char **line_arr, char *line, char **myenvp, struct s_saved_std *st
 		close_saved_std(std);
 }
 
-void	handle_exit(char *line, int *status, struct s_saved_std *std, char **myenvp)
+void	handle_exit(char *line, int *status,
+			struct s_saved_std *std, char **myenvp)
 {
 	char	**line_arr;
 

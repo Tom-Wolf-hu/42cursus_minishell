@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:56:59 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:59:26 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/20 17:38:48 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*find_cmd_in_paths(char **path_arr, char *cmd)
 	while (path_arr[i])
 	{
 		if (!finish_write_cmd_path(&buffer, path_arr[i], cmd))
-			return (NULL);
+			return (free_arr(path_arr), NULL);
 		if (access(buffer, X_OK) == 0)
 		{
 			free_arr(path_arr);
@@ -50,10 +50,10 @@ char	*find_cmd_in_paths(char **path_arr, char *cmd)
 		free(buffer);
 		i++;
 	}
-	return (NULL);
+	return (free_arr(path_arr), NULL);
 }
 
-char	*get_command_path(char *cmd)
+char	*get_command_path(char *cmd, char **myenvp)
 {
 	char	**path_arr;
 	char	*buffer;
@@ -69,13 +69,13 @@ char	*get_command_path(char *cmd)
 		return (NULL);
 	}
 	buffer = NULL;
-	path = getenv("PATH");
+	path = find_var_value("PATH", myenvp);
 	if (!path)
 		return (NULL);
 	path_arr = ft_split(path, ':');
 	if (!path_arr || !*path_arr)
-		return (NULL);
-	return (find_cmd_in_paths(path_arr, cmd));
+		return (free(path), NULL);
+	return (free(path), find_cmd_in_paths(path_arr, cmd));
 }
 
 char	**get_commands(char *cmd, char *temp)

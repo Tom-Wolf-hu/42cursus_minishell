@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/18 20:16:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 19:43:04 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ char	*get_filename(char *cmd)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
 	clean_filename = remove_quotes_first_word(filename);
-	return (clean_filename);
+	return (free(filename), clean_filename);
 }
 
-void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp)
+void	handle_heredoc_child(int write_fd, const char *delimiter,
+			int *status, char **envp)
 {
 	char	*line;
 

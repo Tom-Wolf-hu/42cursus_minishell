@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/20 16:28:50 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 19:46:46 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,17 @@ int	mysetenv(char *name, char *value, char ***myenvp)
 	return (free_arr(*myenvp), *myenvp = new_env, free(new_str), 0);
 }
 
-int	is_alnum_str(char *str)
+int	is_valid_identifier(const char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	if (!str || !(*str))
+		return (0);
+	if (!(ft_isalpha(*str) || *str == '_'))
+		return (0);
+	while (*str && *str != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '=')
+		if (!(ft_isalnum(*str) || *str == '_'))
 			return (0);
-		i++;
+		str++;
 	}
 	return (1);
 }

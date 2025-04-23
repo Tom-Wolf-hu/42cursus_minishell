@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/20 16:23:26 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 19:54:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@
 
 #include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
+
+typedef struct s_redirect_args
+{
+	char	*line;
+	char	*filename;
+}	t_redirect_args;
 
 typedef struct s_var_info
 {
@@ -58,6 +64,8 @@ typedef struct s_pipe_data
 	int					prev_fd;
 	int					pipefd[2];
 	int					i;
+	int					*status;
+	char				*cmd;
 }	t_pipe_data;
 
 typedef enum e_token
@@ -98,10 +106,8 @@ typedef	struct s_store
 }	t_store;
 
 //check_redir.c
-// char	*remove_redirects(char *cmd);
-// char	*get_filename(char *cmd);
-// void	handle_heredoc(const char *delimiter, int pipe_fd[2]);
-// void	handle_redirection(char *cmd, int *status);
+char	*handle_heredoc_to_file(char *delimiter, int *status, char **envp);
+char	*generate_tmp_name(void);
 
 //minishell.c
 void	close_saved_std(struct s_saved_std *std);
@@ -121,7 +127,7 @@ void	setup_signal_handlers(void);
 int		print_env(char ***myenvp);
 int		finish_write_cmd_path(char **buffer, char *path, char *cmd);
 char	*find_cmd_in_paths(char **path_arr, char *cmd);
-char	*get_command_path(char *cmd);
+char	*get_command_path(char *cmd, char **myenvp);
 char	**get_commands(char *cmd, char *temp);
 
 //msh_cmd.c
@@ -159,7 +165,7 @@ void	show_input(char **arr, int fd, int flag);
 int		handle_echo(char *line, int fd);
 
 //handle_export_unset.c
-int		is_alnum_str(char *str);
+int		is_valid_identifier(const char *str);
 void	full_arr(int dlt_num, int size, char **result, char ***myenvp);
 char	**my_unsetenv(char *name, char ***myenvp);
 char	**create_new_arr(char *str, char **myenvp);
@@ -190,19 +196,11 @@ char	*get_filename(char *cmd);
 void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp);
 int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
 int	heredoc_pipe_sign(char *filename, int *status, char **envp);
-int	ch_redirect(char *line, int *i, char *filename, int *status, char **envp);
 void	handle_redirection(char *line, int *status, char **envp);
 void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
 void	join_part(char **s1, char *s2);
 void	redir_part(char *cmd, int *i);
 char	*before_red(char *cmd, int *i);
 char	*remove_redirects(char *cmd);
-/*
-The following file includes functions for checking 
-state of different aspect of minishell
-*/
-//test_funcs.c
-// void	fds_state(void);
-// void	check_tty();
 
 #endif

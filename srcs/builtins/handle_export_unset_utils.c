@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/04/20 16:35:32 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/23 20:27:37 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ int	find_var_in_env(char *name, char **myenvp)
 	int	i;
 	int	name_len;
 
+	if (!name)
+		return (-1);
 	name_len = ft_strlen(name);
 	i = 0;
 	while (myenvp[i])
 	{
 		if (ft_strncmp(myenvp[i], name, name_len) == 0
 			&& (myenvp[i][name_len] == '=' || myenvp[i][name_len] == '\0'))
-			{
-				return (i);
-			}
+			return (i);
 		i++;
 	}
 	return (-1);
@@ -39,7 +39,7 @@ int	cycle_for_unsetenv(char **arr, char *clean_line,
 	i = 1;
 	while (arr[i])
 	{
-		if (!is_alnum_str(arr[i]))
+		if (!is_valid_identifier(arr[i]))
 			return (write_stderr("minishell: invalid parameter name"), 1);
 		clean_line = remove_quotes(arr[i]);
 		if (!clean_line)
@@ -84,7 +84,7 @@ int	process_string_env(char *clean_line, char ***myenvp)
 	char	*value;
 
 	value = NULL;
-	if (find_var_in_env(clean_line, *myenvp) != -1 && !ft_strchr(clean_line, '='))
+	if (find_var_in_env(clean_line, *myenvp) != -1)
 		return (0);
 	equals_pos = ft_strchr(clean_line, '=');
 	if (equals_pos && equals_pos + 1)
@@ -97,11 +97,7 @@ int	process_string_env(char *clean_line, char ***myenvp)
 			return (free(name), 1);
 	}
 	else
-	{
 		name = ft_strdup(clean_line);
-		if (!name)
-			return (free(name), 1);
-	}
 	if (mysetenv(name, value, myenvp))
 		return (free(name), free(value), 1);
 	return (free(name), free(value), 0);
@@ -123,7 +119,7 @@ int	handle_export(char *line, char ***myenvp)
 	i = 1;
 	while (arr[i])
 	{
-		if (!is_alnum_str(arr[i]))
+		if (!is_valid_identifier(arr[i]))
 			return (write_stderr("minishell: bad assignment"),
 				free_arr(arr), 1);
 		clean_line = remove_quotes(arr[i]);

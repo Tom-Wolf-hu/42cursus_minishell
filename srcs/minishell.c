@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/18 21:30:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/22 12:32:10 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,47 +37,50 @@ void	sig_handler(int sig)
 	}
 }
 
-// void	wait_for_last_pid(pid_t last_pid, int *status)
-// {
-// 	pid_t	wpid;
-// 	int		wstatus;
+void	wait_for_last_pid(pid_t last_pid, int *status)
+{
+	pid_t	wpid;
+	int		wstatus;
 
-// 	wpid = waitpid(-1, &wstatus, 0);
-// 	while (wpid > 0)
-// 	{
-// 		if (wpid == last_pid)
-// 		{
-// 			if (WIFEXITED(wstatus))
-// 				*status = WEXITSTATUS(wstatus);
-// 			else if (WIFSIGNALED(wstatus))
-// 				*status = 128 + WTERMSIG(wstatus);
-// 		}
-// 		wpid = waitpid(-1, &wstatus, 0);
-// 	}
-// }
+	wpid = waitpid(-1, &wstatus, 0);
+	while (wpid > 0)
+	{
+		if (wpid == last_pid)
+		{
+			if (WIFEXITED(wstatus))
+				*status = WEXITSTATUS(wstatus);
+			else if (WIFSIGNALED(wstatus))
+				*status = 128 + WTERMSIG(wstatus);
+		}
+		wpid = waitpid(-1, &wstatus, 0);
+	}
+}
 
-// char	**process_command_args(char **cmd_args, char *cmd)
-// {
-// 	int		j;
-// 	char	*clean_cmd2;
+char	**process_command_args(char **cmd_args, char *cmd)
+{
+	int		j;
+	char	*clean_cmd2;
 
-// 	j = 0;
-// 	while (cmd_args[j])
-// 	{
-// 		clean_cmd2 = remove_quotes(cmd_args[j]);
-// 		if (!clean_cmd2)
-// 		{
-// 			printf("%s: Command not found\n", cmd_args[j]);
-// 			exit(127);
-// 		}
-// 		free(cmd_args[j]);
-// 		cmd_args[j] = clean_cmd2;
-// 		j++;
-// 	}
-// 	return (cmd_args);
-// }
+	j = 0;
+	if (!cmd_args)
+		return (perror("malloc"), exit(1), NULL);
+	while (cmd_args[j])
+	{
+		clean_cmd2 = remove_quotes(cmd_args[j]);
+		if (!clean_cmd2)
+		{
+			printf("%s: Command not found\n", cmd_args[j]);
+			exit(127);
+		}
+		free(cmd_args[j]);
+		cmd_args[j] = clean_cmd2;
+		j++;
+	}
+	return (cmd_args);
+}
 
-void	save_and_redirect(struct s_saved_std *std, char *command, int *status, char **envp)
+void	save_and_redirect(struct s_saved_std *std, char *command,
+			int *status, char **envp)
 {
 	std->saved_stdin = dup(STDIN_FILENO);
 	std->saved_stdout = dup(STDOUT_FILENO);
@@ -86,95 +89,112 @@ void	save_and_redirect(struct s_saved_std *std, char *command, int *status, char
 
 void	close_saved_std(struct s_saved_std *std)
 {
-	close(std->saved_stdin);
-	close(std->saved_stdout);
+	if (std->saved_stdin != -1)
+		close(std->saved_stdin);
+	if (std->saved_stdout != -1)
+		close(std->saved_stdout);
 }
 
-// void	handle_child_process(t_pipe_data data, char *cmd, int i, int *status, char **myenvp)
-// {
-// 	char				**cmd_args;
-// 	char				*clean_cmd;
-// 	char				*path;
-// 	struct s_saved_std	std;
+int	has_heredoc(char *cmd)
+{
+	return (ft_strnstr(cmd, "<<", ft_strlen(cmd)) != NULL);
+}
 
-// 	if (data.prev_fd != 0)
-// 	{
-// 		dup2(data.prev_fd, STDIN_FILENO);
-// 		close(data.prev_fd);
-// 	}
-// 	if (i < data.num_commands - 1)
-// 		dup2(data.pipefd[1], STDOUT_FILENO);
-// 	close(data.pipefd[0]);
-// 	close(data.pipefd[1]);
-// 	if (is_builtin(data.commands[i]))
-// 		return (execute_builtin(data.commands[i], 1, status, myenvp), exit(*status));
-// 	clean_cmd = remove_redirects(data.commands[i]);
-// 	cmd_args = ft_split(clean_cmd, ' ');
-// 	save_and_redirect(&std, data.commands[i], status);
-// 	cmd_args = process_command_args(cmd_args, cmd);
-// 	path = get_command_path(cmd_args[0]);
-// 	if (!path)
-// 		return (printf("%s: Command not found\n", cmd), exit(127));
-// 	close_saved_std(&std);
-// 	return (execve(path, cmd_args, NULL), perror("execve"), exit(EXIT_FAILURE));
-// }
+void	close_pipefd(struct s_pipe_data *data)
+{
+	if (data->pipefd[0] != -1)
+		close(data->pipefd[0]);
+	if (data->pipefd[1] != -1)
+		close(data->pipefd[1]);
+}
 
-// void	handle_parent_process(struct s_pipe_data *data,
-// 		int i, pid_t pid, int *last_pid)
-// {
-// 	if (data->prev_fd != -1)
-// 		close(data->prev_fd);
-// 	if (i < data->num_commands - 1)
-// 		close(data->pipefd[1]);
-// 	data->prev_fd = data->pipefd[0];
-// 	if (i == data->num_commands - 1)
-// 		*last_pid = pid;
-// }
+void	handle_child_process(t_pipe_data data, int i,
+			int *status, char ***myenvp)
+{
+	char				**cmd_args;
+	char				*clean_cmd;
+	char				*path;
+	struct s_saved_std	std;
 
-// void	hanlde_pid(struct s_pipe_data *data, char *cmd,
-// 		int *status, int *last_pid, char **myenvp)
-// {
-// 	pid_t	pid;
+	if (data.prev_fd != -1 && !has_heredoc(data.commands[i]))
+	{
+		dup2(data.prev_fd, STDIN_FILENO);
+		close(data.prev_fd);
+	}
+	if (i < data.num_commands - 1)
+		dup2(data.pipefd[1], STDOUT_FILENO);
+	close_pipefd(&data);
+	if (is_builtin(data.commands[i]))
+		return (execute_builtin(data.commands[i], 1,
+				status, myenvp), exit(*status));
+	clean_cmd = remove_redirects(data.commands[i]);
+	cmd_args = ft_split(clean_cmd, ' ');
+	save_and_redirect(&std, data.commands[i], status, *myenvp);
+	cmd_args = process_command_args(cmd_args, data.cmd);
+	path = get_command_path(cmd_args[0], *myenvp);
+	if (!path)
+		return (write_stderr("Command not found"), exit(127));
+	return (close_saved_std(&std), execve(path, cmd_args, *myenvp),
+		perror("execve"), exit(EXIT_FAILURE));
+}
 
-// 	pid = fork();
-// 	if (pid == -1)
-// 	{
-// 		perror("fork");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	if (pid == 0)
-// 		handle_child_process(*data, cmd, data->i, status, myenvp);
-// 	else
-// 		handle_parent_process(data, data->i, pid, last_pid);
-// }
+void	handle_parent_process(struct s_pipe_data *data,
+		int i, pid_t pid, int *last_pid)
+{
+	if (data->prev_fd != -1)
+		close(data->prev_fd);
+	if (i < data->num_commands - 1)
+		close(data->pipefd[1]);
+	data->prev_fd = data->pipefd[0];
+	if (i == data->num_commands - 1)
+		*last_pid = pid;
+}
 
-// void	execute_pipe_commands(char *cmd, int *status)
-// {
-// 	int					last_pid;
-// 	char				*temp;
-// 	struct s_saved_std	std;
-// 	struct s_pipe_data	data;
+void	hanlde_pid(struct s_pipe_data *data,
+		int *status, int *last_pid, char ***myenvp)
+{
+	pid_t	pid;
 
-// 	temp = NULL;
-// 	ft_bzero(&data, sizeof(data));
-// 	data.commands = get_commands(cmd, temp);
-// 	if (temp)
-// 		free(temp);
-// 	if (!data.commands)
-// 		return ;
-// 	data.num_commands = ft_arrlen(data.commands);
-// 	data.prev_fd = -1;
-// 	data.i = 0;
-// 	while (data.i < data.num_commands)
-// 	{
-// 		if (data.i < data.num_commands - 1 && pipe(data.pipefd) == -1)
-// 			return (perror("pipe"), exit(EXIT_FAILURE));
-// 		hanlde_pid(&data, cmd, status, &last_pid);
-// 		data.i++;
-// 	}
-// 	wait_for_last_pid(last_pid, status);
-// 	free_arr(data.commands);
-// }
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+		handle_child_process(*data, data->i, status, myenvp);
+	else
+		handle_parent_process(data, data->i, pid, last_pid);
+}
+
+void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
+{
+	int					last_pid;
+	char				*temp;
+	struct s_saved_std	std;
+	struct s_pipe_data	data;
+
+	data.cmd = cmd;
+	temp = NULL;
+	ft_bzero(&data, sizeof(data));
+	data.commands = get_commands(cmd, temp);
+	if (temp)
+		free(temp);
+	if (!data.commands)
+		return ;
+	data.num_commands = ft_arrlen(data.commands);
+	data.prev_fd = -1;
+	data.i = 0;
+	while (data.i < data.num_commands)
+	{
+		if (data.i < data.num_commands - 1 && pipe(data.pipefd) == -1)
+			return (perror("pipe"), exit(EXIT_FAILURE));
+		hanlde_pid(&data, status, &last_pid, myenvp);
+		data.i++;
+	}
+	wait_for_last_pid(last_pid, status);
+	free_arr(data.commands);
+}
 
 void	handle_empty_command(char *cmd, int *status, char **envp)
 {
@@ -188,8 +208,7 @@ void	handle_empty_command(char *cmd, int *status, char **envp)
 	{
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
-		close(std.saved_stdin);
-		close(std.saved_stdout);
+		close_saved_std(&std);
 		return ;
 	}
 	line = get_next_line(STDIN_FILENO);
@@ -201,8 +220,7 @@ void	handle_empty_command(char *cmd, int *status, char **envp)
 	}
 	dup2(std.saved_stdin, STDIN_FILENO);
 	dup2(std.saved_stdout, STDOUT_FILENO);
-	close(std.saved_stdin);
-	close(std.saved_stdout);
+	close_saved_std(&std);
 }
 
 int	clean_command_args(char **cmd_arr)
@@ -231,11 +249,11 @@ void	restore_std(struct s_saved_std *std)
 {
 	dup2(std->saved_stdin, STDIN_FILENO);
 	dup2(std->saved_stdout, STDOUT_FILENO);
-	close(std->saved_stdin);
-	close(std->saved_stdout);
+	close_saved_std(std);
 }
 
-void	execute_forked_process(char *path, char **cmd_arr, int *status)
+void	execute_forked_process(char *path, char **cmd_arr,
+			int *status, char **myenvp)
 {
 	pid_t	pid;
 	int		wstatus;
@@ -247,7 +265,7 @@ void	execute_forked_process(char *path, char **cmd_arr, int *status)
 	{
 		if (!path)
 			exit(EXIT_FAILURE);
-		execve(path, cmd_arr, NULL);
+		execve(path, cmd_arr, myenvp);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
@@ -279,13 +297,13 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 	return (cmd_arr);
 }
 
-char	*resolve_command_path(char *cmd_name, int *status)
+char	*resolve_command_path(char *cmd_name, int *status, char **myenvp)
 {
 	char	*path;
 
 	if (!cmd_name)
 		return (NULL);
-	path = get_command_path(cmd_name);
+	path = get_command_path(cmd_name, myenvp);
 	if (!path)
 	{
 		write_stderr("Command not found");
@@ -304,23 +322,23 @@ void	execute_command_single(char *cmd, int *status, char ***myenvp)
 	cmd_arr = NULL;
 	if (is_builtin(cmd))
 		return (execute_builtin(cmd, 1, status, myenvp));
-	// clean_cmd = remove_redirects(cmd);
-	// if (clean_cmd && is_empty(clean_cmd))
-	// {
-	// 	free(clean_cmd);
-	// 	clean_cmd = NULL;
-	// }
-	// if (!clean_cmd)
-	// 	return (handle_empty_command(cmd, status));
-	// cmd_arr = split_and_clean_args(clean_cmd, status);
-	// if (!cmd_arr)
-	// 	return ;
-	// path = resolve_command_path(cmd_arr[0], status);
-	// save_and_redirect(&std, cmd, status);
-	// if (*status == 1)
-	// 	return (restore_std(&std));
-	// execute_forked_process(path, cmd_arr, status);
-	// return (free(path), restore_std(&std), free_arr(cmd_arr));
+	clean_cmd = remove_redirects(cmd);
+	if (clean_cmd && is_empty(clean_cmd))
+	{
+		free(clean_cmd);
+		clean_cmd = NULL;
+	}
+	if (!clean_cmd)
+		return (handle_empty_command(cmd, status, *myenvp));
+	cmd_arr = split_and_clean_args(clean_cmd, status);
+	if (!cmd_arr)
+		return ;
+	path = resolve_command_path(cmd_arr[0], status, *myenvp);
+	save_and_redirect(&std, cmd, status, *myenvp);
+	if (*status == 1)
+		return (restore_std(&std), free(path), free_arr(cmd_arr));
+	execute_forked_process(path, cmd_arr, status, *myenvp);
+	return (free(path), restore_std(&std), free_arr(cmd_arr));
 }
 
 void	run_ex(char **line, int *status, char ***myenvp)
@@ -348,7 +366,7 @@ void	run_ex(char **line, int *status, char ***myenvp)
 		return (rl_clear_history());
 	if (!ft_strchr(*line, '|'))
 		return (execute_command_single(*line, status, myenvp));
-	// execute_pipe_commands(*line, status);
+	execute_pipe_commands(*line, status, myenvp);
 }
 
 void	change_status(int *status)
@@ -384,6 +402,16 @@ char	**copy_arr(char **arr)
 	return (result);
 }
 
+void	handle_gnl(char **line, int *status)
+{
+	*line = get_next_line(STDIN_FILENO);
+	if (!*line)
+		return (perror("malloc"), *status = 1, (void)0);
+	*line = ft_strtrim(*line, "\n");
+	if (!*line)
+		return (perror("malloc"), *status = 1, (void)0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char			*line;
@@ -395,15 +423,12 @@ int	main(int argc, char **argv, char **envp)
 	setup_signal_handlers();
 	while (1)
 	{
-		if (isatty(fileno(stdin)))
+		if (isatty(STDIN_FILENO))
 			line = readline("> ");
 		else
-		{
-			line = get_next_line(fileno(stdin));
-			line = ft_strtrim(line, "\n");
-		}
+			handle_gnl(&line, &status);
 		change_status(&status);
-		if (!line) // exit должен быть в builtins!!!
+		if (!line)
 			handle_exit(ft_strdup("exit"), &status, NULL, myenvp);
 		if (ft_strcmp(line, "exit") == 0
 			|| ft_strncmp(line, "exit ", 5) == 0)
