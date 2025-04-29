@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 16:08:20 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 02:22:22 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,18 @@ int	check_closing_quote(char *line, int *i, char quote)
 	return (0);
 }
 
-int	check_quotes_loop(char *line, int *i, int *j)
+int	check_quotes_loop(char *line, int *i, int j)
 {
-	int	end_q;
-
-	end_q = 0;
 	while (line[*i])
 	{
-		if (line[*i] == '\\' && line[*j] == '\"')
-			return (write_stderr("The character is not supported"), 1);
-		if (line[*i] == line[*j])
+		if (line[*i] == line[j])
 		{
-			end_q = 1;
-			break ;
+			(*i)++;
+			return (1);
 		}
 		(*i)++;
 	}
-	return (end_q);
+	return (0);
 }
 
 int	check_quotes(char *line)
@@ -98,9 +93,10 @@ int	check_quotes(char *line)
 		{
 			j = i;
 			i++;
-			end_q = check_quotes_loop(line, &i, &j);
+			end_q = check_quotes_loop(line, &i, j);
 		}
-		i++;
+		else
+			i++;
 	}
 	if (end_q == 0)
 	{
@@ -109,3 +105,5 @@ int	check_quotes(char *line)
 	}
 	return (0);
 }
+
+// echo "Hello world and the fucking goverment! '$USER' $PATH "$USER"\ $$$"

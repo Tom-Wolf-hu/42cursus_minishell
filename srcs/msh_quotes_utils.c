@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/04/15 18:39:36 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 02:05:19 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*remove_quotes_first_word(char *line)
 		return (NULL);
 	i++;
 	if (ft_isspace(line[i]))
-		return (NULL);
+		return (free(result), NULL);
 	return (copy_quoted_word(line, result, i));
 }
 
