@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/23 19:54:52 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 13:03:12 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int		ft_isoperator(int c);
 int		ft_isspace(int c);
 int		skip_whites(char *line, int	*i);
 int		is_empty(char *line);
+void	hanlde_quotes(char *str, int i, int *flag_single, int *flag_double);
 
 //check_var.c
 int	handle_dollar(char **str, t_var_info *var_data, int dollar_pos, char *dollar);

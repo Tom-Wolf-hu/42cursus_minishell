@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:45:12 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 11:50:58 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:02:50 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ int	is_empty(char *line)
 		i++;
 	}
 	return (1);
+}
+
+void	hanlde_quotes(char *str, int i, int *flag_single, int *flag_double)
+{
+	if ((str)[i] == '\'' && *flag_double == 0)
+		*flag_single = !*flag_single;
+	else if ((str)[i] == '"' && *flag_single == 0)
+		*flag_double = !*flag_double;
 }

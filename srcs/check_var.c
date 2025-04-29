@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_var.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 18:14:33 by alex              #+#    #+#             */
-/*   Updated: 2025/04/20 16:25:07 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 12:40:28 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,10 @@ int	handle_dollar(char **str, t_var_info *var_data,
 		+ ft_strlen(pid_str) + ft_strlen(var_data->suffix) + 1;
 	new_str = malloc(new_str_len);
 	if (!new_str)
+	{
 		return (free(var_data->prefix), free(var_data->suffix),
 			free(pid_str), exit(1), 0);
+	}
 	ft_strlcpy(new_str, var_data->prefix, new_str_len);
 	ft_strlcat(new_str, pid_str, new_str_len);
 	ft_strlcat(new_str, var_data->suffix, new_str_len);

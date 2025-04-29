@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 02:09:45 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 12:54:11 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,15 +121,15 @@ void	handle_child_process(t_pipe_data data, int i,
 		dup2(data.prev_fd, STDIN_FILENO);
 		close(data.prev_fd);
 	}
+	clean_cmd = remove_redirects(data.commands[i]);
+	cmd_args = ft_split(clean_cmd, ' ');
+	save_and_redirect(&std, data.commands[i], status, *myenvp);
 	if (i < data.num_commands - 1)
 		dup2(data.pipefd[1], STDOUT_FILENO);
 	close_pipefd(&data);
 	if (is_builtin(data.commands[i]))
 		return (execute_builtin(data.commands[i], 1,
 				status, myenvp), exit(*status));
-	clean_cmd = remove_redirects(data.commands[i]);
-	cmd_args = ft_split(clean_cmd, ' ');
-	save_and_redirect(&std, data.commands[i], status, *myenvp);
 	cmd_args = process_command_args(cmd_args, data.cmd);
 	path = get_command_path(cmd_args[0], *myenvp);
 	if (!path)
@@ -345,28 +345,28 @@ void	run_ex(char **line, int *status, char ***myenvp)
 {
 	char	**arr;
 	int		i;
+	char	*p;
 
 	if (is_empty(*line))
 		return ;
 	add_history(*line);
 	if (check_quotes(*line) == 1)
 		return ;
-	if (check_quastion_sign(line, *status))
-		return ;
-	bridge_var(line, *myenvp);
-	if (!*line)
-		return ;
 	i = 0;
 	while ((*line)[i] && ft_isspace((*line)[i]))
 		i++;
 	if ((*line)[i] == '\0')
 		return ;
-	if (ft_strcmp(*line + i, "clear") == 0
-		|| ft_strncmp(*line + i, "clear ", 6) == 0)
-		return (rl_clear_history());
-	if (!ft_strchr(*line, '|'))
-		return (execute_command_single(*line, status, myenvp));
-	execute_pipe_commands(*line, status, myenvp);
+	p = ft_strdup(*line + i);
+	if (check_quastion_sign(&p, *status))
+		return (free(p));
+	bridge_var(&p, *myenvp);
+	if (ft_strcmp(p, "clear") == 0
+		|| ft_strncmp(p, "clear ", 6) == 0)
+		return (rl_clear_history(), free(p));
+	if (!ft_strchr(p, '|'))
+		return (execute_command_single(p, status, myenvp), free(p));
+	return (execute_pipe_commands(p, status, myenvp), free(p));
 }
 
 void	change_status(int *status)

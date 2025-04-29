@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bridge_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/20 16:24:56 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 13:02:43 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ void	bridge_var(char **str, char **myenvp)
 	flag_double = 0;
 	while ((*str)[i])
 	{
-		if ((*str)[i] == '\'' && flag_double == 0)
-			flag_single = !flag_single;
-		else if ((*str)[i] == '"' && flag_single == 0)
-			flag_double = !flag_double;
+		hanlde_quotes(*str, i, &flag_single, &flag_double);
 		if ((*str)[i] == '$' && flag_single == 0)
 		{
 			if (!bridge_var_at(str, i, myenvp))
-				break ;
+			{
+				i++;
+				continue ;
+			}
 			i = 0;
 			flag_single = 0;
 			flag_double = 0;
@@ -115,3 +115,5 @@ void	bridge_var(char **str, char **myenvp)
 		i++;
 	}
 }
+
+//  echo "$USER $$ $$$ $PATH" $USER
