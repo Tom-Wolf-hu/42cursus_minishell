@@ -6,31 +6,33 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 13:03:12 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:40:07 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/resource.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <termios.h>
-#include <stdbool.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/resource.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <termios.h>
+# include <stdbool.h>
 
-#include "lib/get_next_line/get_next_line.h"
-#include "lib/libft/libft.h"
+# include "lib/get_next_line/get_next_line.h"
+# include "lib/libft/libft.h"
+
+extern volatile int	g_status;
 
 typedef struct s_redirect_args
 {
@@ -53,8 +55,8 @@ typedef struct s_shell
 
 typedef struct s_saved_std
 {
-	int saved_stdin;
-	int saved_stdout;
+	int	saved_stdin;
+	int	saved_stdout;
 }	t_saved_std;
 
 typedef struct s_pipe_data
@@ -91,7 +93,7 @@ typedef struct s_pnode
 	struct s_pnode	*prev;
 }	t_pnode;
 
-typedef	struct s_store
+typedef struct s_store
 {
 	int		pipecount;
 	int		pidcount;
@@ -105,16 +107,18 @@ typedef	struct s_store
 	int		pipefd[2];
 }	t_store;
 
-//check_redir.c
-char	*handle_heredoc_to_file(char *delimiter, int *status, char **envp);
-char	*generate_tmp_name(void);
-
 //minishell.c
+int		has_heredoc(char *cmd);
+char	**process_command_args(char **cmd_args, char *cmd);
+void	wait_for_last_pid(pid_t last_pid, int *status);
+void	save_and_redirect(struct s_saved_std *std, char *command,
+			int *status, char **envp);
 void	close_saved_std(struct s_saved_std *std);
-void	remove_chars(char **str, char ch);
-// void	execute_pipe_commands(char *cmd, int *status);
+int		clean_command_args(char **cmd_arr);
+void	handle_empty_command(char *cmd, int *status, char **envp);
 int		is_nummeric(char *line);
-void	handle_exit(char *line, int *status, struct s_saved_std *std, char **myenvp);
+void	handle_exit(char *line, int *status,
+			struct s_saved_std *std, char **myenvp);
 void	sig_handler(int sig);
 int		ft_getcwd(char *line, int fd);
 void	free_arr(char **arr);
@@ -130,6 +134,17 @@ char	*find_cmd_in_paths(char **path_arr, char *cmd);
 char	*get_command_path(char *cmd, char **myenvp);
 char	**get_commands(char *cmd, char *temp);
 
+//minishell_main.c
+void	change_status(int *status);
+char	**copy_arr(char **arr);
+void	handle_gnl(char **line, int *status);
+
+//exec_pipe_cmd.c
+void	execute_pipe_commands(char *cmd, int *status, char ***myenvp);
+
+//exec_cmd_single
+void	execute_command_single(char *cmd, int *status, char ***myenvp);
+
 //msh_cmd.c
 int		is_builtin(char *cmd);
 void	execute_builtin(char *cmd, int fd, int *status, char ***myenvp);
@@ -143,10 +158,11 @@ int		is_empty(char *line);
 void	hanlde_quotes(char *str, int i, int *flag_single, int *flag_double);
 
 //check_var.c
-int	handle_dollar(char **str, t_var_info *var_data, int dollar_pos, char *dollar);
-int	cmp_names(char *name1, char *name2);
+int		handle_dollar(char **str, t_var_info *var_data,
+			int dollar_pos, char *dollar);
+int		cmp_names(char *name1, char *name2);
 char	*find_var_value(char *var_name, char **myenvp);
-int	get_var_name_size(char *str);
+int		get_var_name_size(char *str);
 void	get_var_name(char *dest, char *str);
 
 //msh_utils.c
@@ -187,16 +203,15 @@ char	*get_temp_remove_quotes(char *line, int *i, char quotes);
 char	*remove_quotes_first_word(char *line);
 char	*copy_quoted_word(char *line, char *result, int i);
 int		check_command_quotes(char *line);
-
-
-int	in_redir(char *filename, int *status);
-int	out_redir(char *filename, int *status, int *i, char opt);
+int		in_redir(char *filename, int *status);
+int		out_redir(char *filename, int *status, int *i, char opt);
 void	reset_stdin(void);
-int	gf_name_length(char *cmd, int *i, int *start);
+int		gf_name_length(char *cmd, int *i, int *start);
 char	*get_filename(char *cmd);
-void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp);
-int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
-int	heredoc_pipe_sign(char *filename, int *status, char **envp);
+void	handle_heredoc_child(int write_fd, const char *delimiter,
+			int *status, char **envp);
+int		heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
+int		heredoc_pipe_sign(char *filename, int *status, char **envp);
 void	handle_redirection(char *line, int *status, char **envp);
 void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
 void	join_part(char **s1, char *s2);

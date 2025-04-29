@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/23 20:21:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 13:19:58 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,10 @@ void	handle_redirection(char *line, int *status, char **envp)
 	struct s_redirect_args	args;
 	int						i;
 
-	*status = 0;
 	i = 0;
 	args.line = line;
+	if (*status != 0)
+		return ;
 	while (args.line[i])
 	{
 		if (args.line[i] == '<' || args.line[i] == '>')
