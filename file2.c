@@ -14,60 +14,45 @@
 #include <termios.h>
 #include <stdbool.h>
 
-extern char **environ;
-
-void	free_arr2(char **arr, int till)
+char	*copy_quoted_word(char *line, char *result, int i, char quote_char)
 {
-	int	i;
+	int	j;
 
-	i = 0;
-	while (arr[i] && i < till)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
+	j = 0;
+	while (line[i] && line[i] != quote_char)
+		result[j++] = line[i++];
+	if (line[i] == quote_char)
+		i++;  // Пропускаем закрывающую кавычку
+	result[j] = '\0';
+	return (result);
 }
 
-char	**copy_environ(void)
+char	*remove_quotes_first_word(char *line)
 {
 	int		i;
-	int		count;
-	char	**my_environ;
+	char	quote_char;
+	char	*result;
+	int		len;
 
 	i = 0;
-	count = 0;
-	my_environ = NULL;
-	while (environ[count])
-		count++;
-	my_environ = malloc(sizeof(char *) * (count + 1));
-	if (!my_environ)
-	{
-		perror("malloc");
-		return (exit(1), NULL);
-	}
-	while (environ[i])
-	{
-		my_environ[i] = strdup(environ[i]);
-		if (!my_environ[i])
-			return (free_arr2(my_environ, i), exit(1), NULL);
+	if (!line)
+		return (NULL);
+	while (line[i] && isspace(line[i]))
 		i++;
-	}
-	my_environ[i] = NULL;
-	return (my_environ);
-}
-
-int		handle_export(char *line, int fd)
-{
-	char	**my_environ;
-
-	// my_environ = copy_environ();
-	// if (ft_strlen(line) == 6 || check_line(line, 7))
-	// 	return (print_env(fd));
-
+	if (line[i] != '\'' && line[i] != '\"')
+		return (strdup(line));
+	quote_char = line[i++];
+	len = 0;
+	while (line[i + len] && line[i + len] != quote_char)
+		len++;
+	result = malloc(len + 1);
+	if (!result)
+		return (NULL);
+	return (copy_quoted_word(line, result, i, quote_char));
 }
 
 int main()
 {
-	handle_export("line", 1);
+	char *str = remove_quotes_first_word("'echo' \"cat lol.c | cat > lol.c\"");
+	printf("%s\n", str);
 }

@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/29 17:24:32 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:35:31 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,21 @@ int	handle_redirection(char *line, int *status, char **envp)
 {
 	struct s_redirect_args	args;
 	int						i;
+	char					quote;
 
+	quote = 0;
 	i = 0;
 	args.line = line;
 	while (args.line[i])
 	{
-		if (args.line[i] == '<' || args.line[i] == '>')
+		if ((line[i] == '\'' || line[i] == '\"') && (!quote || quote == line[i]))
+		{
+			if (!quote)
+				quote = line[i];
+			else
+				quote = 0;
+		}
+		else if ((line[i] == '<' || line[i] == '>') && !quote)
 		{
 			args.filename = get_filename(args.line + i);
 			if (!args.filename)

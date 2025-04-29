@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:22:04 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/29 17:20:56 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:23:41 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	in_redir(char *filename, int *status)
 	{
 		perror("open");
 		*status = 1;
-		free(filename);
 		return (1);
 	}
 	dup2(file_fd, STDIN_FILENO);
@@ -44,7 +43,6 @@ int	out_redir(char *filename, int *status, int *i, char opt)
 	{
 		perror("open");
 		*status = 1;
-		free(filename);
 		return (1);
 	}
 	dup2(file_fd, STDOUT_FILENO);

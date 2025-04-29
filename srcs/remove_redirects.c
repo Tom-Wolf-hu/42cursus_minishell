@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_redirects.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/16 18:54:14 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 18:21:42 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,66 @@ char	*remove_redirects(char *cmd)
 	char	*clean_cmd;
 	char	*temp;
 	int		i;
+	int		start;
+	char	quote;
 
 	i = 0;
 	clean_cmd = NULL;
+	quote = 0;
 	while (cmd[i])
 	{
-		temp = before_red(cmd, &i);
-		if (temp)
+		start = i;
+		while (cmd[i])
+		{
+			if ((cmd[i] == '\'' || cmd[i] == '\"'))
+			{
+				if (!quote)
+					quote = cmd[i];
+				else if (quote == cmd[i])
+					quote = 0;
+			}
+			if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
+				break;
+			i++;
+		}
+		// Добавляем всё до редиректа (или до конца)
+		if (i > start)
+		{
+			temp = malloc(i - start + 1);
+			if (!temp)
+			{
+				perror("Failed to allocate memory in remove_redirects");
+				exit(EXIT_FAILURE);
+			}
+			ft_memcpy(temp, cmd + start, i - start);
+			temp[i - start] = '\0';
 			join_part(&clean_cmd, temp);
-		redir_part(cmd, &i);
+		}
+		// пропускаем редиректную часть
+		if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
+			redir_part(cmd, &i);
 	}
 	return (clean_cmd);
 }
+
+
+// char	*remove_redirects(char *cmd)
+// {
+// 	char	*clean_cmd;
+// 	char	*temp;
+// 	int		i;
+
+// 	i = 0;
+// 	clean_cmd = NULL;
+// 	while (cmd[i])
+// 	{
+// 		temp = before_red(cmd, &i);
+// 		if (temp)
+// 			join_part(&clean_cmd, temp);
+// 		redir_part(cmd, &i);
+// 	}
+// 	return (clean_cmd);
+// }
 
 // void	join_part(char **s1, char *s2)
 // {

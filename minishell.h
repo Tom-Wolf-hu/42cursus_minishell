@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 17:25:12 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:08:08 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,6 @@ char	*get_temp_remove_quotes(char *line, int *i, char quotes);
 
 //msh_quotes_utils.c
 char	*remove_quotes_first_word(char *line);
-char	*copy_quoted_word(char *line, char *result, int i);
 int		check_command_quotes(char *line);
 
 

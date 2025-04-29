@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/18 20:21:15 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 18:11:42 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@ void	execute_builtin(char *cmd, int fd, int *status, char ***myenvp)
 	if (!cmd)
 		return ;
 	clean_cmd = remove_redirects(cmd);
+	printf("clean+_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;
 	temp = remove_quotes_first_word(clean_cmd);
+	printf("temp: %s\n", temp);
 	free(clean_cmd);
 	if (!temp)
 		return ;

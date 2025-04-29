@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 17:25:55 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:33:02 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void	sig_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
+		pid = waitpid(-1, &status, WNOHANG);
+		if (pid == 0)
+			return ;
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -203,8 +206,7 @@ void	handle_empty_command(char *cmd, int *status, char **envp)
 
 	std.saved_stdout = dup(STDOUT_FILENO);
 	std.saved_stdin = dup(STDIN_FILENO);
-	handle_redirection(cmd, status, envp);
-	if (*status == 1)
+	if (handle_redirection(cmd, status, envp))
 	{
 		dup2(std.saved_stdin, STDIN_FILENO);
 		dup2(std.saved_stdout, STDOUT_FILENO);
@@ -342,6 +344,31 @@ void	execute_command_single(char *cmd, int *status, char ***myenvp)
 	return (free(path), restore_std(&std), free_arr(cmd_arr));
 }
 
+char	*my_strchr_quotes(char *s, int c)
+{
+	unsigned char	ch;
+	char			quote;
+
+	ch = c;
+	quote = 0;
+	while (*s != '\0')
+	{
+		if ((*s == '\'' || *s == '\"'))
+		{
+			if (!quote)
+				quote = *s;
+			else if (quote == *s)
+				quote = 0;
+		}
+		else if (*s == ch && !quote)
+			return ((char *)s);
+		s++;
+	}
+	if (*s == ch && !quote)
+		return ((char *)s);
+	return (NULL);
+}
+
 void	run_ex(char **line, int *status, char ***myenvp)
 {
 	char	**arr;
@@ -365,7 +392,7 @@ void	run_ex(char **line, int *status, char ***myenvp)
 	if (ft_strcmp(p, "clear") == 0
 		|| ft_strncmp(p, "clear ", 6) == 0)
 		return (rl_clear_history(), free(p));
-	if (!ft_strchr(p, '|'))
+	if (!my_strchr_quotes(p, '|'))
 		return (execute_command_single(p, status, myenvp), free(p));
 	return (execute_pipe_commands(p, status, myenvp), free(p));
 }

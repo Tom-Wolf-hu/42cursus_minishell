@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 14:31:09 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/23 19:43:04 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 17:48:58 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*get_filename(char *cmd)
 	while (start < i)
 		filename[j++] = cmd[start++];
 	filename[j] = '\0';
-	clean_filename = remove_quotes_first_word(filename);
+	clean_filename = remove_quotes(filename);
 	return (free(filename), clean_filename);
 }
 

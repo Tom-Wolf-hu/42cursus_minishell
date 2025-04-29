@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 02:05:19 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 18:07:40 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,15 @@ int	check_command_quotes(char *line)
 	return (1);
 }
 
-char	*copy_quoted_word(char *line, char *result, int i)
+char	*copy_quoted_word(char *line, char *result, int i, char quote_char)
 {
 	int	j;
 
 	j = 0;
-	while (line[i] && line[i] != '\'' && line[i] != '\"')
-	{
-		if (ft_isspace(line[i]))
-			return (free(result), NULL);
+	while (line[i] && line[i] != quote_char)
 		result[j++] = line[i++];
-	}
-	if (line[i] == '\'' || line[i] == '\"')
-		i++;
-	while (line[i])
-		result[j++] = line[i++];
+	if (line[i] == quote_char)
+		i++;  // Пропускаем закрывающую кавычку
 	result[j] = '\0';
 	return (result);
 }
@@ -60,8 +54,9 @@ char	*copy_quoted_word(char *line, char *result, int i)
 char	*remove_quotes_first_word(char *line)
 {
 	int		i;
-	int		j;
+	char	quote_char;
 	char	*result;
+	int		len;
 
 	i = 0;
 	if (!line)
@@ -70,14 +65,56 @@ char	*remove_quotes_first_word(char *line)
 		i++;
 	if (line[i] != '\'' && line[i] != '\"')
 		return (ft_strdup(line));
-	result = malloc(strlen(line) - 2 + 1);
+	quote_char = line[i++];
+	len = 0;
+	while (line[i + len] && line[i + len] != quote_char)
+		len++;
+	result = malloc(len + 1);
 	if (!result)
 		return (NULL);
-	i++;
-	if (ft_isspace(line[i]))
-		return (free(result), NULL);
-	return (copy_quoted_word(line, result, i));
+	return (copy_quoted_word(line, result, i, quote_char));
 }
+
+// char	*copy_quoted_word(char *line, char *result, int i)
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while (line[i] && line[i] != '\'' && line[i] != '\"')
+// 	{
+// 		if (ft_isspace(line[i]))
+// 			return (free(result), NULL);
+// 		result[j++] = line[i++];
+// 	}
+// 	if (line[i] == '\'' || line[i] == '\"')
+// 		i++;
+// 	while (line[i])
+// 		result[j++] = line[i++];
+// 	result[j] = '\0';
+// 	return (result);
+// }
+
+// char	*remove_quotes_first_word(char *line)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*result;
+
+// 	i = 0;
+// 	if (!line)
+// 		return (NULL);
+// 	while (line[i] && ft_isspace(line[i]))
+// 		i++;
+// 	if (line[i] != '\'' && line[i] != '\"')
+// 		return (ft_strdup(line));
+// 	result = malloc(strlen(line) - 2 + 1);
+// 	if (!result)
+// 		return (NULL);
+// 	i++;
+// 	if (ft_isspace(line[i]))
+// 		return (free(result), NULL);
+// 	return (copy_quoted_word(line, result, i));
+// }
 
 void	process_quotes_loop(char *line, char *result)
 {
