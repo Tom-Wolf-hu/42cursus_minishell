@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 12:54:11 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:25:55 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ char	**process_command_args(char **cmd_args, char *cmd)
 	return (cmd_args);
 }
 
-void	save_and_redirect(struct s_saved_std *std, char *command,
+int	save_and_redirect(struct s_saved_std *std, char *command,
 			int *status, char **envp)
 {
 	std->saved_stdin = dup(STDIN_FILENO);
 	std->saved_stdout = dup(STDOUT_FILENO);
-	handle_redirection(command, status, envp);
+	return (handle_redirection(command, status, envp));
 }
 
 void	close_saved_std(struct s_saved_std *std)
@@ -231,7 +231,7 @@ int	clean_command_args(char **cmd_arr)
 	i = 0;
 	while (cmd_arr[i])
 	{
-		clean_cmd2 = remove_quotes_first_word(cmd_arr[i]);
+		clean_cmd2 = remove_quotes(cmd_arr[i]);
 		if (!clean_cmd2)
 		{
 			printf("%s: The command not found\n", cmd_arr[i]);
@@ -285,6 +285,7 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 {
 	char	**cmd_arr;
 
+	printf("[split_and_clean_args] clean_cmd: %s\n", clean_cmd);
 	cmd_arr = ft_split(clean_cmd, ' ');
 	free(clean_cmd);
 	if (!cmd_arr || !*cmd_arr)
@@ -306,6 +307,7 @@ char	*resolve_command_path(char *cmd_name, int *status, char **myenvp)
 	path = get_command_path(cmd_name, myenvp);
 	if (!path)
 	{
+		printf("was returned here\n");
 		write_stderr("Command not found");
 		*status = 127;
 	}
@@ -334,8 +336,7 @@ void	execute_command_single(char *cmd, int *status, char ***myenvp)
 	if (!cmd_arr)
 		return ;
 	path = resolve_command_path(cmd_arr[0], status, *myenvp);
-	save_and_redirect(&std, cmd, status, *myenvp);
-	if (*status == 1)
+	if (save_and_redirect(&std, cmd, status, *myenvp))
 		return (restore_std(&std), free(path), free_arr(cmd_arr));
 	execute_forked_process(path, cmd_arr, status, *myenvp);
 	return (free(path), restore_std(&std), free_arr(cmd_arr));

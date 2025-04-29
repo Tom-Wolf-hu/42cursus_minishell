@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/23 19:45:09 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 16:22:02 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,5 @@ void	handle_exit(char *line, int *status,
 		}
 		*status = ft_atoi(line_arr[1]);
 	}
-	free_all(line_arr, line, myenvp, std);
-	exit(*status);
+	return (free_all(line_arr, line, myenvp, std), exit(*status));
 }

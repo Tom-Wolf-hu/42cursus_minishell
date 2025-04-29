@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:22:04 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/21 20:08:30 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/29 17:20:56 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	in_redir(char *filename, int *status)
 {
-	int	file_fd;	
+	int	file_fd;
 
 	file_fd = open(filename, O_RDONLY);
 	if (file_fd == -1)

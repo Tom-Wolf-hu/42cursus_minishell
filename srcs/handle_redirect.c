@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/29 15:44:30 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:24:32 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,11 @@ int	ch_redirect(t_redirect_args *args, int *i, int *status, char **envp)
 	return (0);
 }
 
-void	handle_redirection(char *line, int *status, char **envp)
+int	handle_redirection(char *line, int *status, char **envp)
 {
 	struct s_redirect_args	args;
 	int						i;
 
-	// *status = 0;
 	i = 0;
 	args.line = line;
 	while (args.line[i])
@@ -109,12 +108,13 @@ void	handle_redirection(char *line, int *status, char **envp)
 			{
 				write_stderr("No such file or directory");
 				*status = 1;
-				return ;
+				return (1);
 			}
 			if (ch_redirect(&args, &i, status, envp) == 1)
-				return (free(args.filename));
+				return (free(args.filename), 1);
 			free(args.filename);
 		}
 		i++;
 	}
+	return (0);
 }

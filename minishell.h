@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 13:03:12 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:25:12 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ char	*get_filename(char *cmd);
 void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp);
 int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
 int	heredoc_pipe_sign(char *filename, int *status, char **envp);
-void	handle_redirection(char *line, int *status, char **envp);
+int	handle_redirection(char *line, int *status, char **envp);
 void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
 void	join_part(char **s1, char *s2);
 void	redir_part(char *cmd, int *i);
