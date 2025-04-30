@@ -1,8 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = 
-# -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 # Указываем все исходники вручную, включая файлы из подкаталогов
 SRCS =	srcs/builtins/echo.c \

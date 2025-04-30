@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/04/23 20:27:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/30 19:26:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ int	cycle_for_unsetenv(char **arr, char *clean_line,
 
 int	handle_unset(char *line, char ***myenvp)
 {
-	int		i;
 	char	**arr;
 	char	**new_env;
 	char	*clean_line;
 
+	clean_line = NULL;
+	new_env = NULL;
 	if (!line || !*myenvp)
 		return (perror("[handle_unset] malloc/readline"), exit(1), 1);
 	arr = ft_split(line, ' ');
@@ -106,8 +107,6 @@ int	process_string_env(char *clean_line, char ***myenvp)
 int	handle_export(char *line, char ***myenvp)
 {
 	char	**arr;
-	char	*equals_pos;
-	char	*value;
 	int		i;
 	char	*clean_line;
 

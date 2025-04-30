@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export_unset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:49:13 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/23 19:46:46 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/30 19:20:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	**create_new_arr(char *str, char **myenvp)
 int	mysetenv(char *name, char *value, char ***myenvp)
 {
 	char	**new_env;
-	int		i;
 	char	*new_str;
 	int		index;
 

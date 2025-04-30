@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 18:08:08 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:28:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,10 @@ int		is_empty(char *line);
 void	hanlde_quotes(char *str, int i, int *flag_single, int *flag_double);
 
 //check_var.c
-int	handle_dollar(char **str, t_var_info *var_data, int dollar_pos, char *dollar);
-int	cmp_names(char *name1, char *name2);
+int		handle_dollar(char **str, t_var_info *var_data, int dollar_pos, char *dollar);
+int		cmp_names(char *name1, char *name2);
 char	*find_var_value(char *var_name, char **myenvp);
-int	get_var_name_size(char *str);
+int		get_var_name_size(char *str);
 void	get_var_name(char *dest, char *str);
 
 //msh_utils.c
@@ -188,15 +188,15 @@ char	*remove_quotes_first_word(char *line);
 int		check_command_quotes(char *line);
 
 
-int	in_redir(char *filename, int *status);
-int	out_redir(char *filename, int *status, int *i, char opt);
+int		in_redir(char *filename, int *status);
+int		out_redir(char *filename, int *status, int *i, char opt);
 void	reset_stdin(void);
-int	gf_name_length(char *cmd, int *i, int *start);
+int		gf_name_length(char *cmd, int *i, int *start);
 char	*get_filename(char *cmd);
 void	handle_heredoc_child(int write_fd, const char *delimiter, int *status, char **envp);
-int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid);
-int	heredoc_pipe_sign(char *filename, int *status, char **envp);
-int	handle_redirection(char *line, int *status, char **envp);
+int		heredoc_parent(int *status, int pipe_fd[2], pid_t pid);
+int		heredoc_pipe_sign(char *filename, int *status, char **envp);
+int		handle_redirection(char *line, int *status, char **envp);
 void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2);
 void	join_part(char **s1, char *s2);
 void	redir_part(char *cmd, int *i);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/29 18:35:31 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:27:52 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	heredoc_parent(char *filename, int *status, int pipe_fd[2], pid_t pid)
+int	heredoc_parent(int *status, int pipe_fd[2], pid_t pid)
 {
 	int	wstatus;
 
@@ -62,7 +62,7 @@ int	heredoc_pipe_sign(char *filename, int *status, char **envp)
 		handle_heredoc_child(pipe_fd[1], filename, status, envp);
 	}
 	else
-		return (heredoc_parent(filename, status, pipe_fd, pid));
+		return (heredoc_parent(status, pipe_fd, pid));
 	return (0);
 }
 
