@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 18:25:56 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/29 02:22:22 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/30 17:27:22 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,3 @@ int	check_quotes(char *line)
 	}
 	return (0);
 }
-
-// echo "Hello world and the fucking goverment! '$USER' $PATH "$USER"\ $$$"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   msh_quotes_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 16:39:46 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:24:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ char	*remove_quotes_first_word(char *line)
 		return (ft_strdup(line));
 	if (!check_quotes_arg(line) || !check_empty_cmd(line))
 	{
-		write_stderr("Command not found");
+		write_stderr("in remove_quotes_first_word");
 		return (NULL);
 	}
 	result = malloc(ft_strlen(line) - 2 + 1);

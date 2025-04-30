@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redir_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:22:04 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/29 18:23:41 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:15:55 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	reset_stdin(void)
 	if (!isatty(STDIN_FILENO))
 	{
 		std = open("/dev/tty", O_RDWR);
-		if (std != -1)
+		if (std == -1)
 		{
 			perror("Failed restore STDIN");
 			exit(EXIT_FAILURE);
