@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 15:40:24 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:14:06 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,6 +389,8 @@ void	run_ex(char **line, int *status, char ***myenvp)
 	if (check_quastion_sign(&p, *status))
 		return (free(p));
 	bridge_var(&p, *myenvp);
+	if (!p)
+		return ;
 	if (ft_strcmp(p, "clear") == 0
 		|| ft_strncmp(p, "clear ", 6) == 0)
 		return (rl_clear_history(), free(p));
@@ -515,7 +517,7 @@ echo \			+
 echo -nnn hello			+
 
 $nonexist | wc -l	+-
-$nonexist			+-
+$nonexist			----------
 
 > ./minishell
 > cat << EOF
@@ -530,5 +532,8 @@ valgrind:
 bridge_var
 
 "echo " "cat lol.c | cat > lol.c"
+
+
+
 
 */

@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/29 13:02:43 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:18:56 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ int	bridge_var_at(char **str, int dollar_pos, char **myenvp)
 	var_data.prefix = ft_strndup(*str, dollar_pos);
 	if (!var_data.prefix)
 		return (free(var_data.suffix), exit(1), 0);
+	if (!var_data.var_value && ft_strlen(var_data.prefix) == 0 && ft_strlen(var_data.suffix) == 0)
+	{
+		free(*str);
+		*str = NULL;
+		free(var_data.prefix);
+		free(var_data.suffix);
+		return (0);
+	}
 	new_str = build_new_string(&var_data);
 	if (!new_str)
 		return (free(var_data.prefix), free(var_data.suffix),
@@ -104,6 +112,8 @@ void	bridge_var(char **str, char **myenvp)
 		{
 			if (!bridge_var_at(str, i, myenvp))
 			{
+				if (!*str)
+					return ;
 				i++;
 				continue ;
 			}
