@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 17:24:02 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:47:34 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,6 @@ char	*copy_str(char **result, char *line)
 char	*remove_quotes_first_word(char *line)
 {
 	char	*result;
-	int		i;
-	int		j;
-	int		first_quote;
 
 	if (no_first_quotes(line))
 		return (ft_strdup(line));
@@ -174,7 +171,6 @@ char	*remove_quotes(char *line)
 	int		len;
 	char	*result;
 	int		pos;
-	char	*tmp;
 
 	i = 0;
 	len = ft_strlen(line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 16:41:17 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 19:45:02 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	wait_for_last_pid(pid_t last_pid, int *status)
 	}
 }
 
-char	**process_command_args(char **cmd_args, char *cmd)
+char	**process_command_args(char **cmd_args)
 {
 	int		j;
 	char	*clean_cmd2;
@@ -133,7 +133,7 @@ void	handle_child_process(t_pipe_data data, int i,
 	if (is_builtin(data.commands[i]))
 		return (execute_builtin(data.commands[i], 1,
 				status, myenvp), exit(*status));
-	cmd_args = process_command_args(cmd_args, data.cmd);
+	cmd_args = process_command_args(cmd_args);
 	path = get_command_path(cmd_args[0], *myenvp);
 	if (!path)
 		return (write_stderr("Command not found"), exit(127));
@@ -174,7 +174,6 @@ void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
 {
 	int					last_pid;
 	char				*temp;
-	struct s_saved_std	std;
 	struct s_pipe_data	data;
 
 	data.cmd = cmd;
@@ -369,7 +368,6 @@ char	*my_strchr_quotes(char *s, int c)
 
 void	run_ex(char **line, int *status, char ***myenvp)
 {
-	char	**arr;
 	int		i;
 	char	*p;
 
@@ -460,6 +458,8 @@ int	main(int argc, char **argv, char **envp)
 	static int		status = 0;
 	char			**myenvp;
 
+	(void) argc;
+	(void) argv;
 	myenvp = copy_arr(envp);
 	disable_ctrl_c_output(&status);
 	setup_signal_handlers();

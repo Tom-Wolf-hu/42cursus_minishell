@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 19:28:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:40:18 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ typedef	struct s_store
 }	t_store;
 
 //check_redir.c
-char	*handle_heredoc_to_file(char *delimiter, int *status, char **envp);
-char	*generate_tmp_name(void);
+// char	*handle_heredoc_to_file(char *delimiter, int *status, char **envp);
+// char	*generate_tmp_name(void);
 
 //minishell.c
 void	close_saved_std(struct s_saved_std *std);

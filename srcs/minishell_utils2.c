@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:56:59 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/20 17:38:48 by alex             ###   ########.fr       */
+/*   Updated: 2025/04/30 19:45:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ char	*get_command_path(char *cmd, char **myenvp)
 	char	**path_arr;
 	char	*buffer;
 	char	*path;
-	int		i;
 
 	if (!cmd)
 		return (NULL);
