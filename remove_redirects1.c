@@ -7,63 +7,110 @@
 #include <string.h>
 #include <ctype.h>
 
-char *remove_redirects(char *cmd)
+int check_quotes_arg(char *line)
 {
-    char *clean_cmd;
-    int start;
-    int end;
-    int i;
-    int j = 0;
+	int		i;
+	char	first_quote;
 
-    start = 0;
-    while (cmd[start] && cmd[start] != '>' && cmd[start] != '<')
-        start++;  // Находим первый символ редиректа
-
-    if (!cmd[start])  // Если редиректов нет, просто копируем строку
-        return strdup(cmd);
-
-    end = start;
-    while (cmd[end] && (cmd[end] == '>' || cmd[end] == '<' || isspace(cmd[end])))
-        end++;  // Пропускаем пробелы и сам редирект
-
-    while (cmd[end] && !isspace(cmd[end]))  // Пропускаем имя файла
-        end++;
-
-    // printf("start: %d; end: %d\n", start, end);
-
-    i = 0;
-    while (cmd[i] && i < start)  // Копируем всё до редиректа
-        i++;
-
-    while (cmd[end] && isspace(cmd[end]))  // Пропускаем лишние пробелы после имени файла
-        end++;
-
-    clean_cmd = malloc(strlen(cmd) - (end - start) + 1);
-    if (!clean_cmd)
-        return NULL;
-
-    j = 0;
-    i = 0;
-
-    while (cmd[i] && i < start)  // Копируем всё до редиректа
-        clean_cmd[j++] = cmd[i++];
-
-    while (cmd[end])  // Копируем остаток команды после редиректа
-        clean_cmd[j++] = cmd[end++];
-
-    clean_cmd[j] = '\0';
-
-    return clean_cmd;
+	i = 0;
+	while (line[i] && isspace(line[i]))
+		i++;
+	if (line[i] == '\'' || line[i] == '\"')
+	{
+		first_quote = line[i];
+		i++;
+	}
+	while (line[i] && first_quote)
+	{
+		if (isspace(line[i]))
+			return (0);
+		if (line[i] == first_quote)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
+int	check_empty_cmd(char *line)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	while (line[i] && isspace(line[i]))
+		i++;
+	if (line[i] == '\'' || line[i] == '\"')
+	{
+		quote = line[i];
+		i++;
+	}
+	while (line[i] && isspace(line[i]))
+		i++;
+	if (line[i] == quote || line[i] == '\0')
+		return (0);
+	return (1);
+}
+
+int	no_first_quotes(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && isspace(line[i]))
+		i++;
+	if (line[i] != '\'' && line[i] != '\"')
+		return (1);
+	return (0);
+}
+
+char	*copy_str(char **result, char *line)
+{
+	int	first_quote;
+	int	i;
+	int	j;
+
+	i = 0;
+	while (line[i] && isspace(line[i]))
+		i++;
+	i++;
+	j = 0;
+	first_quote = 0;
+	while (line[i])
+	{
+		if ((line[i] == '\'' || line[i] == '\"') && !first_quote)
+		{
+			first_quote = 1;
+			i++;
+			continue ;
+		}
+		(*result)[j] = line[i];
+		i++;
+		j++;
+	}
+	(*result)[j] = '\0';
+	return ((*result));
+}
+
+char	*remove_quotes_first_word(char *line)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		first_quote;
+
+	if (no_first_quotes(line))
+		return (strdup(line));
+	if (!check_quotes_arg(line) || !check_empty_cmd(line))
+		return (NULL);
+	result = malloc(strlen(line) - 2 + 1);
+	if (!result)
+		return (NULL);
+	return (copy_str(&result, line));
+}
 
 int main()
 {
-	char *str = remove_redirects("<<file wc -l");
-	char *str2 = remove_redirects("echo hello>file");
-
-	if (str)
-		printf("%s\n", str);
-	if (str2)
-		printf("%s\n", str2);
+	// printf("%d\n", check_quotes_arg("\"echo\"       hello worold\""));
+	printf("%s\n", remove_quotes_first_word("   \"\"  \"echo\"       \"hello worold\""));
+	// printf("%d\n", check_empty_cmd("     \"   \"  \"echo\"       hello worold\""));
 }

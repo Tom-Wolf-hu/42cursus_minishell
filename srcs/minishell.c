@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/29 18:33:02 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:40:24 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,6 @@ char	**split_and_clean_args(char *clean_cmd, int *status)
 {
 	char	**cmd_arr;
 
-	printf("[split_and_clean_args] clean_cmd: %s\n", clean_cmd);
 	cmd_arr = ft_split(clean_cmd, ' ');
 	free(clean_cmd);
 	if (!cmd_arr || !*cmd_arr)
@@ -309,7 +308,6 @@ char	*resolve_command_path(char *cmd_name, int *status, char **myenvp)
 	path = get_command_path(cmd_name, myenvp);
 	if (!path)
 	{
-		printf("was returned here\n");
 		write_stderr("Command not found");
 		*status = 127;
 	}
@@ -385,7 +383,9 @@ void	run_ex(char **line, int *status, char ***myenvp)
 		i++;
 	if ((*line)[i] == '\0')
 		return ;
-	p = ft_strdup(*line + i);
+	p = remove_quotes_first_word(*line + i);
+	if (!p)
+		return ;
 	if (check_quastion_sign(&p, *status))
 		return (free(p));
 	bridge_var(&p, *myenvp);
@@ -440,6 +440,18 @@ void	handle_gnl(char **line, int *status)
 		return (perror("malloc"), *status = 1, (void)0);
 }
 
+int	if_exit(char *line)
+{
+	if (ft_strcmp(line, "exit") == 0
+		|| ft_strncmp(line, "exit ", 5) == 0
+		|| ft_strcmp(line, "\"exit\"") == 0
+		|| ft_strncmp(line, "\"exit\" ", 7) == 0
+		|| ft_strcmp(line, "'exit'") == 0
+		|| ft_strncmp(line, "'exit' ", 7) == 0)
+		return (1);
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char			*line;
@@ -458,8 +470,7 @@ int	main(int argc, char **argv, char **envp)
 		change_status(&status);
 		if (!line)
 			handle_exit(ft_strdup("exit"), &status, NULL, myenvp);
-		if (ft_strcmp(line, "exit") == 0
-			|| ft_strncmp(line, "exit ", 5) == 0)
+		else if (if_exit(line))
 			handle_exit(line, &status, NULL, myenvp);
 		else
 			run_ex(&line, &status, &myenvp);
@@ -517,5 +528,7 @@ echo $? $USER $PATH $$$
 
 valgrind:
 bridge_var
+
+"echo " "cat lol.c | cat > lol.c"
 
 */

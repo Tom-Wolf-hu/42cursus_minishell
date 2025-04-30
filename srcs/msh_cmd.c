@@ -6,7 +6,7 @@
 /*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:26:24 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/29 18:11:42 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:29:38 by omalovic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,9 @@ void	execute_builtin(char *cmd, int fd, int *status, char ***myenvp)
 	if (!cmd)
 		return ;
 	clean_cmd = remove_redirects(cmd);
-	printf("clean+_cmd: %s\n", clean_cmd);
 	if (!clean_cmd)
 		return ;
 	temp = remove_quotes_first_word(clean_cmd);
-	printf("temp: %s\n", temp);
 	free(clean_cmd);
 	if (!temp)
 		return ;
