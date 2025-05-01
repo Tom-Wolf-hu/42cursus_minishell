@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/05/01 11:21:08 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:07:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,24 @@ void	close_pipefd(struct s_pipe_data *data)
 		close(data->pipefd[1]);
 }
 
+int	check_data_cmd(t_pipe_data *data)
+{
+	int	i;
+
+	i = 0;
+	// print_arr(data->commands);
+	while (data->commands[i])
+	{
+		if (is_empty(data->commands[i]))
+		{
+			write_stderr("syntax error near unexpected token `|'");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 void	handle_child_process(t_pipe_data data, int i,
 			int *status, char ***myenvp)
 {
@@ -143,6 +161,8 @@ void	handle_child_process(t_pipe_data data, int i,
 		dup2(data.prev_fd, STDIN_FILENO);
 		close(data.prev_fd);
 	}
+	// if (!check_data_cmd(&data))
+	// 	return (exit(1));
 	fprintf(stderr, "data.commands[i] in handle_clild_proces: '%s'\n", data.commands[i]);
 	clean_cmd = remove_redirects(data.commands[i]);
 	cmd_args = ft_split(clean_cmd, ' ');
@@ -204,11 +224,16 @@ void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
 	temp = NULL;
 	ft_bzero(&data, sizeof(data));
 	data.commands = get_commands(cmd, temp);
-	print_arr(data.commands);
+	// print_arr(data.commands);
 	if (temp)
 		free(temp);
 	if (!data.commands)
 		return ;
+	if (!check_data_cmd(&data))
+	{
+		*status = 258;
+		return ;
+	}
 	data.num_commands = ft_arrlen(data.commands);
 	data.prev_fd = -1;
 	data.i = 0;
