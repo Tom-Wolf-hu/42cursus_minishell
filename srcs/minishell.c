@@ -6,13 +6,32 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 19:45:02 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/01 11:21:08 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 volatile int	g_status = 0;
+
+void	print_arr(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		fprintf(stderr, "The stringarr NULL.\n");
+	else if ((*str)[0] == '\0')
+		fprintf(stderr, "The stringarr[0] empty.\n");
+	while (str[i])
+	{
+		if (ft_strlen(str[i]) == 0)
+			fprintf(stderr, "str[%d] is empty string.\n", i);
+		else
+			fprintf(stderr, "[%d] %s\n", i, str[i]);
+		i++;
+	}
+}
 
 void	sig_handler(int sig)
 {
@@ -124,6 +143,7 @@ void	handle_child_process(t_pipe_data data, int i,
 		dup2(data.prev_fd, STDIN_FILENO);
 		close(data.prev_fd);
 	}
+	fprintf(stderr, "data.commands[i] in handle_clild_proces: '%s'\n", data.commands[i]);
 	clean_cmd = remove_redirects(data.commands[i]);
 	cmd_args = ft_split(clean_cmd, ' ');
 	save_and_redirect(&std, data.commands[i], status, *myenvp);
@@ -134,9 +154,13 @@ void	handle_child_process(t_pipe_data data, int i,
 		return (execute_builtin(data.commands[i], 1,
 				status, myenvp), exit(*status));
 	cmd_args = process_command_args(cmd_args);
+	// print_arr(cmd_args);
 	path = get_command_path(cmd_args[0], *myenvp);
+	// if (!path)
+	// 	return (exit(127));
+	fprintf(stderr, "path in handle_clild_proces: %s\n", path);
 	if (!path)
-		return (write_stderr("Command not found"), exit(127));
+		return (write_stderr("Command not found in handle_child_process"), exit(127));
 	return (close_saved_std(&std), execve(path, cmd_args, *myenvp),
 		perror("execve"), exit(EXIT_FAILURE));
 }
@@ -180,6 +204,7 @@ void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
 	temp = NULL;
 	ft_bzero(&data, sizeof(data));
 	data.commands = get_commands(cmd, temp);
+	print_arr(data.commands);
 	if (temp)
 		free(temp);
 	if (!data.commands)
