@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/05/01 16:07:07 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/01 16:53:35 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ int	check_data_cmd(t_pipe_data *data)
 	int	i;
 
 	i = 0;
-	// print_arr(data->commands);
 	while (data->commands[i])
 	{
 		if (is_empty(data->commands[i]))
@@ -145,6 +144,14 @@ int	check_data_cmd(t_pipe_data *data)
 		}
 		i++;
 	}
+	return (1);
+}
+
+int	pipe_cmd_exist(t_pipe_data *data, char **clean_cmd, int i)
+{
+	*clean_cmd = remove_redirects(data->commands[i]);
+	if (is_empty(*clean_cmd))
+		return (0);
 	return (1);
 }
 
@@ -161,12 +168,12 @@ void	handle_child_process(t_pipe_data data, int i,
 		dup2(data.prev_fd, STDIN_FILENO);
 		close(data.prev_fd);
 	}
-	// if (!check_data_cmd(&data))
-	// 	return (exit(1));
-	fprintf(stderr, "data.commands[i] in handle_clild_proces: '%s'\n", data.commands[i]);
-	clean_cmd = remove_redirects(data.commands[i]);
-	cmd_args = ft_split(clean_cmd, ' ');
+	// fprintf(stderr, "data.commands[i] in handle_clild_proces: '%s'\n", data.commands[i]);
 	save_and_redirect(&std, data.commands[i], status, *myenvp);
+	if (!pipe_cmd_exist(&data, &clean_cmd, i))
+		return (exit(0));
+	// clean_cmd = remove_redirects(data.commands[i]);
+	cmd_args = ft_split(clean_cmd, ' ');
 	if (i < data.num_commands - 1)
 		dup2(data.pipefd[1], STDOUT_FILENO);
 	close_pipefd(&data);
@@ -176,9 +183,7 @@ void	handle_child_process(t_pipe_data data, int i,
 	cmd_args = process_command_args(cmd_args);
 	// print_arr(cmd_args);
 	path = get_command_path(cmd_args[0], *myenvp);
-	// if (!path)
-	// 	return (exit(127));
-	fprintf(stderr, "path in handle_clild_proces: %s\n", path);
+	// fprintf(stderr, "path in handle_clild_proces: %s\n", path);
 	if (!path)
 		return (write_stderr("Command not found in handle_child_process"), exit(127));
 	return (close_saved_std(&std), execve(path, cmd_args, *myenvp),
