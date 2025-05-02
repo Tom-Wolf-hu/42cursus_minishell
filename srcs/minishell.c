@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 14:45:23 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 19:51:40 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,31 @@ void	sig_handler(int sig)
 	}
 }
 
-void	run_ex(char **line, int *status, char ***myenvp)
+int	run_ex_rqfw(char **line, char **p)
 {
-	int		i;
-	char	*p;
+	int	i;
 
+	i = 0;
 	if (is_empty(*line))
-		return ;
+		return (0);
 	add_history(*line);
 	if (check_quotes(*line) == 1)
-		return ;
-	i = 0;
+		return (0);
 	while ((*line)[i] && ft_isspace((*line)[i]))
 		i++;
 	if ((*line)[i] == '\0')
-		return ;
-	p = remove_quotes_first_word(*line + i);
-	if (!p)
+		return (0);
+	*p = remove_quotes_first_word(*line + i);
+	if (!(*p))
+		return (0);
+	return (1);
+}
+
+void	run_ex(char **line, int *status, char ***myenvp)
+{
+	char	*p;
+
+	if (!run_ex_rqfw(line, &p))
 		return ;
 	if (check_quastion_sign(&p, *status))
 		return (free(p));
