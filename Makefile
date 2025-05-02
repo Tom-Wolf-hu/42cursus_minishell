@@ -15,6 +15,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/check_redir_utils.c \
 		srcs/handle_redirect.c \
 		srcs/remove_redirects.c \
+		srcs/minishell_main_utils.c \
 		srcs/minishell.c \
 		srcs/minishell_utils.c \
 		srcs/minishell_utils2.c \
@@ -22,7 +23,13 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/msh_cmd.c \
 		srcs/msh_quotes.c \
 		srcs/msh_quotes_utils.c \
+		srcs/msh_quotes_utils2.c \
 		srcs/check_var.c \
+		srcs/execute_pipe_cmd.c \
+		srcs/execute_pipe_cmd_utils.c \
+		srcs/execute_pipe_cmd_utils2.c \
+		srcs/execute_single_cmd.c \
+		srcs/execute_single_cmd_utils.c \
 		srcs/bridge_var.c \
 		srcs/msh_utils.c \
 		srcs/check_quastion_sign.c \

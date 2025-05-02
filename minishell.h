@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 12:08:27 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 14:45:59 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ typedef	struct s_store
 //minishell.c
 void	close_saved_std(struct s_saved_std *std);
 void	remove_chars(char **str, char ch);
-// void	execute_pipe_commands(char *cmd, int *status);
 int		is_nummeric(char *line);
 void	handle_exit(char *line, int *status, struct s_saved_std *std, char **myenvp);
 void	sig_handler(int sig);
@@ -204,5 +203,24 @@ void	join_part(char **s1, char *s2);
 void	redir_part(char *cmd, int *i);
 char	*before_red(char *cmd, int *i);
 char	*remove_redirects(char *cmd);
+void	execute_pipe_commands(char *cmd, int *status, char ***myenvp);
+int		check_empty_cmd(char *line);
+int		check_quotes_arg(char *line);
+int		has_heredoc(char *cmd);
+int		save_and_redirect(struct s_saved_std *std, char *command,
+			int *status, char **envp);
+int		pipe_cmd_exist(t_pipe_data *data, char **clean_cmd, int i);
+char	**process_command_args(char **cmd_args);
+void	close_pipefd(struct s_pipe_data *data);
+int		check_data_cmd(t_pipe_data *data);
+void	wait_for_last_pid(pid_t last_pid, int *status);
+void	close_saved_std(struct s_saved_std *std);
+void	execute_command_single(char *cmd, int *status, char ***myenvp);
+int		clean_command_args(char **cmd_arr);
+void	handle_empty_command(char *cmd, int *status, char **envp);
+char	*my_strchr_quotes(char *s, int c);
+char	**copy_arr(char **arr);
+int		if_exit(char *line);
+void	handle_gnl(char **line, int *status);
 
 #endif

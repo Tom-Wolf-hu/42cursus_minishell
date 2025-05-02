@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:56:59 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/30 19:45:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 14:40:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,28 @@ char	**get_commands(char *cmd, char *temp)
 		return (ft_split(temp, '|'));
 	}
 	return (ft_split(cmd, '|'));
+}
+
+char	**copy_arr(char **arr)
+{
+	int		count;
+	char	**result;
+	int		i;
+
+	count = 0;
+	while (arr[count])
+		count++;
+	result = malloc(sizeof(char *) * (count + 1));
+	if (!result)
+		return (exit(1), NULL);
+	i = 0;
+	while (i < count)
+	{
+		result[i] = ft_strdup(arr[i]);
+		if (!result[i])
+			return (free_arr(result), exit(1), NULL);
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
 }
