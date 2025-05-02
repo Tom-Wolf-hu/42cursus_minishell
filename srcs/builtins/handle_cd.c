@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 12:09:50 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:23:05 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,91 +117,3 @@ int	handle_cd(char *line, char ***myenvp)
 	free_arr(arr);
 	return (0);
 }
-
-// void	remember_path(char *path)
-// {
-// 	mysetenv("OLDPATH", path);
-// }
-
-// char *choose_path_minus(char *path)
-// {
-// 	char	*value;
-// 	char	buffer[128];
-// 	size_t	size;
-
-// 	size = 128;
-// 	value = getenv("OLDPATH");
-// 	if (value)
-// 		return (value);
-// 	if (getcwd(buffer, size) == NULL)
-// 	{
-// 		perror("minishell: getcwd");
-// 		return (exit(EXIT_FAILURE), 1);
-// 	}
-// 	value = ft_strdup(buffer);
-// 	return (value);
-// }
-
-// char	*choose_path(char **arr, int i)
-// {
-// 	char	*path;
-// 	char	*clean_path;
-
-// 	path = NULL;
-// 	if (i == 2)
-// 	{
-// 		if (ft_strcmp(arr[1], "~") == 0)
-// 			i = 1;
-// 		else if (ft_strcmp(arr[1], "-") == 0)
-// 			i = -1;
-// 	}
-// 	if (i == -1)
-// 		return (choose_path_minus(path));
-// 	if (i == 1)
-// 	{
-// 		path = getenv("HOME");
-// 		if (!path)
-// 		{
-// 			printf("minishell: cd: HOME not set\n");
-// 			return (NULL);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		clean_path = remove_quotes(arr[1]);
-// 		if (!clean_path)
-// 			return (NULL);
-// 		path = clean_path;
-// 	}
-// 	return (path);
-// }
-
-// int	handle_cd(char *line)
-// {
-// 	char	**arr;
-// 	char	*path;
-// 	int 	i;
-
-// 	i = 0;
-// 	arr = ft_split(line, ' ');
-// 	if (!arr)
-// 		return (free(line), exit(1), 1);
-// 	while (arr[i])
-// 		i++;
-// 	if (i > 2)
-// 	{
-// 		printf("minishell: cd: too many arguments\n");
-// 		free_arr(arr);
-// 		return (1);
-// 	}
-// 	path = choose_path(arr, i);
-// 	remember_path(path);
-// 	if (!path)
-// 		return (free_arr(arr), 1);
-// 	if (chdir(path) != 0)
-// 		return (perror("minishell: cd"), 1);
-// 	free_arr(arr);
-// 	if (path)
-// 		free(path);
-// 	return (0);
-// }

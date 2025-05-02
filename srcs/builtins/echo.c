@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 12:40:45 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/16 18:44:59 by alex             ###   ########.fr       */
+/*   Updated: 2025/05/02 12:22:42 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,3 @@ int	handle_echo(char *line, int fd)
 	}
 	return (free_arr(arr), 0);
 }
-
-// int main()
-// {
-// 	handle_echo("echo \"'hello'\"", 1);
-// }

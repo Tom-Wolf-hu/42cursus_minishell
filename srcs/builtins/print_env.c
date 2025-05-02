@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:44 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 12:11:12 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:24:17 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,3 @@ char	*my_getenv(char **myenvp, const char *name)
 	}
 	return (NULL);
 }
-
-// int	print_env(char ***myenvp)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!*myenvp)
-// 		return (1);
-// 	while ((*myenvp)[i])
-// 	{
-// 		write(1, (*myenvp)[i], ft_strlen((*myenvp)[i]));
-// 		write(1, "\n", 1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
