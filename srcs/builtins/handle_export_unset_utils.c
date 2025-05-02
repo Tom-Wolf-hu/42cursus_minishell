@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 19:26:05 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 10:00:31 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	handle_export(char *line, char ***myenvp)
 	char	*clean_line;
 
 	if (ft_strlen(line) == 6 || check_line(line, 7))
-		return (print_env(myenvp));
+		return (print_export(myenvp));
 	arr = ft_split(line, ' ');
 	if (!arr)
 		return (1);
