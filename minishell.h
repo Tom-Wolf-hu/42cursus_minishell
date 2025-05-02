@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 10:00:13 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:08:27 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int		check_quastion_sign(char **line, int status);
 char	*remove_first_spaces(char *line);
 void	disable_ctrl_c_output(int *status);
 void	setup_signal_handlers(void);
+char	*my_getenv(char **myenvp, const char *name);
 int		print_export(char ***myenvp);
 int		print_env(char ***myenvp);
 int		finish_write_cmd_path(char **buffer, char *path, char *cmd);

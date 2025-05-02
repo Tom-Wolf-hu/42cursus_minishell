@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 11:26:41 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:09:50 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	remember_path(char ***myenvp)
 	}
 }
 
-char	*choose_path_minus(void)
+char	*choose_path_minus(char **myenvp)
 {
 	char	*value;
 	char	buffer[128];
 
-	value = getenv("OLDPWD");
+	value = my_getenv(myenvp, "OLDPWD");
 	if (value)
 	{
 		write(1, value, ft_strlen(value));
@@ -44,7 +44,7 @@ char	*choose_path_minus(void)
 	return (ft_strdup(buffer));
 }
 
-char	*choose_path(char **arr, int i)
+char	*choose_path(char **arr, int i, char **myenvp)
 {
 	char	*path;
 	char	*clean_path;
@@ -58,7 +58,7 @@ char	*choose_path(char **arr, int i)
 			i = -1;
 	}
 	if (i == -1)
-		return (choose_path_minus());
+		return (choose_path_minus(myenvp));
 	if (i == 1)
 	{
 		path = getenv("HOME");
@@ -98,7 +98,7 @@ int	handle_cd(char *line, char ***myenvp)
 
 	if (get_arr(&arr, &i, line))
 		return (free_arr(arr), 1);
-	path = choose_path(arr, i);
+	path = choose_path(arr, i, *myenvp);
 	if (!path)
 		return (free_arr(arr), 1);
 	remember_path(myenvp);
