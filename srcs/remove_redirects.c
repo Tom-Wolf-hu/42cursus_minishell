@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_redirects.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/29 18:21:42 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/05/02 17:04:48 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,9 @@ char	*remove_redirects(char *cmd)
 					quote = 0;
 			}
 			if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
-				break;
+				break ;
 			i++;
 		}
-		// Добавляем всё до редиректа (или до конца)
 		if (i > start)
 		{
 			temp = malloc(i - start + 1);
@@ -132,66 +131,8 @@ char	*remove_redirects(char *cmd)
 			temp[i - start] = '\0';
 			join_part(&clean_cmd, temp);
 		}
-		// пропускаем редиректную часть
 		if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
 			redir_part(cmd, &i);
 	}
 	return (clean_cmd);
 }
-
-
-// char	*remove_redirects(char *cmd)
-// {
-// 	char	*clean_cmd;
-// 	char	*temp;
-// 	int		i;
-
-// 	i = 0;
-// 	clean_cmd = NULL;
-// 	while (cmd[i])
-// 	{
-// 		temp = before_red(cmd, &i);
-// 		if (temp)
-// 			join_part(&clean_cmd, temp);
-// 		redir_part(cmd, &i);
-// 	}
-// 	return (clean_cmd);
-// }
-
-// void	join_part(char **s1, char *s2)
-// {
-// 	int		lens1;
-// 	int		lens2;
-// 	char	*temp;
-// 	int		i;
-
-// 	lens1 = 0;
-// 	i = 0;
-// 	if (*s1 != NULL)
-// 		lens1 = ft_strlen(*s1);
-// 	if (s2 == NULL)
-// 		return ;
-// 	lens2 = ft_strlen(s2);
-// 	temp = (char *)malloc((lens1 + lens2 + 1) * sizeof(char));
-// 	if (!temp)
-// 	{
-// 		perror("Failed to allocate memory for temp in join part");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	while (*s1 && i < lens1)
-// 	{
-// 		temp[i] = (*s1)[i];
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (s2 && i < lens2)
-// 	{
-// 		temp[lens1 + i] = s2[i];
-// 		i++;
-// 	}
-// 	temp[lens1 + i] = '\0';
-// 	free(*s1);
-// 	free(s2);
-// 	s2 = NULL;
-// 	*s1 = temp;
-// }

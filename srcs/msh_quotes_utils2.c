@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:41:53 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/05/02 13:44:14 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:58:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_command_quotes(char *line)
 	return (1);
 }
 
-int check_quotes_arg(char *line)
+int	check_quotes_arg(char *line)
 {
 	int		i;
 	char	first_quote;

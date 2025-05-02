@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/04/30 19:27:52 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:56:25 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	handle_redirection(char *line, int *status, char **envp)
 	args.line = line;
 	while (args.line[i])
 	{
-		if ((line[i] == '\'' || line[i] == '\"') && (!quote || quote == line[i]))
+		if ((line[i] == '\'' || line[i] == '\"')
+			&& (!quote || quote == line[i]))
 		{
 			if (!quote)
 				quote = line[i];

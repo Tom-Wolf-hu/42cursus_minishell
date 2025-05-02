@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:06:33 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/05/02 14:12:25 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 16:55:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	pipe_cmd_exist(t_pipe_data *data, char **clean_cmd, int i)
 int	save_and_redirect(struct s_saved_std *std, char *command,
 	int *status, char **envp)
 {
-std->saved_stdin = dup(STDIN_FILENO);
-std->saved_stdout = dup(STDOUT_FILENO);
-return (handle_redirection(command, status, envp));
+	std->saved_stdin = dup(STDIN_FILENO);
+	std->saved_stdout = dup(STDOUT_FILENO);
+	return (handle_redirection(command, status, envp));
 }
 
 char	**process_command_args(char **cmd_args)
