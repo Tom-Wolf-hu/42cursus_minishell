@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/05/02 16:56:25 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 20:34:47 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,22 @@ int	ch_redirect(t_redirect_args *args, int *i, int *status, char **envp)
 	return (0);
 }
 
+int	hr_filename_redirec(struct s_redirect_args *args,
+	int *i, int *status, char **envp)
+{
+	args->filename = get_filename(args->line + *i);
+	if (!args->filename)
+	{
+		write_stderr("No such file or directory");
+		*status = 1;
+		return (1);
+	}
+	if (ch_redirect(args, i, status, envp) == 1)
+		return (free(args->filename), 1);
+	free(args->filename);
+	return (0);
+}
+
 int	handle_redirection(char *line, int *status, char **envp)
 {
 	struct s_redirect_args	args;
@@ -112,18 +128,8 @@ int	handle_redirection(char *line, int *status, char **envp)
 				quote = 0;
 		}
 		else if ((line[i] == '<' || line[i] == '>') && !quote)
-		{
-			args.filename = get_filename(args.line + i);
-			if (!args.filename)
-			{
-				write_stderr("No such file or directory");
-				*status = 1;
+			if (hr_filename_redirec(&args, &i, status, envp) == 1)
 				return (1);
-			}
-			if (ch_redirect(&args, &i, status, envp) == 1)
-				return (free(args.filename), 1);
-			free(args.filename);
-		}
 		i++;
 	}
 	return (0);
