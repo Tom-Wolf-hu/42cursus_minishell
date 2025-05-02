@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:26 by alex              #+#    #+#             */
-/*   Updated: 2025/04/17 12:28:12 by alex             ###   ########.fr       */
+/*   Updated: 2025/05/02 11:26:41 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	remember_path(char ***myenvp)
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 	{
-		mysetenv("OLDPATH", cwd, myenvp);
+		mysetenv("OLDPWD", cwd, myenvp);
 		free(cwd);
 	}
 }
@@ -29,9 +29,13 @@ char	*choose_path_minus(void)
 	char	*value;
 	char	buffer[128];
 
-	value = getenv("OLDPATH");
+	value = getenv("OLDPWD");
 	if (value)
+	{
+		write(1, value, ft_strlen(value));
+		write(1, "\n", 1);
 		return (ft_strdup(value));
+	}
 	if (getcwd(buffer, sizeof(buffer)) == NULL)
 	{
 		perror("minishell: getcwd");
