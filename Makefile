@@ -15,6 +15,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/check_redir_utils.c \
 		srcs/handle_redirect.c \
 		srcs/remove_redirects.c \
+		srcs/remove_redirects_utils.c \
 		srcs/minishell_main_utils.c \
 		srcs/minishell.c \
 		srcs/minishell_utils.c \

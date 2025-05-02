@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 13:44:00 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 17:35:16 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ char	*remove_quotes_first_word(char *line)
 	if (no_first_quotes(line))
 		return (ft_strdup(line));
 	if (!check_quotes_arg(line) || !check_empty_cmd(line))
-	{
-		write_stderr("in remove_quotes_first_word");
 		return (NULL);
-	}
 	result = malloc(ft_strlen(line) - 2 + 1);
 	if (!result)
 		return (NULL);

@@ -6,55 +6,11 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:46:55 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/05/02 17:04:48 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/02 18:08:43 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	jp_temp_s1(char *s1, char **temp, int *lens1, int lens2)
-{
-	int	i;
-
-	i = 0;
-	*lens1 = 0;
-	if (s1 != NULL)
-		*lens1 = ft_strlen(s1);
-	*temp = (char *)malloc((*lens1 + lens2 + 1) * sizeof(char));
-	if (!(*temp))
-	{
-		perror("Failed to allocate memory for temp in join part");
-		exit(EXIT_FAILURE);
-	}
-	while (s1 && i < *lens1)
-	{
-		(*temp)[i] = s1[i];
-		i++;
-	}
-}
-
-void	join_part(char **s1, char *s2)
-{
-	int		lens1;
-	int		lens2;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	if (!s2)
-		return ;
-	lens2 = ft_strlen(s2);
-	jp_temp_s1(*s1, &temp, &lens1, lens2);
-	while (s2 && i < lens2)
-	{
-		temp[lens1 + i] = s2[i];
-		i++;
-	}
-	temp[lens1 + i] = '\0';
-	free(*s1);
-	free(s2);
-	*s1 = temp;
-}
 
 void	redir_part(char *cmd, int *i)
 {
@@ -92,10 +48,41 @@ char	*before_red(char *cmd, int *i)
 	return (bef_red);
 }
 
+void	quotes_redir_len(char *cmd, int *i, char *quote)
+{
+	while (cmd[*i])
+	{
+		if ((cmd[*i] == '\'' || cmd[*i] == '\"'))
+		{
+			if (!(*quote))
+				*quote = cmd[*i];
+			else if (*quote == cmd[*i])
+				*quote = 0;
+		}
+		if ((cmd[*i] == '<' || cmd[*i] == '>') && !(*quote))
+			break ;
+		(*i)++;
+	}
+}
+
+void	remove_reidr_temp(char *cmd, int i, int start, char **clean_cmd)
+{
+	char	*temp;
+
+	temp = malloc(i - start + 1);
+	if (!temp)
+	{
+		perror("Failed to allocate memory in remove_redirects");
+		exit(EXIT_FAILURE);
+	}
+	ft_memcpy(temp, cmd + start, i - start);
+	temp[i - start] = '\0';
+	join_part(clean_cmd, temp);
+}
+
 char	*remove_redirects(char *cmd)
 {
 	char	*clean_cmd;
-	char	*temp;
 	int		i;
 	int		start;
 	char	quote;
@@ -106,31 +93,9 @@ char	*remove_redirects(char *cmd)
 	while (cmd[i])
 	{
 		start = i;
-		while (cmd[i])
-		{
-			if ((cmd[i] == '\'' || cmd[i] == '\"'))
-			{
-				if (!quote)
-					quote = cmd[i];
-				else if (quote == cmd[i])
-					quote = 0;
-			}
-			if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
-				break ;
-			i++;
-		}
+		quotes_redir_len(cmd, &i, &quote);
 		if (i > start)
-		{
-			temp = malloc(i - start + 1);
-			if (!temp)
-			{
-				perror("Failed to allocate memory in remove_redirects");
-				exit(EXIT_FAILURE);
-			}
-			ft_memcpy(temp, cmd + start, i - start);
-			temp[i - start] = '\0';
-			join_part(&clean_cmd, temp);
-		}
+			remove_reidr_temp(cmd, i, start, &clean_cmd);
 		if ((cmd[i] == '<' || cmd[i] == '>') && !quote)
 			redir_part(cmd, &i);
 	}
