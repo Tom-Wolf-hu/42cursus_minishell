@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bridge_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:27:27 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/04/30 16:18:56 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:31:44 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ int	bridge_var_at(char **str, int dollar_pos, char **myenvp)
 	{
 		free(*str);
 		*str = NULL;
-		free(var_data.prefix);
-		free(var_data.suffix);
-		return (0);
+		return (free(var_data.prefix), free(var_data.suffix), 0);
 	}
 	new_str = build_new_string(&var_data);
 	if (!new_str)
@@ -125,5 +123,3 @@ void	bridge_var(char **str, char **myenvp)
 		i++;
 	}
 }
-
-//  echo "$USER $$ $$$ $PATH" $USER
