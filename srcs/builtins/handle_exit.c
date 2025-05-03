@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_exit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: omalovic <omalovic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:10:32 by alex              #+#    #+#             */
-/*   Updated: 2025/04/30 13:47:28 by omalovic         ###   ########.fr       */
+/*   Updated: 2025/05/03 12:53:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	free_all(char **line_arr, char *line,
 	free(line);
 	rl_clear_history();
 	free_arr(myenvp);
-	printf("exit\n");
+	if (isatty(STDIN_FILENO))
+		printf("exit\n");
 	if (std)
 		close_saved_std(std);
 }
