@@ -6,11 +6,34 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:14:08 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/05/02 14:20:15 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/03 10:53:13 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	init_data(t_pipe_data *data, char *cmd, int *status)
+{
+	char	*temp;
+
+	data->cmd = cmd;
+	temp = NULL;
+	ft_bzero(data, sizeof(data));
+	data->commands = get_commands(cmd, temp);
+	if (temp)
+		free(temp);
+	if (!data->commands)
+		return (0);
+	if (!check_data_cmd(data))
+	{
+		*status = 258;
+		return (0);
+	}
+	data->num_commands = ft_arrlen(data->commands);
+	data->prev_fd = -1;
+	data->i = 0;
+	return (1);
+}
 
 int	check_data_cmd(t_pipe_data *data)
 {

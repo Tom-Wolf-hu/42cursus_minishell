@@ -6,25 +6,30 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:54:02 by tfarkas           #+#    #+#             */
-/*   Updated: 2025/05/02 13:56:21 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/03 10:54:32 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	hcp_prev_fd(t_pipe_data *data, int i)
+{
+	if (data->prev_fd != -1 && !has_heredoc(data->commands[i]))
+	{
+		dup2(data->prev_fd, STDIN_FILENO);
+		close(data->prev_fd);
+	}
+}
+
 void	handle_child_process(t_pipe_data data, int i, int *status,
-		char ***myenvp)
+	char ***myenvp)
 {
 	char				**cmd_args;
 	char				*clean_cmd;
 	char				*path;
 	struct s_saved_std	std;
 
-	if (data.prev_fd != -1 && !has_heredoc(data.commands[i]))
-	{
-		dup2(data.prev_fd, STDIN_FILENO);
-		close(data.prev_fd);
-	}
+	hcp_prev_fd(&data, i);
 	save_and_redirect(&std, data.commands[i], status, *myenvp);
 	if (!pipe_cmd_exist(&data, &clean_cmd, i))
 		return (exit(0));
@@ -75,25 +80,10 @@ void	hanlde_pid(struct s_pipe_data *data, int *status, int *last_pid,
 void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
 {
 	int					last_pid;
-	char				*temp;
 	struct s_pipe_data	data;
 
-	data.cmd = cmd;
-	temp = NULL;
-	ft_bzero(&data, sizeof(data));
-	data.commands = get_commands(cmd, temp);
-	if (temp)
-		free(temp);
-	if (!data.commands)
+	if (!init_data(&data, cmd, status))
 		return ;
-	if (!check_data_cmd(&data))
-	{
-		*status = 258;
-		return ;
-	}
-	data.num_commands = ft_arrlen(data.commands);
-	data.prev_fd = -1;
-	data.i = 0;
 	while (data.i < data.num_commands)
 	{
 		if (data.i < data.num_commands - 1 && pipe(data.pipefd) == -1)
@@ -104,3 +94,36 @@ void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
 	wait_for_last_pid(last_pid, status);
 	free_arr(data.commands);
 }
+
+// void	execute_pipe_commands(char *cmd, int *status, char ***myenvp)
+// {
+// 	int					last_pid;
+// 	char				*temp;
+// 	struct s_pipe_data	data;
+
+// 	data.cmd = cmd;
+// 	temp = NULL;
+// 	ft_bzero(&data, sizeof(data));
+// 	data.commands = get_commands(cmd, temp);
+// 	if (temp)
+// 		free(temp);
+// 	if (!data.commands)
+// 		return ;
+// 	if (!check_data_cmd(&data))
+// 	{
+// 		*status = 258;
+// 		return ;
+// 	}
+// 	data.num_commands = ft_arrlen(data.commands);
+// 	data.prev_fd = -1;
+// 	data.i = 0;
+// 	while (data.i < data.num_commands)
+// 	{
+// 		if (data.i < data.num_commands - 1 && pipe(data.pipefd) == -1)
+// 			return (perror("pipe"), exit(EXIT_FAILURE));
+// 		hanlde_pid(&data, status, &last_pid, myenvp);
+// 		data.i++;
+// 	}
+// 	wait_for_last_pid(last_pid, status);
+// 	free_arr(data.commands);
+// }
