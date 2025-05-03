@@ -32,6 +32,7 @@ SRCS =	srcs/builtins/echo.c \
 		srcs/execute_single_cmd.c \
 		srcs/execute_single_cmd_utils.c \
 		srcs/bridge_var.c \
+		srcs/bridge_var_utils.c \
 		srcs/msh_utils.c \
 		srcs/check_quastion_sign.c \
 		lib/get_next_line/get_next_line.c \

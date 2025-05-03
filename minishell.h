@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:14:00 by alex              #+#    #+#             */
-/*   Updated: 2025/05/03 10:56:43 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/03 11:38:30 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,5 +223,8 @@ char	**copy_arr(char **arr);
 int		if_exit(char *line);
 void	handle_gnl(char **line, int *status);
 int		init_data(t_pipe_data *data, char *cmd, int *status);
+int		bva_newstr(char *str, int dollar_pos, t_var_info *var, char **myenvp);
+int		replace_str_with_var(char **str, t_var_info *var_data, char *new_str);
+char	*build_new_string(t_var_info *var_data);
 
 #endif
