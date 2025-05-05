@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 17:51:40 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 10:00:31 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/05 09:42:10 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	process_string_env(char *clean_line, char ***myenvp)
 	if (find_var_in_env(clean_line, *myenvp) != -1)
 		return (0);
 	equals_pos = ft_strchr(clean_line, '=');
-	if (equals_pos && equals_pos + 1)
+	if (equals_pos && *(equals_pos + 1))
 	{
 		name = ft_substr(clean_line, 0, equals_pos - clean_line);
 		if (!name)

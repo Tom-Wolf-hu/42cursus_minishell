@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:56:59 by omalovic          #+#    #+#             */
-/*   Updated: 2025/05/02 14:40:05 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/05 09:44:37 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 int	finish_write_cmd_path(char **buffer, char *path, char *cmd)
 {
-	int	i;
-	int	j;
 	int	len;
 
-	i = 0;
-	j = 0;
 	if (!path || !cmd)
 		return (0);
 	len = ft_strlen(path) + ft_strlen(cmd);
@@ -56,7 +52,6 @@ char	*find_cmd_in_paths(char **path_arr, char *cmd)
 char	*get_command_path(char *cmd, char **myenvp)
 {
 	char	**path_arr;
-	char	*buffer;
 	char	*path;
 
 	if (!cmd)
@@ -67,7 +62,6 @@ char	*get_command_path(char *cmd, char **myenvp)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-	buffer = NULL;
 	path = find_var_value("PATH", myenvp);
 	if (!path)
 		return (NULL);

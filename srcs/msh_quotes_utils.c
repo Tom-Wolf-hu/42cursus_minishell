@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 18:36:27 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 17:35:16 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/05 09:46:07 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,13 @@ void	process_quotes_loop(char *line, char *result)
 
 char	*remove_quotes(char *line)
 {
-	int		i;
 	int		len;
 	char	*result;
-	int		pos;
 
-	i = 0;
 	len = ft_strlen(line);
 	result = (char *)malloc(len + 1);
 	if (!result)
 		return (NULL);
-	pos = 0;
 	process_quotes_loop(line, result);
 	return (result);
 }

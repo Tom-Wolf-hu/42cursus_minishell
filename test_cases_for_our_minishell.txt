@@ -27,6 +27,7 @@ cat < file3 | grep day
 ls | sort > file4
 grep day < file3 | sort >> file4
 cat file3 | grep day | awk '{print $2}' >> file4
+echo hello >file1 | echo hello >> file1 | cat file1 | wc -l  -->The execution of the command line is not correct
 sort < file3 | uniq >> file4
 
 Commands with $-s
@@ -36,6 +37,7 @@ expr 1 + 2
 expr $? + 1
 
 Commands with singlequotes
+''								-->not print out Command not found	
 echo 'hello alex' 'how are you'
 echo 'This is the exit status: $?'
 cat < file3 | grep 'day'
@@ -48,6 +50,8 @@ echo "This is the exit status: $?"
 cat < file3 | grep "day"
 echo "cat lol.c | cat > lol.c"
 "echo" hello
+"cat hello" file				-->not print out Command not found
+env | grep 'PATH='				-->after unset PATH it print out Command not found
 
 Commands with single and doublequotes
 echo "Hello '$USER'"				
