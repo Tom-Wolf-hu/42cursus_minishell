@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:25:23 by omalovic          #+#    #+#             */
-/*   Updated: 2025/05/02 20:37:36 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/05 11:47:19 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	heredoc_parent(int *status, int pipe_fd[2], pid_t pid)
 		close(pipe_fd[1]);
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
+		signal(SIGINT, sig_handler);
+		signal(SIGQUIT, sig_handler);
 		return (*status = 130, 1);
 	}
 	else if (WIFEXITED(*status))
@@ -33,6 +35,7 @@ int	heredoc_parent(int *status, int pipe_fd[2], pid_t pid)
 			return (*status = wstatus, 1);
 	}
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	return (0);
@@ -49,6 +52,7 @@ int	heredoc_pipe_sign(char *filename, int *status, char **envp)
 		return (1);
 	}
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 	{
