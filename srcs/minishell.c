@@ -6,7 +6,7 @@
 /*   By: tfarkas <tfarkas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:15:14 by alex              #+#    #+#             */
-/*   Updated: 2025/05/02 19:51:40 by tfarkas          ###   ########.fr       */
+/*   Updated: 2025/05/21 13:13:16 by tfarkas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,60 +116,3 @@ int	main(int argc, char **argv, char **envp)
 	}
 	rl_clear_history();
 }
-
-// ps aux | grep bash | awk '{print $2}'    снова не работает		+
-// Введите Ctrl+C внутри minishell (появляется лишний > в приглашении) +
-// sleep 5
-
-/* 
-# Введите Ctrl+C внутри minishell (появляется лишний > в приглашении) +
-sleep 5	(через раз)
-
-ctrl + \ after some stuff should do nothing
-если писать cat и затем нажимать ctrl+c появляется лишний > (иногда) +
-
-
-> export PATH=/usr/bin					+
-zsh: segmentation fault  ./minishell
-
-
-> cat <filesfa    (виснит)			+
-clean_filename: filesfa
-filename: filesfa
-open: No such file or directory
-
-> 
-
-> cat <<		(должна быть просто ошибка)	+
-
-> | ls			(должна быть просто ошибка) +
-> ls |			(должна быть просто ошибка) +
-> ls || grep test							+
-
-НЕ ДОЛЖНА ИНТЕРПРЕТИРОВАТЬ ЭТИ СИМВОЛЫ
-echo hello; ls			+
-echo hello \			+
-echo \			+
-echo -nnn hello			+
-
-$nonexist | wc -l	+-
-$nonexist			----------
-
-> ./minishell
-> cat << EOF
-cat : Command not found
-
-echo "hello"$ +
-
-echo $? $USER $PATH $$$
-
-
-valgrind:
-bridge_var
-
-"echo " "cat lol.c | cat > lol.c"
-
-
-
-
-*/
